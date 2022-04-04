@@ -39,7 +39,7 @@ class PermissionController extends Controller
     public function store(Request $request)
     {
         $validator = Validator($request->all(), [
-            'guard_name' => 'required|string|in:admin,web',
+            'guard_name' => 'required|string|in:admin,student,supervisor,trainer',
             'name' => 'required|string',
         ]);
 
@@ -89,7 +89,7 @@ class PermissionController extends Controller
     public function update(Request $request, Permission $permission)
     {
         $validator = Validator($request->all(), [
-            'guard_name' => 'required|string|in:admin,web',
+            'guard_name' => 'required|string|in:admin,student,supervisor,trainer',
             'name' => 'required|string',
         ]);
 
@@ -106,7 +106,7 @@ class PermissionController extends Controller
         }
     }
 
-    
+
 
     /**
      * Remove the specified resource from storage.

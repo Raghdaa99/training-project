@@ -15,7 +15,7 @@ class StudentController extends Controller
 
     public function __construct()
     {
-       $this->authorizeResource(Student::class, 'student');
+//       $this->authorizeResource(Student::class, 'student');
     }
 
     /**
@@ -60,6 +60,7 @@ class StudentController extends Controller
             $user->password = Hash::make(12345);
             $user->gender = $request->input('gender');
             $isSaved = $user->save();
+
             return response()->json(
                 [
                     'message' => $isSaved ? 'Student created successfully' : 'Create failed!'
@@ -83,17 +84,11 @@ class StudentController extends Controller
     }
 
 
-    public function showAddCompany()
-    {
-        $companies = Company::all();
-        $fields = Field::all();
-        $student = Auth::guard('student')->user();
-        return response()->view('cms.students.add_student_company',
-            ['companies' => $companies,
-                'fields' => $fields,
-                'student' => $student]);
-
-    }
+//    public function showAddCompany()
+//    {
+//
+//
+//    }
 
     /**
      * Show the form for editing the specified resource.

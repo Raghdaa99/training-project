@@ -1,0 +1,37 @@
+<?php
+
+namespace App\Mail;
+
+use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Mail\Mailable;
+use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\URL;
+
+class CompanyEmail extends Mailable
+{
+    use Queueable, SerializesModels;
+
+    protected $id;
+
+    /**
+     * Create a new message instance.
+     *
+     * @return void
+     */
+    public function __construct($id)
+    {
+        $this->id = $id;
+    }
+
+    /**
+     * Build the message.
+     *
+     * @return $this
+     */
+    public function build()
+    {
+        $url = Url::temporarySignedRoute('company.send.email', now()->addHours(24), ['id'=>$this->id]);
+        return $this->markdown('emails.company.show_email',['url'=>$url]);
+    }
+}

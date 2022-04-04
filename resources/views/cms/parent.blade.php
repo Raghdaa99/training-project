@@ -8,7 +8,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{__('cms.app_name')}} | @yield('title')</title>
+    <title>Project | @yield('title')</title>
 
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet"
@@ -43,6 +43,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     </nav>
     <!-- /.navbar -->
 
+
     <!-- Main Sidebar Container -->
     <aside class="main-sidebar sidebar-dark-primary elevation-4">
         <!-- Brand Logo -->
@@ -53,16 +54,21 @@ scratch. This page gets rid of all links and provides the needed markup only.
         </a>
 
         <!-- Sidebar -->
+
+        @if(auth()->check())
         <div class="sidebar">
             <!-- Sidebar user panel (optional) -->
+
             <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                 <div class="image">
                     <img src="{{asset('cms/dist/img/user2-160x160.jpg')}}" class="img-circle elevation-2"
                          alt="User Image">
                 </div>
+
                 <div class="info">
                     <a href="#" class="d-block">{{auth()->user()->name}}</a>
                 </div>
+
             </div>
 
             <!-- SidebarSearch Form -->
@@ -169,6 +175,35 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                     @can('Create-Admin')
                                         <li class="nav-item">
                                             <a href="{{route('admins.create')}}" class="nav-link">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>{{__('cms.create')}}</p>
+                                            </a>
+                                        </li>
+                                    @endcan
+                                </ul>
+                            </li>
+                        @endcanany
+                        @canany(['Create-Supervisor','Read-Supervisors'])
+                            <li class="nav-item">
+                                <a href="#" class="nav-link">
+                                    <i class="nav-icon fas fa-table"></i>
+                                    <p>
+                                        {{__('cms.supervisors')}}
+                                        <i class="fas fa-angle-left right"></i>
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview" style="display: none;">
+                                    @can('Read-Supervisors')
+                                        <li class="nav-item">
+                                            <a href="{{route('supervisors.index')}}" class="nav-link">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>{{__('cms.index')}}</p>
+                                            </a>
+                                        </li>
+                                    @endcan
+                                    @can('Create-Supervisor')
+                                        <li class="nav-item">
+                                            <a href="{{route('supervisors.create')}}" class="nav-link">
                                                 <i class="far fa-circle nav-icon"></i>
                                                 <p>{{__('cms.create')}}</p>
                                             </a>
@@ -303,10 +338,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         @endcanany
                     @endcanany
 
-{{--                  {{auth()->guard}}--}}
+{{--                  {{auth()->guard('student')->check()}}--}}
+
                    @can('Add-Data-Company')
                     <li class="nav-item">
-                        <a href="{{route('student.showDataCompany')}}" class="nav-link">
+                        <a href="{{route('registerStudentCompany.create')}}" class="nav-link">
                             <i class="nav-icon fas fa-th"></i>
                             <p>
                                Add Company
@@ -315,6 +351,50 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     </li>
                     @endcan
 
+                    @can('Read-Data-Company')
+                        <li class="nav-item">
+                            <a href="{{route('registerStudentCompany.index')}}" class="nav-link">
+                                <i class="nav-icon fas fa-th"></i>
+                                <p>
+                                    Read Data
+                                </p>
+                            </a>
+                        </li>
+                    @endcan
+
+                    @can('Registered-Students')
+                    <li class="nav-item">
+                        <a href="{{route('registerStudentCourse.index')}}" class="nav-link">
+                            <i class="nav-icon fas fa-th"></i>
+                            <p>
+                               Registered Students
+                            </p>
+                        </a>
+                    </li>
+
+                    @endcan
+
+
+                    @can('Read-Students-Trainer')
+                    <li class="nav-item">
+                        <a href="{{route('trainers.index')}}" class="nav-link">
+                            <i class="nav-icon fas fa-th"></i>
+                            <p>
+                                index Students
+                            </p>
+                        </a>
+                    </li>
+                    @endcan
+                    @can('Create-Appointments-Training')
+                    <li class="nav-item">
+                        <a href="{{route('appointments.create')}}" class="nav-link">
+                            <i class="nav-icon fas fa-th"></i>
+                            <p>
+                                Create Appointments
+                            </p>
+                        </a>
+                    </li>
+                    @endcan
 
                     <li class="nav-header">{{__('cms.settings')}}</li>
                     <li class="nav-item">
@@ -328,7 +408,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 </ul>
             </nav>
             <!-- /.sidebar-menu -->
+
         </div>
+    @endif
         <!-- /.sidebar -->
     </aside>
 

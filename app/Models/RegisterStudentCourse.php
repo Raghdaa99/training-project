@@ -9,9 +9,14 @@ class RegisterStudentCourse extends Model
 {
     use HasFactory;
 
+    protected $table = 'register_students_course';
     public function student()
     {
         return $this->belongsTo(Student::class, 'student_no', 'student_no');
+    }
+    public function studentCompany()
+    {
+        return $this->belongsTo(StudentCompanyField::class, 'student_no', 'student_no');
     }
     public function department()
     {

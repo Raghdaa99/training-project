@@ -7,7 +7,7 @@
 @endsection
 
 @section('large-page-name',__('cms.create'))
-@section('main-page-name',__('cms.roles'))
+@section('main-page-name',__('cms.supervisors'))
 @section('small-page-name',__('cms.create'))
 
 @section('content')
@@ -28,18 +28,29 @@
                         @csrf
                         <div class="card-body">
                             <div class="form-group">
-                                <label for="guard_name">{{__('cms.guard')}}</label>
-                                <select class="custom-select form-control-border" id="guard_name">
-                                    <option value="admin">Admin</option>
-                                    <option value="student">Student</option>
-                                    <option value="supervisor">Supervisor</option>
-                                    <option value="trainer">Trainer</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
                                 <label for="name">{{__('cms.name')}}</label>
                                 <input type="text" class="form-control" id="name" placeholder="{{__('cms.enter_name')}}"
                                     name="name">
+                            </div>
+                            <div class="form-group">
+                                <label for="number">{{__('cms.number')}}</label>
+                                <input type="text" class="form-control" id="number"
+                                    placeholder="{{__('cms.number')}}" name="number">
+                            </div>
+                            <div class="form-group">
+                                <label for="password">{{__('cms.password')}}</label>
+                                <input type="password" class="form-control" id="password"
+                                       placeholder="{{__('cms.password')}}" name="password">
+                            </div>
+                            <div class="form-group">
+                                <label for="email">{{__('cms.email')}}</label>
+                                <input type="email" class="form-control" id="email"
+                                       placeholder="{{__('cms.email')}}" name="email">
+                            </div>
+                            <div class="form-group">
+                                <label for="phone">{{__('cms.phone')}}</label>
+                                <input type="text" class="form-control" id="phone"
+                                       placeholder="{{__('cms.phone')}}" name="phone">
                             </div>
                         </div>
                         <!-- /.card-body -->
@@ -63,9 +74,13 @@
 @section('scripts')
 <script>
     function performStore() {
-        axios.post('/cms/admin/roles', {
+        axios.post('/cms/admin/supervisors', {
             name: document.getElementById('name').value,
-            guard_name: document.getElementById('guard_name').value
+            number: document.getElementById('number').value,
+            email: document.getElementById('email').value,
+            password: document.getElementById('password').value,
+            phone: document.getElementById('phone').value,
+
         })
         .then(function (response) {
             //2xx

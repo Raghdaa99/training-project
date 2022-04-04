@@ -30,8 +30,10 @@
                             <div class="form-group">
                                 <label for="guard_name">{{__('cms.guard')}}</label>
                                 <select class="custom-select form-control-border" id="guard_name">
-                                    <option value="web">Web</option>
                                     <option value="admin">Admin</option>
+                                    <option value="student">Student</option>
+                                    <option value="supervisor">Supervisor</option>
+                                    <option value="trainer">Trainer</option>
                                 </select>
                             </div>
                             <div class="form-group">

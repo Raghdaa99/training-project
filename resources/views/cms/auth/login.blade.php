@@ -29,22 +29,35 @@
                 <a href="" class="h1"><b>Student Login</b></a>
             @elseif($guard == 'admin')
                 <a href="" class="h1"><b>Admin Login</b></a>
-            @else
+            @elseif($guard == 'supervisor')
                 <a href="" class="h1"><b>Supervisor Login</b></a>
+            @elseif($guard == 'trainer')
+                <a href="" class="h1"><b>Trainer Login</b></a>
             @endif
         </div>
         <div class="card-body">
             <p class="login-box-msg">Sign in to start your session</p>
 
             <form>
+                @if($guard == 'trainer')
                 <div class="input-group mb-3">
-                    <input type="text" class="form-control" placeholder="Number" id="number">
+                    <input type="email" class="form-control" placeholder="Email" id="number">
                     <div class="input-group-append">
                         <div class="input-group-text">
-                            <span class="fas fa-user"></span>
+                            <span class="fas fa-envelope"></span>
                         </div>
                     </div>
                 </div>
+                @else
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" placeholder="Number" id="number">
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-user"></span>
+                            </div>
+                        </div>
+                    </div>
+                @endif
                 <div class="input-group mb-3">
                     <input type="password" class="form-control" placeholder="Password" id="password">
                     <div class="input-group-append">
@@ -98,6 +111,7 @@
             number: document.getElementById('number').value,
             password: document.getElementById('password').value,
             remember: document.getElementById('remember').checked,
+            // email: document.getElementById('email').checked,
             guard: '{{$guard}}',
         })
             .then(function (response) {

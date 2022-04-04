@@ -49,5 +49,7 @@ return [
     "company_phone" => "Company Phone",
     "company_address" => "Company Address",
     "training_data" => "Training Data",
-    "number"=>"Number"
+    "number"=>"Number",
+    "supervisors"=>"Supervisors",
+    "password"=>"Password",
 ];

@@ -18,6 +18,10 @@ class CompanyController extends Controller
         $companies = Company::all();
         return response()->view('cms.companies.index',['companies'=>$companies]);
     }
+//    public function show_company(){
+////        dd('55');
+//        return response()->view('cms.companies.show_students_company');
+//    }
 
     /**
      * Show the form for creating a new resource.

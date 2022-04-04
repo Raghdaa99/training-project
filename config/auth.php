@@ -48,6 +48,10 @@ return [
             'driver' => 'session',
             'provider' => 'supervisors'
         ],
+        'trainer' => [
+            'driver' => 'session',
+            'provider' => 'trainers'
+        ],
     ],
 
     /*
@@ -80,6 +84,10 @@ return [
         'supervisors' => [
             'driver' => 'eloquent',
             'model' => App\Models\Supervisor::class,
+        ],
+        'trainers' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Trainer::class,
         ],
     ],
 

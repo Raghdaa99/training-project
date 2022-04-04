@@ -27,6 +27,11 @@ class AdminController extends Controller
         return response()->view('cms.admins.index', ['admins' => $admins]);
     }
 
+    public function index_dashboard()
+    {
+//        $admins = Admin::all();
+        return response()->view('cms.admins.index_dashboard');
+    }
     /**
      * Show the form for creating a new resource.
      *
@@ -105,7 +110,7 @@ class AdminController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\Admin  $admin
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function update(Request $request, Admin $admin)
     {

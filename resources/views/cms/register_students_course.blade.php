@@ -22,55 +22,35 @@
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body">
-                            @if($items != null)
                             <table class="table table-bordered table-striped table-hover">
                                 <thead>
                                 <tr>
                                     <th style="width: 10px">#</th>
                                     <th>Student No</th>
                                     <th>Student Name</th>
-                                    <th>Company Name</th>
-                                    <th>Field Name</th>
-                                    <th>Status</th>
-                                    @if($items[0]->status==0)
-                                    <th style="width: 40px">Settings</th>
-                                    @endif
+                                    <th>Department No</th>
+                                    <th>Department Name</th>
+                                    <th>Supervisor No</th>
+                                    <th>Supervisor Name</th>
+
                                 </tr>
                                 </thead>
                                 <tbody>
+                                @foreach ($items as $item)
+                                    <tr>
+                                        <td>{{$loop->iteration}}</td>
+                                        <td>{{$item->student->student_no}}</td>
+                                        <td>{{$item->student->name}}</td>
+                                        <td>{{$item->department->department_no}}</td>
+                                        <td>{{$item->department->name}}</td>
+                                        <td>{{$item->supervisor->supervisor_no}}</td>
+                                        <td>{{$item->supervisor->name}}</td>
 
-                                    @foreach ($items as $item)
-                                        <tr>
-                                            <td>{{$loop->iteration}}</td>
-                                            <td>{{$item->student_no}}</td>
-                                            <td>{{$item->student->student->name}}</td>
-                                            <td>{{$item->companies->name}}</td>
-                                            <td>{{$item->fields->name}}</td>
-                                            <td><span class="badge @if($item->status) bg-success @else bg-danger @endif">{{$item->active_status}}</span>
-                                            </td>
-                                            @if($item->status==0)
-                                            <td>
-                                                <div class="btn-group">
-                                                    <a href=""
-                                                       class="btn btn-warning">
-                                                        <i class="fas fa-edit"></i>
-                                                    </a>
-                                                    <a href="#" onclick="confirmDelete('',this)"
-                                                       class=" btn btn-danger">
-                                                        <i class="fas fa-trash"></i>
-                                                    </a>
-                                                </div>
-                                            </td>
-                                            @endif
-                                        </tr>
-                                    @endforeach
-
+                                    </tr>
+                                @endforeach
 
                                 </tbody>
                             </table>
-                            @else
-                                <p> no company registerd</p>
-                            @endif
                         </div>
                         <!-- /.card-body -->
                         <div class="card-footer clearfix">
@@ -90,7 +70,7 @@
 @section('scripts')
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-        function confirmDelete(id, reference) {
+        function confirmDelete(id,reference) {
             Swal.fire({
                 title: 'Are you sure?',
                 text: "You won't be able to revert this!",
@@ -101,13 +81,13 @@
                 confirmButtonText: 'Yes, delete it!'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    performDelete(id, reference);
+                    performDelete(id,reference);
                 }
             });
         }
 
-        function performDelete(id, reference) {
-            axios.delete('/cms/admin/users/' + id)
+        function performDelete(id,reference) {
+            axios.delete('/cms/admin/users/'+id)
                 .then(function (response) {
                     //2xx
                     console.log(response);

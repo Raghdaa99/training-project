@@ -66,17 +66,18 @@
 @section('scripts')
 <script>
     function performStore() {
-        axios.post('/cms/admin/admins', {
-            name: document.getElementById('name').value,
-            email_address: document.getElementById('email').value,
-            role_id: document.getElementById('role_id').value,
-            gender: document.getElementById('gender').value
+        axios.post('/cms/student/registerStudentCompany', {
+            company_id: document.getElementById('company_id').value,
+            field_id: document.getElementById('field_id').value,
+
         })
         .then(function (response) {
             //2xx
             console.log(response);
             toastr.success(response.data.message);
-            document.getElementById('create-form').reset();
+            // document.getElementById('create-form').reset();
+            window.location.href = '/cms/student/registerStudentCompany';
+
         })
         .catch(function (error) {
             //4xx - 5xx

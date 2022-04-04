@@ -30,9 +30,13 @@
                             <div class="form-group">
                                 <label for="guard_name">{{__('cms.guard')}}</label>
                                 <select class="custom-select form-control-border" id="guard_name">
-                                    <option value="web" @if($permission->guard_name == 'web') selected @endif>Web
+                                    <option value="student" @if($permission->guard_name == 'student') selected @endif>Student
                                     </option>
                                     <option value="admin" @if($permission->guard_name == 'admin') selected @endif>Admin
+                                    </option>
+                                    <option value="supervisor" @if($permission->guard_name == 'supervisor') selected @endif>Supervisor
+                                    </option>
+                                    <option value="trainer" @if($permission->guard_name == 'trainer') selected @endif>Trainer
                                     </option>
                                 </select>
                             </div>

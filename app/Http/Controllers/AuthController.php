@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Redis;
+use Spatie\Permission\Models\Role;
 use Symfony\Component\HttpFoundation\Response;
 
 class AuthController extends Controller
@@ -20,7 +21,7 @@ class AuthController extends Controller
         //dd($request->guard);
 
         $validator = Validator($request->all(), [
-            'guard' => 'required|string|in:student,admin,supervisor'
+            'guard' => 'required|string|in:student,admin,supervisor,trainer'
         ]);
         if (!$validator->fails()) {
 
@@ -32,16 +33,19 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-
+//dd($request->guard);
         $validator = Validator($request->all(), [
-            'number' => "required|numeric",
+            'number' => "required",
             'password' => 'required|string|min:3',
             'remember' => 'required|boolean',
-            'guard' => 'required|string|in:student,admin,supervisor'
+            'guard' => 'required|string|in:student,admin,supervisor,trainer'
         ]);
-        $guard = $request->input('guard') . "_no";
-        if (!$validator->fails()) {
 
+        if (!$validator->fails()) {
+            $guard = $request->input('guard'). "_no";
+            if ($request->input('guard') == 'trainer') {
+                $guard = 'email';
+            }
             $credentials = ["$guard" => $request->input('number'), 'password' => $request->input('password')];
             if (Auth::guard($request->input('guard'))->attempt($credentials, $request->input('remember'))) {
                 return response()->json(['message' => 'Logged in Success'], Response::HTTP_OK);
@@ -66,6 +70,7 @@ class AuthController extends Controller
             'guard' => 'required|string|in:student'
         ]);
 //        $guard = $request->input('guard') . "_no";
+
         if (!$validator->fails()) {
             $student = new Student();
             $student->name = $request->input('name');
@@ -73,16 +78,22 @@ class AuthController extends Controller
             $student->phone = $request->input('phone');
             $student->password = Hash::make($request->input('password'));
             $isSaved = $student->save();
-            return response()->json(
-                [
-                    'message' => $isSaved ? 'User created successfully' : 'Create failed!'
-                ],
-                $isSaved ? Response::HTTP_CREATED : Response::HTTP_BAD_REQUEST,
-            );
+            if ($isSaved) {
+
+                $student->assignRole(Role::findById(3, 'student'));
+                return response()->json(
+                    [
+                        'message' => $isSaved ? 'User created successfully' : 'Create failed!'
+                    ],
+                    $isSaved ? Response::HTTP_CREATED : Response::HTTP_BAD_REQUEST,
+                );
+            }
+
         } else {
             return response()->json(['message' => $validator->getMessageBag()->first()], Response::HTTP_BAD_REQUEST);
         }
     }
+
     public function showRegister(Request $request)
     {
         $request->merge(['guard' => $request->guard]);
@@ -105,9 +116,11 @@ class AuthController extends Controller
 //        $guard = auth('web')->check() ? 'web' : 'admin';
         if (auth('student')->check()) {
             $guard = 'student';
-        }elseif (auth('admin')->check()) {
+        } elseif (auth('admin')->check()) {
             $guard = 'admin';
-        }else{
+        } elseif (auth('trainer')->check()) {
+            $guard = 'trainer';
+        }else {
             $guard = 'supervisor';
         }
         Auth::guard($guard)->logout();

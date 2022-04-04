@@ -7,7 +7,7 @@
 @endsection
 
 @section('large-page-name',__('cms.update'))
-@section('main-page-name',__('cms.roles'))
+@section('main-page-name',__('cms.admins'))
 @section('small-page-name',__('cms.update'))
 
 @section('content')
@@ -24,30 +24,37 @@
                     </div>
                     <!-- /.card-header -->
                     <!-- form start -->
-                    <form id="create-form">
-                        @csrf
+                    <form>
                         <div class="card-body">
                             <div class="form-group">
-                                <label for="guard_name">{{__('cms.guard')}}</label>
-                                <select class="custom-select form-control-border" id="guard_name">
-                                    <option value="admin" @if($role->guard_name == 'admin') selected @endif>Admin
-                                    </option>
-                                    <option value="student" @if($role->guard_name == 'student') selected @endif>Student
-                                    </option>
-                                    <option value="supervisor" @if($role->guard_name == 'supervisor') selected @endif>Supervisor
-                                    </option>
-                                    <option value="trainer" @if($role->guard_name == 'trainer') selected @endif>Trainer
-                                    </option>
+                                <label for="role_id">{{__('cms.role')}}</label>
+                                <select class="custom-select form-control-border" id="role_id">
+                                    @foreach ($roles as $role)
+                                    <option value="{{$role->id}}" @if($role->id == $adminRole->id) selected
+                                        @endif>{{$role->name}}</option>
+                                    @endforeach
                                 </select>
                             </div>
                             <div class="form-group">
                                 <label for="name">{{__('cms.name')}}</label>
                                 <input type="text" class="form-control" id="name" placeholder="{{__('cms.enter_name')}}"
-                                    name="name" value="{{$role->name}}">
+                                    name="name" value="{{$admin->name}}">
+                            </div>
+                            <div class="form-group">
+                                <label for="email">{{__('cms.email')}}</label>
+                                <input type="email" class="form-control" id="email"
+                                    placeholder="{{__('cms.enter_email')}}" name="email" value="{{$admin->email}}">
+                            </div>
+                            <div class="form-group">
+                                <label for="gender">{{__('cms.gender')}}</label>
+                                <select class="custom-select form-control-border" id="gender">
+                                    <option value="Male" @if($admin->gender == 'Male') selected @endif>Male</option>
+                                    <option value="Female" @if($admin->gender == 'Female') selected @endif>Female
+                                    </option>
+                                </select>
                             </div>
                         </div>
                         <!-- /.card-body -->
-
                         <div class="card-footer">
                             <button type="button" onclick="performUpdate()"
                                 class="btn btn-primary">{{__('cms.save')}}</button>
@@ -67,15 +74,19 @@
 @section('scripts')
 <script>
     function performUpdate() {
-        axios.put('/cms/admin/roles/{{$role->id}}', {
+        axios.put('/cms/admin/admins/{{$admin->id}}', {
             name: document.getElementById('name').value,
-            guard_name: document.getElementById('guard_name').value
+            email_address: document.getElementById('email').value,
+            role_id: document.getElementById('role_id').value,
+            gender: document.getElementById('gender').value
+
         })
         .then(function (response) {
             //2xx
             console.log(response);
             toastr.success(response.data.message);
-            window.location.href = '/cms/admin/roles';
+            //
+            window.location.href = '/cms/admin/admins';
         })
         .catch(function (error) {
             //4xx - 5xx
