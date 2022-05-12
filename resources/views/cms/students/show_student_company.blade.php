@@ -22,52 +22,67 @@
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body">
-                            @if($items != null)
-                            <table class="table table-bordered table-striped table-hover">
-                                <thead>
-                                <tr>
-                                    <th style="width: 10px">#</th>
-                                    <th>Student No</th>
-                                    <th>Student Name</th>
-                                    <th>Company Name</th>
-                                    <th>Field Name</th>
-                                    <th>Status</th>
-                                    @if($items[0]->status==0)
-                                    <th style="width: 40px">Settings</th>
-                                    @endif
-                                </tr>
-                                </thead>
-                                <tbody>
+                            @if($item != null)
+                                <table class="table table-bordered table-striped table-hover">
+                                    <thead>
+                                    <tr>
+{{--                                        <th style="width: 10px">#</th>--}}
+                                        <th>Student No</th>
+                                        <th>Student Name</th>
+                                        <th>Company Name</th>
+                                        <th>Field Name</th>
+                                        <th>Status Supervisor</th>
+                                        @if($item->status_supervisor==0)
+                                            <th style="width: 30px">Settings</th>
+                                        @endif
+                                        @if($item->status_company==1)
+                                            <th style="width: 60px">Appointments</th>
+                                        @endif
+                                    </tr>
+                                    </thead>
+                                    <tbody>
 
-                                    @foreach ($items as $item)
+{{--                                    @foreach ($items as $item)--}}
                                         <tr>
-                                            <td>{{$loop->iteration}}</td>
+{{--                                            <td>{{$loop->iteration}}</td>--}}
                                             <td>{{$item->student_no}}</td>
                                             <td>{{$item->student->student->name}}</td>
-                                            <td>{{$item->companies->name}}</td>
-                                            <td>{{$item->fields->name}}</td>
-                                            <td><span class="badge @if($item->status) bg-success @else bg-danger @endif">{{$item->active_status}}</span>
+                                            <td>{{$item->companyField->company->name}}</td>
+                                            <td>{{$item->companyField->field->name}}</td>
+                                            <td><span
+                                                    class="badge @if($item->status_supervisor) bg-success @else bg-danger @endif">{{$item->supervisor_status}}</span>
                                             </td>
-                                            @if($item->status==0)
-                                            <td>
-                                                <div class="btn-group">
-                                                    <a href=""
-                                                       class="btn btn-warning">
-                                                        <i class="fas fa-edit"></i>
-                                                    </a>
-                                                    <a href="#" onclick="confirmDelete('',this)"
-                                                       class=" btn btn-danger">
-                                                        <i class="fas fa-trash"></i>
-                                                    </a>
-                                                </div>
-                                            </td>
+                                            @if($item->status_supervisor==0)
+                                                <td>
+                                                    <div class="btn-group">
+                                                        <a href="{{route('edit.Student.Company',$item->id)}}"
+                                                           class="btn btn-warning">
+                                                            <i class="fas fa-edit"></i>
+                                                        </a>
+                                                        <a href="#" onclick="confirmDelete('{{$item->id}}',this)"
+                                                           class=" btn btn-danger">
+                                                            <i class="fas fa-trash"></i>
+                                                        </a>
+                                                    </div>
+
+                                                </td>
+                                            @endif
+                                            @if($item->status_company==1)
+                                                <td>
+                                                    <div class="btn-group">
+                                                        <a href="{{route('show.student.appointment',$item->id)}}"
+                                                           class="btn btn-warning">
+                                                            <i class="fas fa-table"> Show</i>
+                                                        </a>
+                                                    </div>
+                                                </td>
                                             @endif
                                         </tr>
-                                    @endforeach
+{{--                                    @endforeach--}}
 
 
-                                </tbody>
-                            </table>
+                                    </tbody>
+                                </table>
                             @else
                                 <p> no company registerd</p>
                             @endif
@@ -107,12 +122,14 @@
         }
 
         function performDelete(id, reference) {
-            axios.delete('/cms/admin/users/' + id)
+
+            axios.delete('/cms/student/registerStudentCompany/'+id)
                 .then(function (response) {
                     //2xx
                     console.log(response);
                     toastr.success(response.data.message);
-                    reference.closest('tr').remove();
+                    reference.closest('table').remove();
+
                 })
                 .catch(function (error) {
                     //4xx - 5xx

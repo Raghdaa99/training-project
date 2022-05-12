@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Company;
+use App\Models\CompanyField;
 use App\Models\Field;
 use App\Models\StudentCompanyField;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Response;
 
 class StudentCompanyFieldController extends Controller
@@ -19,9 +21,9 @@ class StudentCompanyFieldController extends Controller
     public function index()
     {
         $student = Auth::guard('student')->user();
-        $items = StudentCompanyField::where('student_no', '=', $student->student_no)->get();
+        $item = StudentCompanyField::where('student_no', '=', $student->student_no)->first();
 
-        return response()->view('cms.students.show_student_company', ['items' => $items]);
+        return response()->view('cms.students.show_student_company', ['item' => $item]);
 
     }
 
@@ -32,13 +34,61 @@ class StudentCompanyFieldController extends Controller
      */
     public function create()
     {
+//        $companies = Company::all();
+//        $fields = Field::all();
+//        $student = Auth::guard('student')->user();
+//        return response()->view('cms.students.add_student_company',
+//            ['companies' => $companies,
+//                'fields' => $fields,
+//                'student' => $student]);
+    }
+
+    public function create_company_field(Request $request, $student_no)
+    {
+
+        $guard = Auth::guard('student')->check() ? 'student' : 'supervisor';
+        if ($guard == 'student') {
+            $student_no = Auth::guard('student')->user()->student_no;
+        }
+
+
+        $request->merge(['company_id' => $request->company_id]);
+        $request->merge(['student_no' => $student_no]);
+
+
+        if ($request->company_id != null) {
+            $company_id = $request->input('company_id');
+        } else {
+            $company_id = Company::first()->id;
+        }
+
+
         $companies = Company::all();
-        $fields = Field::all();
-        $student = Auth::guard('student')->user();
+        $fields = Field::whereHas('companies', function ($query) use ($company_id) {
+            $query->where('company_id', '=', $company_id);
+        })->get();
+//        $student = Auth::guard('student')->user();
         return response()->view('cms.students.add_student_company',
             ['companies' => $companies,
+                'fields' => $fields, 'company_id' => $company_id,
+                'student_no' => $student_no,
+                'guard' => $guard]);
+    }
+
+    public function edit_company_field(StudentCompanyField $studentCompanyField, $company_id = 2)
+    {
+        $companies = Company::all();
+        $fields = Field::whereHas('companies', function ($query) use ($company_id) {
+            $query->where('company_id', '=', $company_id);
+        })->get();
+        $student = Auth::guard('student')->user();
+
+        return response()->view('cms.students.edit_student_company',
+            ['companies' => $companies,
                 'fields' => $fields,
-                'student' => $student]);
+                'student' => $student,
+                'studentCompanyField' => $studentCompanyField,
+                'company_id' => $company_id]);
     }
 
     /**
@@ -49,11 +99,11 @@ class StudentCompanyFieldController extends Controller
      */
     public function store(Request $request)
     {
-        $student = Auth::guard('student')->user();
 
-        $request->merge(['student_no' => $student->student_no]);
+
         $validator = Validator($request->all(), [
             'student_no' => 'required|numeric|unique:students_company_field,student_no,',
+            //'student_no' => 'required|numeric|exists:register_students_course,student_no,',
             'company_id' => 'required|numeric|exists:companies,id',
             'field_id' => 'required|numeric|exists:fields,id',
         ],
@@ -61,16 +111,33 @@ class StudentCompanyFieldController extends Controller
                 'student_no.unique' => 'The company already registered'
             ]
         );
-        $item = new StudentCompanyField();
 
         if (!$validator->fails()) {
-            $item->student_no = $student->student_no;
-            $item->company_id = $request->company_id;
-            $item->field_id = $request->field_id;
-            $item->status = 0;
+            $company_id = $request->company_id;
+            $field_id = $request->field_id;
+            $company_field = CompanyField::where([
+                ['company_id', '=', $company_id],
+                ['field_id', '=', $field_id]])->first();
+
+            if (Auth::guard('student')->check() == 'student')
+                $student_no = Auth::guard('student')->user()->student_no;
+            else
+                $student_no = $request->student_no;
+
+
+            $item = new StudentCompanyField();
+            $item->student_no = $student_no;
+            $item->company_field_id = $company_field->id;
+
+            $item->status_company = 0;
+            $item->status_supervisor = 0;
+            $item->notes = $request->notes;
             $isSaved = $item->save();
             return response()->json(['message' => $isSaved ? ' succsess Registered' : 'Faield']
                 , $isSaved ? Response::HTTP_CREATED : Response::HTTP_BAD_REQUEST);
+//            if (Auth::guard('student')->check()){
+//
+//            }
         } else {
             return response()->json(['message' => $validator->getMessageBag()->first()], Response::HTTP_BAD_REQUEST);
         }
@@ -100,7 +167,7 @@ class StudentCompanyFieldController extends Controller
 
         if (!$validator->fails()) {
 
-            $item->status = $request->status;
+            $item->status_company = $request->status;
             $isSaved = $item->save();
             return response()->json(['message' => $isSaved ? ' success' : 'Failed']
                 , $isSaved ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST);
@@ -125,11 +192,43 @@ class StudentCompanyFieldController extends Controller
      *
      * @param \Illuminate\Http\Request $request
      * @param \App\Models\StudentCompanyField $studentCompanyField
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Request $request, StudentCompanyField $studentCompanyField)
+    public function update(Request $request, $studentCompanyField)
     {
+//        dd($studentCompanyField);
+        $studentCompanyField = StudentCompanyField::findOrFail($studentCompanyField);
+        $student = Auth::guard('student')->user();
 
+        $request->merge(['student_no' => $student->student_no]);
+        $validator = Validator($request->all(), [
+                'student_no' => 'required|numeric|unique:students_company_field,student_no,' . $studentCompanyField->id,
+                'company_id' => 'required|numeric|exists:companies,id',
+                'field_id' => 'required|numeric|exists:fields,id',
+            ]
+        );
+
+        if (!$validator->fails()) {
+            $company_id = $request->company_id;
+            $field_id = $request->field_id;
+            $company_field = CompanyField::where([
+                ['company_id', '=', $company_id],
+                ['field_id', '=', $field_id]])->first();
+//            $company_field_id = $company_field->id;
+//            dd();
+
+            $studentCompanyField->student_no = $student->student_no;
+            $studentCompanyField->company_field_id = $company_field->id;
+
+            $studentCompanyField->status_company = 0;
+            $studentCompanyField->status_supervisor = 0;
+            $studentCompanyField->notes = $request->notes;
+            $isSaved = $studentCompanyField->save();
+            return response()->json(['message' => $isSaved ? ' succsess Edited' : 'Faield']
+                , $isSaved ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST);
+        } else {
+            return response()->json(['message' => $validator->getMessageBag()->first()], Response::HTTP_BAD_REQUEST);
+        }
     }
 
 
@@ -139,12 +238,14 @@ class StudentCompanyFieldController extends Controller
      * @param \App\Models\StudentCompanyField $studentCompanyField
      * @return \Illuminate\Http\JsonResponse
      */
-    public function destroy(StudentCompanyField $studentCompanyField)
+    public function destroy($studentCompanyField)
     {
-        $isDeleted = $studentCompanyField->delete();
+//        dd($studentCompanyField);
+        $isDeleted = StudentCompanyField::destroy([$studentCompanyField]);
+//        $isDeleted = $studentCompanyField->delete();
         return response()->json(
-            ['message' => $isDeleted ? 'Deleted successfully' : 'Delete failed!'],
-            $isDeleted ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST
+            ['message' => $isDeleted > 0 ? 'Deleted successfully' : 'Delete failed!'],
+            $isDeleted > 0 ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST
         );
     }
 }

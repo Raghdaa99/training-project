@@ -29,7 +29,7 @@
 
             <form>
                 <div class="input-group mb-3">
-                    <input type="text" class="form-control" placeholder="Full name" id="name">
+                    <input type="text" class="form-control" placeholder="Full name" id="name" value="{{$user->name}}" disabled>
                     <div class="input-group-append">
                         <div class="input-group-text">
                             <span class="fas fa-user"></span>
@@ -37,7 +37,10 @@
                     </div>
                 </div>
                 <div class="input-group mb-3">
-                    <input type="text" class="form-control" placeholder="Student Number" id="number">
+                    <?php
+                    $str = $guard."_no";
+                    $guard_no =$user->$str ?>
+                    <input type="text" class="form-control" placeholder="Student Number" id="number" value="{{$guard_no}}" disabled>
                     <div class="input-group-append">
                         <div class="input-group-text">
                             <span class="fas fa-envelope"></span>
@@ -45,7 +48,7 @@
                     </div>
                 </div>
                 <div class="input-group mb-3">
-                    <input type="text" class="form-control" placeholder="Phone" id="phone">
+                    <input type="text" class="form-control" placeholder="Phone" id="phone" value="{{$user->phone}}" disabled>
                     <div class="input-group-append">
                         <div class="input-group-text">
                             <span class="fas fa-phone"></span>
@@ -67,6 +70,14 @@
                             <span class="fas fa-lock"></span>
                         </div>
                     </div>
+                </div>
+                <div class="form-group">
+                    <label for="">Department</label>
+                    <select class="custom-select form-control-border" id="department_no">
+                        @foreach ($departments as $department)
+                            <option value="{{$department->department_no}}">{{$department->name}}</option>
+                        @endforeach
+                    </select>
                 </div>
                 <div class="row">
                     <div class="col-8">
@@ -101,18 +112,20 @@
 <script>
     function register() {
 
-        axios.post('/cms/register', {
+        axios.put('/cms/register', {
             number: document.getElementById('number').value,
-            name: document.getElementById('name').value,
-            phone: document.getElementById('phone').value,
+            // name: document.getElementById('name').value,
+            // phone: document.getElementById('phone').value,
             password: document.getElementById('password').value,
             password_confirmation: document.getElementById('password_confirmation').value,
             guard: '{{$guard}}',
+            department_no: document.getElementById('department_no').value,
+
         })
             .then(function (response) {
                 toastr.success(response.data.message);
                 console.log(response);
-                // window.location.href = '/cms/admin/departments';
+                window.location.href = '/cms/{{$guard}}/login';
             })
             .catch(function (error) {
 

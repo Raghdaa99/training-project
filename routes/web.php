@@ -5,7 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\FieldController;
-use App\Http\Controllers\RegisterStudentCourseController;
+use App\Http\Controllers\StudentsSupervisorsController;
 use App\Http\Controllers\StudentCompanyFieldController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\RoleController;
@@ -15,7 +15,7 @@ use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\SupervisorController;
 use App\Http\Controllers\TrainerController;
 use App\Mail\CompanyEmail;
-use App\Models\RegisterStudentCourse;
+use App\Models\StudentSupervisor;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -36,9 +36,10 @@ Route::get('/', function () {
 Route::prefix('cms')->middleware('guest:student,admin,supervisor,trainer')->group(function () {
     Route::get('{guard}/login', [AuthController::class, 'showLogin'])->name('cms.login');
     Route::get('{guard}/register', [AuthController::class, 'showRegister'])->name('cms.register');
+    Route::get('{guard}/check', [AuthController::class, 'checkCredentials'])->name('cms.check.credentials');
     Route::post('login', [AuthController::class, 'login']);
-    Route::post('register', [AuthController::class, 'register']);
-
+    Route::put('register', [AuthController::class, 'register']);
+    Route::post('check', [AuthController::class, 'check_credential']);
 });
 
 Route::prefix('cms/admin')->middleware('auth:admin')->group(function () {
@@ -51,7 +52,7 @@ Route::prefix('cms/admin')->middleware('auth:admin')->group(function () {
     Route::resource('departments', DepartmentController::class);
     Route::resource('fields', FieldController::class);
     Route::resource('companies', CompanyController::class);
-    Route::resource('registerStudentCourse', RegisterStudentCourseController::class);
+    Route::resource('registerStudentCourse', StudentsSupervisorsController::class);
 
 });
 
@@ -59,24 +60,40 @@ Route::prefix('cms/admin')->middleware('auth:student,admin,supervisor')->group(f
     Route::resource('students', StudentController::class);
 });
 Route::prefix('cms/supervisor')->middleware('auth:supervisor')->group(function () {
-        Route::get('show/Students', [SupervisorController::class,'show_students']);
+        Route::get('show/Students', [SupervisorController::class,'show_students'])->name('supervisor.show.students');
+        Route::post('search/Students', [SupervisorController::class,'search_students'])->name('supervisor.search.students');
+    Route::post('update-supervisor-status', [SupervisorController::class, 'updateSupervisorStatus']);
 });
 
 Route::get('show/company/{id}/show',[StudentCompanyFieldController::class,'show'])->name('company.send.email');
 Route::put('show/company/{id}/update',[StudentCompanyFieldController::class,'update_status']);
-Route::get('trainer/create/{company_student_id}',[TrainerController::class,'create_trainer']);
-Route::post('trainer/store',[TrainerController::class,'store']);
+Route::get('show/company/trainers/{id}',[TrainerController::class,'show_trainers_company'])->name('show.trainers.company');
+Route::post('trainer/store',[TrainerController::class,'create_trainer_to_company']);
+Route::get('trainer/create/{company_student_id}',[TrainerController::class,'create_trainer'])->name('trainer.create');
+Route::post('trainer/store/new',[TrainerController::class,'store'])->name('trainer.store.new');
 
-Route::prefix('cms/student')->middleware('auth:student')->group(function () {
+Route::prefix('cms/student')->middleware('auth:student,supervisor')->group(function () {
     Route::resource('registerStudentCompany', StudentCompanyFieldController::class);
+    Route::get('registerCompany/{student_no}', [StudentCompanyFieldController::class,'create_company_field'])->name('register.Student.Company');
+    Route::get('registerCompany/{studentCompanyField}/edit/{company_id?}', [StudentCompanyFieldController::class,'edit_company_field'])->name('edit.Student.Company');
 });
+
+
 Route::prefix('cms/trainer')->middleware('auth:trainer')->group(function () {
     Route::resource('trainers', TrainerController::class);
 
 });
 
-Route::prefix('cms')->middleware('auth:trainer,student,supervisor')->group( function () {
+Route::prefix('cms')->middleware('auth:trainer,student,supervisor,admin')->group( function () {
     Route::resource('appointments', AppointmentsController::class);
+    Route::get('student/appointment/{id}', [AppointmentsController::class,'show_student_appointment'])->name('show.student.appointment');
+
+    Route::get('update-password', [AuthController::class, 'update_pass_show'])->name('cms.update.password');
+    Route::post('update-password', [AuthController::class, 'update_password']);
+
+
+
+
 });
 
 Route::prefix('cms/admin')->middleware('auth:student,admin,supervisor,trainer')->group(function () {

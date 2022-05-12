@@ -41,18 +41,11 @@
                                     name="name" value="{{$admin->name}}">
                             </div>
                             <div class="form-group">
-                                <label for="email">{{__('cms.email')}}</label>
-                                <input type="email" class="form-control" id="email"
-                                    placeholder="{{__('cms.enter_email')}}" name="email" value="{{$admin->email}}">
+                                <label for="number">{{__('cms.number')}}</label>
+                                <input type="text" class="form-control" id="admin_no"
+                                    placeholder="{{__('cms.number')}}" name="number" value="{{$admin->admin_no}}">
                             </div>
-                            <div class="form-group">
-                                <label for="gender">{{__('cms.gender')}}</label>
-                                <select class="custom-select form-control-border" id="gender">
-                                    <option value="Male" @if($admin->gender == 'Male') selected @endif>Male</option>
-                                    <option value="Female" @if($admin->gender == 'Female') selected @endif>Female
-                                    </option>
-                                </select>
-                            </div>
+                        
                         </div>
                         <!-- /.card-body -->
                         <div class="card-footer">
@@ -74,18 +67,16 @@
 @section('scripts')
 <script>
     function performUpdate() {
-        axios.put('/cms/admin/admins/{{$admin->id}}', {
+        axios.put('/cms/admin/admins/{{$admin->admin_no}}', {
             name: document.getElementById('name').value,
-            email_address: document.getElementById('email').value,
             role_id: document.getElementById('role_id').value,
-            gender: document.getElementById('gender').value
+            admin_no: document.getElementById('admin_no').value,
 
         })
         .then(function (response) {
             //2xx
             console.log(response);
             toastr.success(response.data.message);
-            //
             window.location.href = '/cms/admin/admins';
         })
         .catch(function (error) {

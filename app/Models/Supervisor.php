@@ -17,11 +17,11 @@ class Supervisor extends Authenticatable
 
     public function registerStudentCourse()
     {
-        return $this->hasMany(RegisterStudentCourse::class, 'supervisor_no', 'supervisor_no');
+        return $this->hasMany(StudentSupervisor::class, 'supervisor_no', 'supervisor_no');
     }
     public function students()
     {
-        return $this->belongsToMany(Student::class, RegisterStudentCourse::class, 'supervisor_no', 'student_no');
+        return $this->belongsToMany(Student::class, StudentSupervisor::class, 'supervisor_no', 'student_no');
     }
 
 }

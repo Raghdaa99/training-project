@@ -31,7 +31,8 @@
 
                                 <div class="form-group">
                                     <label for="name">{{__('cms.company_name')}}</label>
-                                    <input type="text" class="form-control" id="name" placeholder="{{__('cms.company_name')}}"
+                                    <input type="text" class="form-control" id="name"
+                                           placeholder="{{__('cms.company_name')}}"
                                            name="name" value="{{$company->name}}">
                                 </div>
                                 <div class="form-group">
@@ -51,6 +52,29 @@
                                     <input type="text" class="form-control" id="address"
                                            placeholder="{{__('cms.company_address')}}" name="address"
                                            value="{{$company->address}}">
+                                </div>
+
+                                <div class="form-group">
+                                    <label> Training Fields Company :</label>
+                                    <div class="icheck-success d-block">
+                                        {{--                                        @php($fields_req = [])--}}
+
+                                        @foreach($fields as $field)
+                                            <?php $checked = false;?>
+                                            @foreach($fields_companies as $field_company)
+                                                @if($field->id ==$field_company->id )
+                                                    <?php $checked= true;?>
+                                                    @endif
+                                            @endforeach
+                                                <input type="checkbox" value="{{$field->id}}" class="ids" name="ids[]"{{$checked ? 'checked':''}}>
+                                                <label for="ids[]">
+                                                    {{$field->name}}
+                                                </label>
+{{--                                            --}}
+                                            {{--                                            <label for="field_{{$field->id}}">{{$field->name}}</label>--}}
+                                            <br>
+                                        @endforeach
+                                    </div>
                                 </div>
                             </div>
                             <!-- /.card-body -->
@@ -74,12 +98,16 @@
 @section('scripts')
     <script>
         function performUpdate() {
+            var ids = [];
+            $('.ids:checked').each(function(i, e) {
+                ids.push($(this).val());
+            });
             axios.put('/cms/admin/companies/{{$company->id}}', {
                 name: document.getElementById('name').value,
                 email: document.getElementById('email').value,
                 phone: document.getElementById('phone').value,
                 address: document.getElementById('address').value,
-
+                fields_req: ids,
             })
                 .then(function (response) {
                     //2xx

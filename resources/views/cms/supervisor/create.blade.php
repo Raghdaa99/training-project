@@ -52,6 +52,15 @@
                                 <input type="text" class="form-control" id="phone"
                                        placeholder="{{__('cms.phone')}}" name="phone">
                             </div>
+
+                            <div class="form-group">
+                                <label for="">Department</label>
+                                <select class="custom-select form-control-border" id="department_no">
+                                    @foreach ($departments as $department)
+                                        <option value="{{$department->department_no}}">{{$department->name}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
                         </div>
                         <!-- /.card-body -->
 
@@ -80,7 +89,7 @@
             email: document.getElementById('email').value,
             password: document.getElementById('password').value,
             phone: document.getElementById('phone').value,
-
+            department_no: document.getElementById('department_no').value,
         })
         .then(function (response) {
             //2xx

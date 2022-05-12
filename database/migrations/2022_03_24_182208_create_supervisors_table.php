@@ -17,6 +17,9 @@ return new class extends Migration {
             $table->string('name');
             $table->string('password');
             $table->string('phone')->unique();
+            $table->bigInteger('id_number ')->unique();
+            $table->boolean('status')->default(false);
+            $table->string('phone')->unique();
             $table->string('email')->unique();
             $table->rememberToken();
             $table->timestamps();

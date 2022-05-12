@@ -13,4 +13,9 @@ class Field extends Model
     {
         return $this->hasMany(StudentCompanyField::class, 'field_id', 'id');
     }
+
+    public function companies()
+    {
+        return $this->belongsToMany(Company::class, CompanyField::class, 'field_id', 'company_id');
+    }
 }

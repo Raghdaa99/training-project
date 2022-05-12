@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Http\Controllers\AppointmentsController;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -19,15 +20,25 @@ class Student extends Authenticatable
 
     public function registerStudentCourse()
     {
-        return $this->hasMany(RegisterStudentCourse::class, 'student_no', 'student_no');
+        return $this->hasMany(StudentSupervisor::class, 'student_no', 'student_no');
     }
+
     public function supervisor()
     {
-        return $this->belongsToMany(Supervisor::class, RegisterStudentCourse::class, 'student_no', 'supervisor_no');
+        return $this->belongsToMany(Supervisor::class, StudentSupervisor::class, 'student_no', 'supervisor_no');
     }
     public function studentCompanyField()
     {
         return $this->hasOne(StudentCompanyField::class, 'student_no', 'student_no');
+    }
+    public function department()
+    {
+        return $this->belongsTo(Department::class, 'department_no', 'department_no');
+    }
+
+    public function appointments()
+    {
+        return $this->hasMany(Appointments::class, 'student_no', 'student_no');
     }
 //    public function company()
 //    {

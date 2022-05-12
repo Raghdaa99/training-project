@@ -33,28 +33,28 @@
                             <div class="card-body">
                                 <div class="form-group">
                                     <label for="">Student Name</label>
-                                    <select class="custom-select form-control-border" id="user_id">
+                                    <select class="custom-select form-control-border" id="student_company_id">
                                         @foreach ($students as $student)
-                                            <option value="{{$student->student_no}}">{{$student->student->student->name}}</option>
+                                            <option value="{{$student->id}}">{{$student->student->student->name}}</option>
                                         @endforeach
                                     </select>
                                 </div>
 
                                 <!--Time picker -->
                                 <div class="form-group">
-                                    <label for="name">Number of Hours</label>
-                                    <input type="number" class="form-control" id="age" placeholder="Enter number hours of Training"
+                                    <label for="no_hours_of_training">Number of Hours</label>
+                                    <input type="number" class="form-control" id="no_hours_of_training" placeholder="Enter number hours of Training"
                                            name="no_hours_of_training">
                                 </div>
 
                                 <div class="row">
                                     <div class="form-group col-sm">
                                         <label>Start Date:</label>
-                                        <div class="input-group date" id="reservationdate" data-target-input="nearest">
-                                            <input id="date_appointment" type="text"
+                                        <div class="input-group date" id="start_date" data-target-input="nearest">
+                                            <input id="start_date_appointment" type="text"
                                                    class="form-control datetimepicker-input"
-                                                   data-target="#reservationdate"/>
-                                            <div class="input-group-append" data-target="#reservationdate"
+                                                   data-target="#start_date"/>
+                                            <div class="input-group-append" data-target="#start_date"
                                                  data-toggle="datetimepicker">
                                                 <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                                             </div>
@@ -62,11 +62,11 @@
                                     </div>
                                     <div class="form-group col-sm">
                                         <label>End Date:</label>
-                                        <div class="input-group date" id="reservationdate" data-target-input="nearest">
-                                            <input id="date_appointment" type="text"
+                                        <div class="input-group date" id="end_date" data-target-input="nearest">
+                                            <input id="end_date_appointment" type="text"
                                                    class="form-control datetimepicker-input"
-                                                   data-target="#reservationdate"/>
-                                            <div class="input-group-append" data-target="#reservationdate"
+                                                   data-target="#end_date"/>
+                                            <div class="input-group-append" data-target="#end_date"
                                                  data-toggle="datetimepicker">
                                                 <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                                             </div>
@@ -80,10 +80,10 @@
                                     <div class="form-group col-sm">
                                         <label>Start Time:</label>
 
-                                        <div class="input-group date" id="timepicker" data-target-input="nearest">
-                                            <input id="time_appointment" type="text"
-                                                   class="form-control datetimepicker-input" data-target="#timepicker">
-                                            <div class="input-group-append" data-target="#timepicker"
+                                        <div class="input-group date" id="start_time" data-target-input="nearest">
+                                            <input id="start_time_appointment" type="text"
+                                                   class="form-control datetimepicker-input" data-target="#start_time">
+                                            <div class="input-group-append" data-target="#start_time"
                                                  data-toggle="datetimepicker">
                                                 <div class="input-group-text"><i class="far fa-clock"></i></div>
                                             </div>
@@ -93,10 +93,10 @@
                                     <div class="form-group col-sm">
                                         <label>End Time:</label>
 
-                                        <div class="input-group date" id="timepicker" data-target-input="nearest">
-                                            <input id="time_appointment" type="text"
-                                                   class="form-control datetimepicker-input" data-target="#timepicker">
-                                            <div class="input-group-append" data-target="#timepicker"
+                                        <div class="input-group date" id="end_time" data-target-input="nearest">
+                                            <input id="end_time_appointment" type="text"
+                                                   class="form-control datetimepicker-input" data-target="#end_time">
+                                            <div class="input-group-append" data-target="#end_time"
                                                  data-toggle="datetimepicker">
                                                 <div class="input-group-text"><i class="far fa-clock"></i></div>
                                             </div>
@@ -111,28 +111,28 @@
                                 <div class="form-group">
 
                                     <div class="icheck-success d-block">
-                                        <input type="checkbox" id="" onclick="">
-                                        <label for="">Saturday</label>
+                                        <input type="checkbox" id="Saturday">
+                                        <label for="Saturday">Saturday</label>
                                     </div>
                                     <div class="icheck-success d-block">
-                                        <input type="checkbox" id="" onclick="">
-                                        <label for="">Sunday</label>
+                                        <input type="checkbox" id="Sunday">
+                                        <label for="Sunday">Sunday</label>
                                     </div>
                                     <div class="icheck-success d-block">
-                                        <input type="checkbox" id="" onclick="">
-                                        <label for="">Monday</label>
+                                        <input type="checkbox" id="Monday">
+                                        <label for="Monday">Monday</label>
                                     </div>
                                     <div class="icheck-success d-block">
-                                        <input type="checkbox" id="" onclick="">
-                                        <label for="">Tuesday</label>
+                                        <input type="checkbox" id="Tuesday">
+                                        <label for="Tuesday">Tuesday</label>
                                     </div>
                                     <div class="icheck-success d-block">
-                                        <input type="checkbox" id="" onclick="">
-                                        <label for="">Wednesday</label>
+                                        <input type="checkbox" id="Wednesday">
+                                        <label for="Wednesday">Wednesday</label>
                                     </div>
                                     <div class="icheck-success d-block">
-                                        <input type="checkbox" id="" onclick="">
-                                        <label for="">Thursday</label>
+                                        <input type="checkbox" id="Thursday">
+                                        <label for="Thursday">Thursday</label>
                                     </div>
 
                                 </div>
@@ -165,23 +165,36 @@
     <script>
         $(function () {
             //Date picker
-            $('#reservationdate').datetimepicker({
+            $('#start_date').datetimepicker({
+                format: 'DD-MM-YYYY'
+            });
+            $('#end_date').datetimepicker({
                 format: 'DD-MM-YYYY'
             });
             //Timepicker
-            $('#timepicker').datetimepicker({
+            $('#start_time').datetimepicker({
+                format: 'HH:mm:ss'
+            });
+            $('#end_time').datetimepicker({
                 format: 'HH:mm:ss'
             });
 
         });
 
         function performStore() {
-            axios.post('/cms/admin/appointments', {
-                user_id: document.getElementById('user_id').value,
-                patient_id: document.getElementById('patient_id').value,
-                date: document.getElementById('date_appointment').value,
-                time: document.getElementById('time_appointment').value,
-                emergency: document.getElementById('emergency').checked
+            axios.post('/cms/appointments', {
+                student_company_id: document.getElementById('student_company_id').value,
+                no_hours_of_training: document.getElementById('no_hours_of_training').value,
+                start_date: document.getElementById('start_date_appointment').value,
+                end_date: document.getElementById('end_date_appointment').value,
+                start_time: document.getElementById('start_time_appointment').value,
+                end_time: document.getElementById('end_time_appointment').value,
+                Saturday: document.getElementById('Saturday').checked,
+                Sunday: document.getElementById('Sunday').checked,
+                Monday: document.getElementById('Monday').checked,
+                Tuesday: document.getElementById('Tuesday').checked,
+                Wednesday: document.getElementById('Wednesday').checked,
+                Thursday: document.getElementById('Thursday').checked,
             })
                 .then(function (response) {
                     //2xx

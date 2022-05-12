@@ -1,11 +1,11 @@
 @component('mail::message')
-# HI Baby
+# Al-Aqsa University
 
-The body of your message.
+Application for approval of field training students from Al-Aqsa University
 
 
 @component('mail::button', ['url' => $url])
-Button Text
+Continue
 @endcomponent
 
 Thanks,<br>

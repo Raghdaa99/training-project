@@ -13,23 +13,37 @@ class StudentCompanyField extends Model
 
     public function student()
     {
-        return $this->belongsTo(RegisterStudentCourse::class, 'student_no', 'student_no');
-    }
-//    public function studentOne()
-//    {
-//        return $this->belongsToMany(Student::class, RegisterStudentCourse::class, 'student_no', 'student_no');
-//    }
-    public function fields()
-    {
-        return $this->belongsTo(Field::class, 'field_id', 'id');
+        return $this->belongsTo(StudentSupervisor::class, 'student_no', 'student_no');
     }
 
-    public function companies()
+//    public function studentOne()
+//    {
+//        return $this->belongsToMany(Student::class, StudentSupervisor::class, 'student_no', 'student_no');
+//    }
+//    public function fields()
+//    {
+//        return $this->belongsTo(Field::class, 'field_id', 'id');
+//    }
+//
+//    public function companies()
+//    {
+//        return $this->belongsTo(Company::class, 'company_id', 'id');
+//    }
+
+    public function companyField()
     {
-        return $this->belongsTo(Company::class, 'company_id', 'id');
+        return $this->belongsTo(CompanyField::class, 'company_field_id', 'id');
     }
-    public function getActiveStatusAttribute()
+    public function trainer()
     {
-        return $this->status ? 'Active' : 'Non-Active';
+        return $this->belongsTo(Trainer::class, 'trainer_id', 'id');
+    }
+    public function getCompanyStatusAttribute()
+    {
+        return $this->status_company ? 'Active' : 'Non-Active';
+    }
+    public function getSupervisorStatusAttribute()
+    {
+        return $this->status_supervisor ? 'Active' : 'Non-Active';
     }
 }

@@ -82,10 +82,8 @@
                     <!-- /.col -->
                 </div>
             </form>
-
-
             <p class="mb-0">
-                <a href="{{route('cms.register','student')}}" class="text-center">Register a new membership</a>
+                <a href="{{route('cms.check.credentials',$guard)}}" class="text-center">Register a new membership</a>
             </p>
         </div>
         <!-- /.card-body -->
@@ -117,7 +115,7 @@
             .then(function (response) {
                 toastr.success(response.data.message);
                 console.log(response);
-                window.location.href = '/cms/admin/departments';
+                window.location.href = '/cms/admin';
             })
             .catch(function (error) {
 

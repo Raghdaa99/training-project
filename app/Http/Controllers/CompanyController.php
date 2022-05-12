@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Company;
+use App\Models\Field;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Response;
 
 class CompanyController extends Controller
@@ -16,7 +18,7 @@ class CompanyController extends Controller
     public function index()
     {
         $companies = Company::all();
-        return response()->view('cms.companies.index',['companies'=>$companies]);
+        return response()->view('cms.companies.index', ['companies' => $companies]);
     }
 //    public function show_company(){
 ////        dd('55');
@@ -30,95 +32,129 @@ class CompanyController extends Controller
      */
     public function create()
     {
-        return view('cms.companies.add');
+        $fields = Field::all();
+        return response()->view('cms.companies.add', ['fields' => $fields]);
 
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function store(Request $request)
     {
-        $validator = Validator($request->all(),[
+        $validator = Validator($request->all(), [
             'name' => 'required|string',
             'email' => 'required|email|unique:companies,email,',
             'phone' => 'required|string|unique:companies,phone,',
             'address' => 'required|string',
         ]);
-        if(!$validator->fails()){
+        if (!$validator->fails()) {
             $company = new Company();
             $company->name = $request->name;
             $company->email = $request->email;
             $company->phone = $request->phone;
             $company->address = $request->address;
             $isSaved = $company->save();
-
-            return response()->json(['message'=>$isSaved ? 'Company succsess Created' : 'Faield']
-                ,$isSaved ? Response::HTTP_CREATED : Response::HTTP_BAD_REQUEST );
-        }else{
-            return response()->json(['message'=>$validator->getMessageBag()->first()],Response::HTTP_BAD_REQUEST);
+            if ($isSaved) {
+                $myCheckboxes = $request->input('fields_req');
+                foreach ($myCheckboxes as $key => $value) {
+                    DB::table('companies_fields')->insert([
+                        'field_id' => $value,
+                        'company_id' => $company->id,
+                    ]);
+                }
+            }
+            return response()->json(['message' => $isSaved ? 'Company succsess Created' : 'Faield']
+                , $isSaved ? Response::HTTP_CREATED : Response::HTTP_BAD_REQUEST);
+        } else {
+            return response()->json(['message' => $validator->getMessageBag()->first()], Response::HTTP_BAD_REQUEST);
         }
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Company  $company
+     * @param \App\Models\Company $company
      * @return \Illuminate\Http\Response
      */
     public function show(Company $company)
     {
-        //
+        $fields = Field::whereHas('companies', function ($query) use ($company) {
+            $query->where('company_id', '=', $company->id);
+        })->get();
+//        $fields = Field::whereHas('companies');
+//        dd($fields);
+        return response()->view('cms.companies.show_fields_company', ['company' => $company, 'fields' => $fields]);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Company  $company
+     * @param \App\Models\Company $company
      * @return \Illuminate\Http\Response
      */
     public function edit(Company $company)
     {
-        return response()->view('cms.companies.edit',['company'=>$company]);
+        $fields = Field::all();
+        $fields_id = DB::table('companies_fields')->select(['field_id'])->where('company_id', '=', $company->id)->get();
+        $fields_companies = [];
+        foreach ($fields_id as $key => $value) {
+            $object = Field::where('id', '=', $value->field_id)->first();
+            $fields_companies[] = (object)$object;
+        }
+
+        return response()->view('cms.companies.edit', ['company' => $company, 'fields' => $fields,
+            'fields_companies' => $fields_companies]);
 
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Company  $company
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Models\Company $company
      * @return \Illuminate\Http\JsonResponse
      */
     public function update(Request $request, Company $company)
     {
-        $validator = Validator($request->all(),[
+        $validator = Validator($request->all(), [
             'name' => 'required|string',
-            'email' => 'required|email|unique:companies,email,'.$company->id,
-            'phone' => 'required|string|unique:companies,phone,'.$company->id,
+            'email' => 'required|email|unique:companies,email,' . $company->id,
+            'phone' => 'required|string|unique:companies,phone,' . $company->id,
             'address' => 'required|string',
         ]);
-        if(!$validator->fails()){
+        if (!$validator->fails()) {
             $company->name = $request->name;
             $company->email = $request->email;
             $company->phone = $request->phone;
             $company->address = $request->address;
             $isSaved = $company->save();
+            if ($isSaved) {
+                $myCheckboxes = $request->input('fields_req');
+                DB::table('companies_fields')->where('company_id', '=', $company->id)
+                    ->delete();
+                foreach ($myCheckboxes as $key => $value) {
 
-            return response()->json(['message'=>$isSaved ? 'Company succsess Updated' : 'Faield']
-                ,$isSaved ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST );
-        }else{
-            return response()->json(['message'=>$validator->getMessageBag()->first()],Response::HTTP_BAD_REQUEST);
+                    DB::table('companies_fields')->insert([
+                        'field_id' => $value,
+                        'company_id' => $company->id,
+                    ]);
+                }
+            }
+            return response()->json(['message' => $isSaved ? 'Company succsess Updated' : 'Faield']
+                , $isSaved ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST);
+        } else {
+            return response()->json(['message' => $validator->getMessageBag()->first()], Response::HTTP_BAD_REQUEST);
         }
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Company  $company
+     * @param \App\Models\Company $company
      * @return \Illuminate\Http\JsonResponse
      */
     public function destroy(Company $company)

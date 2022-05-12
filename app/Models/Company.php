@@ -13,8 +13,24 @@ class Company extends Model
     {
         return $this->hasMany(StudentCompanyField::class, 'company_id', 'id');
     }
+
     public function students()
     {
         return $this->belongsTo(Student::class, StudentCompanyField::class, 'student_no', 'company_id');
+    }
+
+    public function trainer()
+    {
+        return $this->hasOne(Trainer::class, 'company_id', 'id');
+    }
+
+    public function companyFields()
+    {
+        return $this->hasMany(CompanyField::class, 'company_id', 'id');
+    }
+
+    public function fields()
+    {
+        return $this->belongsToMany(Field::class, CompanyField::class, 'company_id', 'field_id');
     }
 }

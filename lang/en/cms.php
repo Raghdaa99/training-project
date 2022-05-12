@@ -6,6 +6,7 @@ return [
     'app_name' => 'UN-Project',
     'index' => 'Index',
     'create' => 'Create',
+    'show' => 'Show',
     'cities' => 'Cities',
     'content_management' => 'Content Management',
     'name_en' => 'Name (EN)',

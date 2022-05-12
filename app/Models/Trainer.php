@@ -12,4 +12,8 @@ class Trainer extends Authenticatable
 {
     use HasFactory, HasRoles;
 
+    public function company()
+    {
+        return $this->belongsTo(Company::class, 'company_id', 'id');
+    }
 }

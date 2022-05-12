@@ -3,17 +3,20 @@
 namespace App\Http\Controllers;
 
 use App\Models\Admin;
+use App\Models\Company;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
 
 class AdminController extends Controller
 {
 
     public function __construct()
     {
-//        $this->authorizeResource(Admin::class, 'admin');
+        //        $this->authorizeResource(Admin::class, 'admin');
     }
 
     /**
@@ -29,8 +32,17 @@ class AdminController extends Controller
 
     public function index_dashboard()
     {
-//        $admins = Admin::all();
-        return response()->view('cms.admins.index_dashboard');
+        //        $admins = Admin::all();
+        $count_companies = DB::table('companies')->count();
+        $count_trainers = DB::table('trainers')->count();
+        $count_students = DB::table('students')->count();
+        $count_supervisors = DB::table('supervisors')->count();
+        return response()->view('cms.admins.index_dashboard', [
+            'count_companies' => $count_companies,
+            'count_trainers' => $count_trainers,
+            'count_students' => $count_students,
+            'count_supervisors' => $count_supervisors,
+        ]);
     }
     /**
      * Show the form for creating a new resource.
@@ -55,13 +67,14 @@ class AdminController extends Controller
             'name' => 'required|string|min:3|max:100',
             'number' => 'required|integer|unique:admins,admin_no',
             'role_id' => 'required|numeric|exists:roles,id',
+            'password' => 'required|string|min:6|max:100',
         ]);
 
         if (!$validator->fails()) {
             $admin = new Admin();
             $admin->name = $request->input('name');
             $admin->admin_no = $request->input('number');
-            $admin->password = Hash::make(12345);
+            $admin->password = Hash::make($request->input('password'));
             $isSaved = $admin->save();
             if ($isSaved) {
                 $admin->assignRole(Role::findById($request->input('role_id'), 'admin'));
@@ -116,16 +129,13 @@ class AdminController extends Controller
     {
         $validator = Validator($request->all(), [
             'name' => 'required|string|min:3|max:100',
-            'email_address' => 'required|email|unique:admins,email,' . $admin->id,
+            'admin_no' => ['required', 'numeric', Rule::unique('admins')->ignore($admin->admin_no, 'admin_no')],
             'role_id' => 'required|numeric|exists:roles,id',
-            'gender' => 'required|string|in:Male,Female',
         ]);
 
         if (!$validator->fails()) {
             $admin->name = $request->input('name');
-            $admin->email = $request->input('email_address');
-            $admin->password = Hash::make(12345);
-            $admin->gender = $request->input('gender');
+            $admin->admin_no = $request->input('admin_no');
             $isSaved = $admin->save();
             if ($isSaved) {
                 $admin->syncRoles(Role::findById($request->input('role_id'), 'admin'));

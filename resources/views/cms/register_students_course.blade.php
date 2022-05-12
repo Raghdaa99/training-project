@@ -18,7 +18,10 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title">Bordered Table</h3>
+{{--                            <h3 class="card-title">Bordered Table</h3>--}}
+                            <a href="{{route('registerStudentCourse.create')}}" class="btn btn-success">
+                                <i >Register Student </i>
+                            </a>
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body">
@@ -41,8 +44,8 @@
                                         <td>{{$loop->iteration}}</td>
                                         <td>{{$item->student->student_no}}</td>
                                         <td>{{$item->student->name}}</td>
-                                        <td>{{$item->department->department_no}}</td>
-                                        <td>{{$item->department->name}}</td>
+                                        <td>{{$item->student->department->department_no}}</td>
+                                        <td>{{$item->student->department->name}}</td>
                                         <td>{{$item->supervisor->supervisor_no}}</td>
                                         <td>{{$item->supervisor->name}}</td>
 

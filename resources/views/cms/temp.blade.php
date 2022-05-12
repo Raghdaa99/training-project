@@ -4,68 +4,63 @@
 
 @section('content')
     <!-- Main content -->
-    <div class="content">
+    <section class="content">
         <div class="container-fluid">
-            <div class="row">
-                <div class="col-lg-6">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">Card title</h5>
+        <div class="row">
+                    <div class="large-12 columns">
+                        <div class="custom-panel">
+                            <div class="custom-panel-heading">
+                                <h4>Change Password</h4>
+                            </div>
 
-                            <p class="card-text">
-                                Some quick example text to build on the card title and make up the bulk of the card's
-                                content.
-                            </p>
+                            <div class="custom-panel-body">
 
-                            <a href="#" class="card-link">Card link</a>
-                            <a href="#" class="card-link">Another link</a>
-                        </div>
-                    </div>
+                                <form action="" method="POST">
+                                    @csrf
+                                    <table class="tbl-30">
+                                        <tr>
+                                            <td>Current Password:</td>
+                                            <td>
+                                                <input type="password" name="oldpassword" placeholder="Current Password"
+                                                       required>
+                                            </td>
+                                        </tr>
 
-                    <div class="card card-primary card-outline">
-                        <div class="card-body">
-                            <h5 class="card-title">Card title</h5>
+                                        <tr>
+                                            <td>New Password:</td>
+                                            <td>
+                                                <input type="password" name="newpassword" placeholder="New Password"
+                                                       required>
+                                            </td>
+                                        </tr>
 
-                            <p class="card-text">
-                                Some quick example text to build on the card title and make up the bulk of the card's
-                                content.
-                            </p>
-                            <a href="#" class="card-link">Card link</a>
-                            <a href="#" class="card-link">Another link</a>
-                        </div>
-                    </div><!-- /.card -->
-                </div>
-                <!-- /.col-md-6 -->
-                <div class="col-lg-6">
-                    <div class="card">
-                        <div class="card-header">
-                            <h5 class="m-0">Featured</h5>
-                        </div>
-                        <div class="card-body">
-                            <h6 class="card-title">Special title treatment</h6>
+                                        <tr>
+                                            <td>Confirm Password:</td>
+                                            <td>
+                                                <input type="password" name="password_confirmation"
+                                                       placeholder="Confirm Password" required>
+                                            </td>
+                                        </tr>
 
-                            <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                            <a href="#" class="btn btn-primary">Go somewhere</a>
-                        </div>
-                    </div>
+                                        <tr>
+                                            <td colspan="2">
+                                                <input type="hidden" name="id" value="">
+                                                <input type="submit" name="submit" value="Change Password"
+                                                       class="btn-secondary">
+                                            </td>
+                                        </tr>
 
-                    <div class="card card-primary card-outline">
-                        <div class="card-header">
-                            <h5 class="m-0">Featured</h5>
-                        </div>
-                        <div class="card-body">
-                            <h6 class="card-title">Special title treatment</h6>
+                                    </table>
 
-                            <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                            <a href="#" class="btn btn-primary">Go somewhere</a>
+                                </form>
+
+                            </div>
                         </div>
                     </div>
                 </div>
-                <!-- /.col-md-6 -->
-            </div>
             <!-- /.row -->
         </div><!-- /.container-fluid -->
-    </div>
+    </section>
     <!-- /.content -->
 
 @endsection

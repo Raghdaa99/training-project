@@ -70,11 +70,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                     <input type="email" class="form-control" id="email"
                                            name="email" value="" placeholder="Enter your Email">
                                 </div>
-                                <div class="form-group">
-                                    <label for="password">Trainer Password</label>
-                                    <input type="password" class="form-control" id="password"
-                                           name="password" value="" placeholder="Enter Password">
-                                </div>
                                 <div class="card-footer">
                                     <button type="button" onclick="performStore()"
                                             class="btn btn-primary">{{__('cms.save')}}</button>
@@ -110,19 +105,19 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     function performStore() {
-        axios.post('/trainer/store', {
+        console.log('555');
+        axios.post('/trainer/store/new', {
             name: document.getElementById('name').value,
             email: document.getElementById('email').value,
-            password: document.getElementById('password').value,
             phone: document.getElementById('phone').value,
-            company_id:{{$company_id}},
+            company_student_id:{{$company_student_id}},
         })
             .then(function (response) {
                 //2xx
                 console.log(response);
                 toastr.success(response.data.message);
                 // document.getElementById('create-form').reset();
-                window.location.href = '/cms/trainer/login';
+                window.location.href = '/show/company/trainers/{{$company_student_id}}';
 
             })
             .catch(function (error) {

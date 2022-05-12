@@ -26,7 +26,8 @@
 
                                 <div class="form-group">
                                     <label for="name">{{__('cms.company_name')}}</label>
-                                    <input type="text" class="form-control" id="name" placeholder="{{__('cms.company_name')}}"
+                                    <input type="text" class="form-control" id="name"
+                                           placeholder="{{__('cms.company_name')}}"
                                            name="name">
                                 </div>
                                 <div class="form-group">
@@ -43,6 +44,21 @@
                                     <label for="address">{{__('cms.company_address')}}</label>
                                     <input type="text" class="form-control" id="address"
                                            placeholder="{{__('cms.company_address')}}" name="address">
+                                </div>
+                                <div class="form-group">
+                                    <label> Training Fields Company :</label>
+                                    <div class="icheck-success d-block">
+                                        {{--                                        @php($fields_req = [])--}}
+                                        @foreach($fields as $field)
+
+                                            <input type="checkbox" value="{{$field->id}}" class="ids" name="ids[]">
+                                            <label for="ids[]">
+                                                {{$field->name}}
+                                            </label>
+                                            {{--                                            <label for="field_{{$field->id}}">{{$field->name}}</label>--}}
+                                            <br>
+                                        @endforeach
+                                    </div>
                                 </div>
                             </div>
                             <!-- /.card-body -->
@@ -66,29 +82,33 @@
 
 @section('scripts')
 
-<script>
-    function performStore() {
-
-        axios.post('/cms/admin/companies', {
-            name: document.getElementById('name').value,
-            email: document.getElementById('email').value,
-            phone: document.getElementById('phone').value,
-            address: document.getElementById('address').value,
-
-            })
-            .then(function(response) {
-                toastr.success(response.data.message);
-
-                console.log(response);
-                document.getElementById('create-form').reset();
-                window.location.href = '/cms/admin/companies';
-
-            })
-            .catch(function(error) {
-                toastr.error(error.response.data.message);
-
-                console.log(error.response.data.message);
+    <script>
+        function performStore() {
+            var ids = [];
+            $('.ids:checked').each(function(i, e) {
+                ids.push($(this).val());
             });
-    }
-</script>
+            axios.post('/cms/admin/companies', {
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                address: document.getElementById('address').value,
+                fields_req: ids,
+
+            })
+                .then(function (response) {
+                    toastr.success(response.data.message);
+
+                    console.log(response);
+                    document.getElementById('create-form').reset();
+                    // window.location.href = '/cms/admin/companies';
+
+                })
+                .catch(function (error) {
+                    toastr.error(error.response.data.message);
+
+                    console.log(error.response.data.message);
+                });
+        }
+    </script>
 @endsection

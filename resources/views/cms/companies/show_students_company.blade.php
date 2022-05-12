@@ -79,7 +79,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                 <div class="form-group">
                                     <label for="email">Field Name</label>
                                     <input type="email" class="form-control" id="email"
-                                           name="email" value="{{$item->fields->name}}" disabled>
+                                           name="email" value="{{$item->companyField->field->name}}" disabled>
                                 </div>
                                 <div class="form-group">
                                     <label for="email">University Name</label>
@@ -136,7 +136,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             //2xx
             console.log(response);
             toastr.success(response.data.message);
-            window.location.href = '/trainer/create/{{$item->id}}';
+            window.location.href = '/show/company/trainers/{{$item->id}}';
         })
             .catch(function (error) {
                 //4xx - 5xx

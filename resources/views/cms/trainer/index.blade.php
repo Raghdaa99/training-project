@@ -18,7 +18,7 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title">Bordered Table</h3>
+                            <h3 class="card-title">Students</h3>
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body">
@@ -29,7 +29,6 @@
                                     <th>Student No</th>
                                     <th>Student Name</th>
                                     <th>Field Name</th>
-
                                     <th>Settings</th>
 
                                 </tr>
@@ -38,15 +37,13 @@
                                 @foreach ($students as $student)
                                     <tr>
                                         <td>{{$loop->iteration}}</td>
-                                        <td>{{$student->student_no}}</td>
+                                        <td>{{$student->student->student_no}}</td>
                                         <td>{{$student->student->student->name}}</td>
-                                        <td>{{$student->fields->name}}</td>
+                                        <td>{{$student->companyField->field->name}}</td>
                                         <td>
                                             <a class="btn btn-primary btn-sm"
-                                               onclick="confirmSendEmail('{{$student->id}}','{{$student->companies->email}}')">
-{{--                                                <i class="fa fa-envelope"></i>--}}
-
-                                               Create Appointment
+{{--                                               onclick="confirmSendEmail('{{$student->id}}','{{$student->companies->email}}')"--}}>
+                                               Attendance
                                             </a>
 
                                         </td>

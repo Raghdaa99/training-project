@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Department;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
 
 class DepartmentController extends Controller
 {
@@ -91,7 +93,10 @@ class DepartmentController extends Controller
     {
         $validator = Validator($request->all(),[
             'name' => 'required|string',
-            'department_no' => 'required|unique:departments,department_no,',
+            
+            // 'department_no' => 'required|unique:departments,department_no'
+            // 'department_no' => 'required|unique:departments,department_no,'.$department->department_no,
+            'department_no' => ['required', 'numeric', Rule::unique('departments')->ignore($department->department_no, 'department_no')],
         ]);
         if(!$validator->fails()){
             $department->name = $request->name;

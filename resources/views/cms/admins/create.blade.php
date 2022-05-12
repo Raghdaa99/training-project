@@ -45,6 +45,11 @@
                                 <input type="text" class="form-control" id="number"
                                     placeholder="{{__('cms.number')}}" name="number">
                             </div>
+                            <div class="form-group">
+                                <label for="password">{{__('cms.password')}}</label>
+                                <input type="password" class="form-control" id="password"
+                                    placeholder="{{__('cms.password')}}" name="password">
+                            </div>
                         </div>
                         <!-- /.card-body -->
 
@@ -71,6 +76,8 @@
             name: document.getElementById('name').value,
             number: document.getElementById('number').value,
             role_id: document.getElementById('role_id').value,
+            password: document.getElementById('password').value,
+
         })
         .then(function (response) {
             //2xx

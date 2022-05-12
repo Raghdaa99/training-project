@@ -30,6 +30,7 @@
                                     <th>{{__('cms.company_email')}}</th>
                                     <th>{{__('cms.company_phone')}}</th>
                                     <th>{{__('cms.company_address')}}</th>
+                                    <th>{{__('cms.fields')}}</th>
                                     <th style="width: 40px">Settings</th>
                                 </tr>
                                 </thead>
@@ -41,13 +42,20 @@
                                         <td>{{$company->email}}</td>
                                         <td>{{$company->phone}}</td>
                                         <td>{{$company->address}}</td>
-
+                                        <td><a class="btn btn-primary btn-sm"
+                                               href="{{route('companies.show',$company->id)}}">
+                                                <i class="fas fa-folder"></i>
+                                                View
+                                            </a>
+                                        </td>
                                         <td>
                                             <div class="btn-group">
-                                                <a href="{{route('companies.edit',$company->id)}}" class="btn btn-warning">
+                                                <a href="{{route('companies.edit',$company->id)}}"
+                                                   class="btn btn-warning">
                                                     <i class="fas fa-edit"></i>
                                                 </a>
-                                                <a href="#" onclick="confirmDelete('{{$company->id}}',this)" class=" btn btn-danger">
+                                                <a href="#" onclick="confirmDelete('{{$company->id}}',this)"
+                                                   class=" btn btn-danger">
                                                     <i class="fas fa-trash"></i>
                                                 </a>
                                             </div>
@@ -76,7 +84,7 @@
 @section('scripts')
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-        function confirmDelete(id,reference) {
+        function confirmDelete(id, reference) {
             Swal.fire({
                 title: 'Are you sure?',
                 text: "You won't be able to revert this!",
@@ -87,13 +95,13 @@
                 confirmButtonText: 'Yes, delete it!'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    performDelete(id,reference);
+                    performDelete(id, reference);
                 }
             });
         }
 
-        function performDelete(id,reference) {
-            axios.delete('/cms/admin/companies/'+id)
+        function performDelete(id, reference) {
+            axios.delete('/cms/admin/companies/' + id)
                 .then(function (response) {
                     //2xx
                     console.log(response);

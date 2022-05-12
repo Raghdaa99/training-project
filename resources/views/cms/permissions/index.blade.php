@@ -28,8 +28,7 @@
                   <th style="width: 10px">#</th>
                   <th>{{__('cms.name')}}</th>
                   <th>{{__('cms.guard')}}</th>
-                  <th>{{__('cms.created_at')}}</th>
-                  <th>{{__('cms.updated_at')}}</th>
+
                   <th style="width: 40px">Settings</th>
                 </tr>
               </thead>
@@ -39,8 +38,7 @@
                   <td>{{$permission->id}}</td>
                   <td>{{$permission->name}}</td>
                   <td>{{$permission->guard_name}}</td>
-                  <td>{{$permission->created_at}}</td>
-                  <td>{{$permission->updated_at}}</td>
+
                   <td>
                     <div class="btn-group">
                       <a href="{{route('permissions.edit',$permission->id)}}" class="btn btn-warning">
@@ -90,7 +88,7 @@
       }
     });
   }
-  
+
   function performDelete(id,reference) {
     axios.delete('/cms/admin/permissions/'+id)
     .then(function (response) {
@@ -103,7 +101,7 @@
         //4xx - 5xx
         console.log(error.response.data.message);
         toastr.error(error.response.data.message);
-    });    
+    });
   }
 </script>
 @endsection
