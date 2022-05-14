@@ -98,6 +98,11 @@
                                                            class="btn btn-warning btn-sm">
                                                             <i class="fas fa-table"> Show Appointments</i>
                                                         </a>
+                                                        <a class="btn btn-secondary btn-sm"
+                                                           href="{{route('show.student.attendances',$company_student->studentCompany->id)}}">
+                                                            Attendance
+                                                        </a>
+
                                                     </div>
                                                 @endif
                                             </td>

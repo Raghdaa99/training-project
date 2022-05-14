@@ -37,6 +37,7 @@
                                         @endif
                                         @if($item->status_company==1)
                                             <th style="width: 60px">Appointments</th>
+                                            <th style="width: 60px">Attendances</th>
                                         @endif
                                     </tr>
                                     </thead>
@@ -74,8 +75,13 @@
                                                            class="btn btn-warning">
                                                             <i class="fas fa-table"> Show</i>
                                                         </a>
+
                                                     </div>
                                                 </td>
+                                                <td><a class="btn btn-secondary btn-sm"
+                                                       href="{{route('show.student.attendances',$item->id)}}">
+                                                        Attendance
+                                                    </a></td>
                                             @endif
                                         </tr>
 {{--                                    @endforeach--}}

@@ -106,10 +106,14 @@ class AttendanceController extends Controller
      * Remove the specified resource from storage.
      *
      * @param \App\Models\Attendance $attendance
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy(Attendance $attendance)
     {
-        //
+        $isDeleted = $attendance->delete();
+        return response()->json(
+            ['message' => $isDeleted ? 'Deleted successfully' : 'Delete failed!'],
+            $isDeleted ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST
+        );
     }
 }

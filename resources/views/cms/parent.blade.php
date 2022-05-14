@@ -74,12 +74,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                         <!-- Add icons to the links using the .nav-icon class
                          with font-awesome or any other icon font library -->
+                        @auth('admin')
                         <li class="nav-item">
                             <a href="{{route('cms.admin.dashboard')}}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Dashboard</p>
                             </a>
                         </li>
+                        @endauth
 
                         @canany(['Create-Role','Read-Roles', 'Create-Permission','Read-Permissions'])
                         <li class="nav-header">{{__('cms.roles_permissions')}}</li>
