@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AppointmentsController;
+use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\DepartmentController;
@@ -60,22 +61,22 @@ Route::prefix('cms/admin')->middleware('auth:student,admin,supervisor')->group(f
     Route::resource('students', StudentController::class);
 });
 Route::prefix('cms/supervisor')->middleware('auth:supervisor')->group(function () {
-        Route::get('show/Students', [SupervisorController::class,'show_students'])->name('supervisor.show.students');
-        Route::post('search/Students', [SupervisorController::class,'search_students'])->name('supervisor.search.students');
+    Route::get('show/Students', [SupervisorController::class, 'show_students'])->name('supervisor.show.students');
+    Route::post('search/Students', [SupervisorController::class, 'search_students'])->name('supervisor.search.students');
     Route::post('update-supervisor-status', [SupervisorController::class, 'updateSupervisorStatus']);
 });
 
-Route::get('show/company/{id}/show',[StudentCompanyFieldController::class,'show'])->name('company.send.email');
-Route::put('show/company/{id}/update',[StudentCompanyFieldController::class,'update_status']);
-Route::get('show/company/trainers/{id}',[TrainerController::class,'show_trainers_company'])->name('show.trainers.company');
-Route::post('trainer/store',[TrainerController::class,'create_trainer_to_company']);
-Route::get('trainer/create/{company_student_id}',[TrainerController::class,'create_trainer'])->name('trainer.create');
-Route::post('trainer/store/new',[TrainerController::class,'store'])->name('trainer.store.new');
+Route::get('show/company/{id}/show', [StudentCompanyFieldController::class, 'show'])->name('company.send.email');
+Route::put('show/company/{id}/update', [StudentCompanyFieldController::class, 'update_status']);
+Route::get('show/company/trainers/{id}', [TrainerController::class, 'show_trainers_company'])->name('show.trainers.company');
+Route::post('trainer/store', [TrainerController::class, 'create_trainer_to_company']);
+Route::get('trainer/create/{company_student_id}', [TrainerController::class, 'create_trainer'])->name('trainer.create');
+Route::post('trainer/store/new', [TrainerController::class, 'store'])->name('trainer.store.new');
 
 Route::prefix('cms/student')->middleware('auth:student,supervisor')->group(function () {
     Route::resource('registerStudentCompany', StudentCompanyFieldController::class);
-    Route::get('registerCompany/{student_no}', [StudentCompanyFieldController::class,'create_company_field'])->name('register.Student.Company');
-    Route::get('registerCompany/{studentCompanyField}/edit/{company_id?}', [StudentCompanyFieldController::class,'edit_company_field'])->name('edit.Student.Company');
+    Route::get('registerCompany/{student_no}', [StudentCompanyFieldController::class, 'create_company_field'])->name('register.Student.Company');
+    Route::get('registerCompany/{studentCompanyField}/edit/{company_id?}', [StudentCompanyFieldController::class, 'edit_company_field'])->name('edit.Student.Company');
 });
 
 
@@ -84,15 +85,16 @@ Route::prefix('cms/trainer')->middleware('auth:trainer')->group(function () {
 
 });
 
-Route::prefix('cms')->middleware('auth:trainer,student,supervisor,admin')->group( function () {
+Route::prefix('cms')->middleware('auth:trainer,student,supervisor,admin')->group(function () {
     Route::resource('appointments', AppointmentsController::class);
-    Route::get('student/appointment/{id}', [AppointmentsController::class,'show_student_appointment'])->name('show.student.appointment');
+    Route::get('student/appointment/{id}', [AppointmentsController::class, 'show_student_appointment'])->name('show.student.appointment');
 
     Route::get('update-password', [AuthController::class, 'update_pass_show'])->name('cms.update.password');
     Route::post('update-password', [AuthController::class, 'update_password']);
 
+    Route::resource('attendances', AttendanceController::class);
 
-
+    Route::get('trainer/show_attendances_student/{student_company_id}', [TrainerController::class, 'show_attendances_students'])->name('show.student.attendances');
 
 });
 
@@ -100,6 +102,6 @@ Route::prefix('cms/admin')->middleware('auth:student,admin,supervisor,trainer')-
     Route::get('logout', [AuthController::class, 'logout'])->name('cms.logout');
 });
 
-Route::post('send/email/company', [SupervisorController::class,'send_email'])->name('company.email');
+Route::post('send/email/company', [SupervisorController::class, 'send_email'])->name('company.email');
 
 

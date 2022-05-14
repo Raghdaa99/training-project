@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Mail\TrainerEmail;
+use App\Models\Attendance;
 use App\Models\Student;
 use App\Models\StudentCompanyField;
 use App\Models\Trainer;
@@ -39,6 +40,15 @@ class TrainerController extends Controller
         $student_company_field = StudentCompanyField::findOrFail($id);
         $trainers = Trainer::where('company_id', '=', $student_company_field->companyField->company->id)->get();
         return response()->view('cms.trainer.show_trainers_company', ['trainers' => $trainers, 'student_company_id' => $id]);
+    }
+
+
+    public function show_attendances_students($student_company_id): \Illuminate\Http\Response
+    {
+//        $student_company_field = StudentCompanyField::findOrFail($student_company_id);
+        $attendances = Attendance::where('student_company_id', $student_company_id)->get();
+        return response()->view('cms.trainer.register-attendances-student', ['attendances' => $attendances,
+            'student_company_id' => $student_company_id]);
     }
 
     /**

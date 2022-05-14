@@ -42,8 +42,8 @@
                                         <td>{{$student->companyField->field->name}}</td>
                                         <td>
                                             <a class="btn btn-primary btn-sm"
-{{--                                               onclick="confirmSendEmail('{{$student->id}}','{{$student->companies->email}}')"--}}>
-                                               Attendance
+                                               href="{{route('show.student.attendances',$student->id)}}">
+                                                Attendance
                                             </a>
 
                                         </td>
