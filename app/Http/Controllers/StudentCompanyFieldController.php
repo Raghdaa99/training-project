@@ -54,7 +54,7 @@ class StudentCompanyFieldController extends Controller
 
         $request->merge(['company_id' => $request->company_id]);
         $request->merge(['student_no' => $student_no]);
-
+//Validate -------------
 
         if ($request->company_id != null) {
             $company_id = $request->input('company_id');

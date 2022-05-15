@@ -22,7 +22,7 @@ return new class extends Migration
             $table->foreignId('company_field_id');
             $table->foreign('company_field_id')->references('id')->on('companies_fields')->onDelete('cascade');
 
-            $table->foreignId('trainer_id');
+            $table->foreignId('trainer_id')->nullable();
             $table->foreign('trainer_id')->references('id')->on('trainers')->onDelete('cascade');
 
             $table->boolean('status_company')->default(false);

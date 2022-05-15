@@ -31,14 +31,14 @@
                         <form id="create-form">
                             @csrf
                             <div class="card-body">
-                                <div class="form-group">
-                                    <label for="">Student Name</label>
-                                    <select class="custom-select form-control-border" id="student_company_id">
-                                        @foreach ($students as $student)
-                                            <option value="{{$student->id}}">{{$student->student->student->name}}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
+{{--                                <div class="form-group">--}}
+{{--                                    <label for="">Student Name</label>--}}
+{{--                                    <select class="custom-select form-control-border" id="student_company_id">--}}
+{{--                                        @foreach ($students as $student)--}}
+{{--                                            <option value="{{$student->id}}">{{$student->student->student->name}}</option>--}}
+{{--                                        @endforeach--}}
+{{--                                    </select>--}}
+{{--                                </div>--}}
 
                                 <!--Time picker -->
                                 <div class="form-group">
@@ -183,7 +183,7 @@
 
         function performStore() {
             axios.post('/cms/appointments', {
-                student_company_id: document.getElementById('student_company_id').value,
+                student_company_id: {{$student_company_id}},
                 no_hours_of_training: document.getElementById('no_hours_of_training').value,
                 start_date: document.getElementById('start_date_appointment').value,
                 end_date: document.getElementById('end_date_appointment').value,

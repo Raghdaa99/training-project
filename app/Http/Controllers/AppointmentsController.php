@@ -36,6 +36,15 @@ class AppointmentsController extends Controller
         return response()->view('cms.appointments.create', ['students' => $company_students]);
     }
 
+    public function create_student_appointment($student_company_id)
+    {
+        $trainer = Auth::guard('trainer')->user();
+//        $company_students = StudentCompanyField::whereHas('companies', function ($query) use ($trainer) {
+//            $query->where('id', '=', $trainer->company_id);
+//        })->get();
+//        $company_students = StudentCompanyField::where('trainer_id', '=', $trainer->id)->get();
+        return response()->view('cms.appointments.create', ['student_company_id' => $student_company_id]);
+    }
     /**
      * Store a newly created resource in storage.
      *

@@ -17,7 +17,8 @@ return new class extends Migration
             $table->id('student_no');
             $table->string('name');
             $table->string('phone')->unique();
-            $table->bigInteger('id_number ')->unique();
+            $table->unsignedBigInteger('id_number')->unique();
+//            $table->bigInteger('id_number')->unique();
             $table->boolean('status')->default(false);
 //            $table->string('email')->unique();
 //            $table->timestamp('email_verified_at')->nullable();

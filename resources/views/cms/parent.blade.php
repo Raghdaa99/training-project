@@ -386,16 +386,16 @@ scratch. This page gets rid of all links and provides the needed markup only.
                             </a>
                         </li>
                         @endcan
-                        @can('Create-Appointments-Training')
-                        <li class="nav-item">
-                            <a href="{{route('appointments.create')}}" class="nav-link">
-                                <i class="nav-icon fas fa-th"></i>
-                                <p>
-                                    Create Appointments
-                                </p>
-                            </a>
-                        </li>
-                        @endcan
+{{--                        @can('Create-Appointments-Training')--}}
+{{--                        <li class="nav-item">--}}
+{{--                            <a href="{{route('appointments.create')}}" class="nav-link">--}}
+{{--                                <i class="nav-icon fas fa-th"></i>--}}
+{{--                                <p>--}}
+{{--                                    Create Appointments--}}
+{{--                                </p>--}}
+{{--                            </a>--}}
+{{--                        </li>--}}
+{{--                        @endcan--}}
 
                         @can('Read-Students')
                         <li class="nav-item">

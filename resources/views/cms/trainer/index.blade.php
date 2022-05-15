@@ -45,6 +45,10 @@
                                                href="{{route('show.student.attendances',$student->id)}}">
                                                 Attendance
                                             </a>
+                                            <a class="btn btn-warning btn-sm"
+                                               href="{{route('show.student.appointment',$student->id)}}">
+                                                Create Appointments
+                                            </a>
 
                                         </td>
 
