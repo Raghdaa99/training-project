@@ -40,7 +40,7 @@ class PermissionController extends Controller
     {
         $validator = Validator($request->all(), [
             'guard_name' => 'required|string|in:admin,student,supervisor,trainer',
-            'name' => 'required|string',
+            'name' => 'required|string|unique:permissions,name',
         ]);
 
         if (!$validator->fails()) {

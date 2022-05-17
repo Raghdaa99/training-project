@@ -45,6 +45,7 @@ class AppointmentsController extends Controller
 //        $company_students = StudentCompanyField::where('trainer_id', '=', $trainer->id)->get();
         return response()->view('cms.appointments.create', ['student_company_id' => $student_company_id]);
     }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -54,7 +55,7 @@ class AppointmentsController extends Controller
     public function store(Request $request)
     {
         $validator = Validator($request->all(), [
-            'student_company_id' => 'required|numeric|unique:students_company_field,id',
+            'student_company_id' => 'required|numeric|exists:students_company_field,id|unique:appointments,student_company_id',
             'no_hours_of_training' => 'required|numeric',
             'start_date' => 'required|date_format:d-m-Y',
             'end_date' => 'required|date_format:d-m-Y',
@@ -66,8 +67,9 @@ class AppointmentsController extends Controller
             'Tuesday' => 'required|boolean',
             'Wednesday' => 'required|boolean',
             'Thursday' => 'required|boolean',
-        ],[
-          'student_company_id.unique' => 'This Student has appointment'
+        ], [
+            'student_company_id.exists' => 'This Student not found',
+            'student_company_id.unique' => 'This Student has appointment',
         ]);
 
         if (!$validator->fails()) {
@@ -115,7 +117,8 @@ class AppointmentsController extends Controller
 //        $student_no = auth()->guard('student')->id();
 //        $student_company_id = StudentCompanyField::where('')
         $appointment = Appointments::where('student_company_id', '=', $id)->first();
-        return response()->view('cms.appointments.show', ['appointment' => $appointment]);
+        return response()->view('cms.appointments.show', ['appointment' => $appointment,
+            'student_company_id' => $id]);
     }
 
     /**
@@ -124,9 +127,10 @@ class AppointmentsController extends Controller
      * @param \App\Models\Appointments $appointments
      * @return \Illuminate\Http\Response
      */
-    public function edit(Appointments $appointments)
+    public function edit(Appointments $appointment)
     {
-        //
+//        dd($appointment->id);
+        return response()->view('cms.appointments.edit', ['appointment' => $appointment]);
     }
 
     /**
@@ -134,21 +138,71 @@ class AppointmentsController extends Controller
      *
      * @param \Illuminate\Http\Request $request
      * @param \App\Models\Appointments $appointments
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Request $request, Appointments $appointments)
+    public function update(Request $request, Appointments $appointment)
     {
-        //
+        $validator = Validator($request->all(), [
+//            'student_company_id' => 'required|numeric|unique:students_company_field,id',
+            'no_hours_of_training' => 'required|numeric',
+            'start_date' => 'required|date_format:d-m-Y',
+            'end_date' => 'required|date_format:d-m-Y',
+            'start_time' => 'required|date_format:H:i:s',
+            'end_time' => 'required|date_format:H:i:s',
+            'Saturday' => 'required|boolean',
+            'Sunday' => 'required|boolean',
+            'Monday' => 'required|boolean',
+            'Tuesday' => 'required|boolean',
+            'Wednesday' => 'required|boolean',
+            'Thursday' => 'required|boolean',
+        ]);
+
+        if (!$validator->fails()) {
+//            $appointment->student_company_id = $request->input('student_company_id');
+            $appointment->no_hours_of_training = $request->input('no_hours_of_training');
+            $appointment->start_time = Carbon::parse($request->input('start_time'))->format('H:i');
+            $appointment->end_time = Carbon::parse($request->input('end_time'))->format('H:i');
+            $appointment->start_date = Carbon::parse($request->input('start_date'))->format('Y-m-d');
+            $appointment->end_date = Carbon::parse($request->input('end_date'))->format('Y-m-d');
+            $appointment->Saturday = $request->input('Saturday');
+            $appointment->Sunday = $request->input('Sunday');
+            $appointment->Monday = $request->input('Monday');
+            $appointment->Tuesday = $request->input('Tuesday');
+            $appointment->Wednesday = $request->input('Wednesday');
+            $appointment->Thursday = $request->input('Thursday');
+            $isSaved = $appointment->save();
+            return response()->json(
+                [
+                    'message' => $isSaved ? 'Appointment created successfully' : 'Create failed!'
+                ],
+                $isSaved ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST,
+            );
+            // }
+
+        } else {
+            return response()->json(['message' => $validator->getMessageBag()->first()], Response::HTTP_BAD_REQUEST);
+        }
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param \App\Models\Appointments $appointments
-     * @return \Illuminate\Http\Response
+     *
      */
-    public function destroy(Appointments $appointments)
+    public function destroy(Appointments $appointment)
     {
-        //
+        $isDeleted = $appointment->delete();
+        if ($isDeleted) {
+            session()->flash('message', 'appointment deleted successfully');
+//            return redirect()->route('show.student.appointment',$appointment->student_company_id);
+            return redirect()->back();
+        }else{
+            return redirect()->back();
+        }
+//        return response()->json(
+//            ['message' => $isDeleted ? 'Deleted successfully' : 'Delete failed!'],
+//            $isDeleted ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST
+//        );
     }
 }

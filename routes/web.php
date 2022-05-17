@@ -89,6 +89,7 @@ Route::prefix('cms')->middleware('auth:trainer,student,supervisor,admin')->group
     Route::resource('appointments', AppointmentsController::class);
     Route::get('student/appointment/{id}', [AppointmentsController::class, 'show_student_appointment'])->name('show.student.appointment');
     Route::get('student/appointment/{student_company_id}/create', [AppointmentsController::class, 'create_student_appointment'])->name('create.student.appointment');
+//    Route::get('student/appointment/{student_company_id}/create', [AppointmentsController::class, 'edit'])->name('edit.student.appointment');
 
     Route::get('update-password', [AuthController::class, 'update_pass_show'])->name('cms.update.password');
     Route::post('update-password', [AuthController::class, 'update_password']);

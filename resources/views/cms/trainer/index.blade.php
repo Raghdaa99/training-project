@@ -20,6 +20,7 @@
                         <div class="card-header">
                             <h3 class="card-title">Students</h3>
                         </div>
+
                         <!-- /.card-header -->
                         <div class="card-body">
                             <table class="table table-bordered table-striped table-hover">
@@ -47,7 +48,7 @@
                                             </a>
                                             <a class="btn btn-warning btn-sm"
                                                href="{{route('show.student.appointment',$student->id)}}">
-                                                Create Appointments
+                                                 Appointments
                                             </a>
 
                                         </td>
