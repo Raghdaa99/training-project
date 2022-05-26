@@ -88,7 +88,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         @canany(['Create-Role','Read-Roles'])
                         <li class="nav-item">
                             <a href="#" class="nav-link">
-                                <i class="nav-icon fas fa-table"></i>
+                                <i class="nav-icon fas fa-key"></i>
                                 <p>
                                     {{__('cms.roles')}}
                                     <i class="fas fa-angle-left right"></i>
@@ -117,7 +117,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         @canany(['Create-Permission','Read-Permissions'])
                         <li class="nav-item">
                             <a href="#" class="nav-link">
-                                <i class="nav-icon fas fa-table"></i>
+                                <i class="nav-icon fas fa-key"></i>
                                 <p>
                                     {{__('cms.permissions')}}
                                     <i class="fas fa-angle-left right"></i>
@@ -150,7 +150,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         @canany(['Create-Admin','Read-Admins'])
                         <li class="nav-item">
                             <a href="#" class="nav-link">
-                                <i class="nav-icon fas fa-table"></i>
+                                <i class="nav-icon fas fa-user"></i>
                                 <p>
                                     {{__('cms.admins')}}
                                     <i class="fas fa-angle-left right"></i>
@@ -179,7 +179,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         @canany(['Create-Supervisor','Read-Supervisors'])
                         <li class="nav-item">
                             <a href="#" class="nav-link">
-                                <i class="nav-icon fas fa-table"></i>
+                                <i class="nav-icon fas fa-user"></i>
                                 <p>
                                     {{__('cms.supervisors')}}
                                     <i class="fas fa-angle-left right"></i>
@@ -194,29 +194,29 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                     </a>
                                 </li>
                                 @endcan
-                                @can('Create-Supervisor')
-                                <li class="nav-item">
-                                    <a href="{{route('supervisors.create')}}" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>{{__('cms.create')}}</p>
-                                    </a>
-                                </li>
-                                @endcan
+{{--                                @can('Create-Supervisor')--}}
+{{--                                <li class="nav-item">--}}
+{{--                                    <a href="{{route('supervisors.create')}}" class="nav-link">--}}
+{{--                                        <i class="far fa-circle nav-icon"></i>--}}
+{{--                                        <p>{{__('cms.create')}}</p>--}}
+{{--                                    </a>--}}
+{{--                                </li>--}}
+{{--                                @endcan--}}
                             </ul>
                         </li>
                         @endcanany
-                        @canany(['Create-Student','Read-Users'])
+                        @canany(['Read-Students-Admin'])
                         <li class="nav-item">
                             <a href="#" class="nav-link">
 
-                                <i class="nav-icon fas fa-table"></i>
+                                <i class="nav-icon fas fa-user"></i>
                                 <p>
-                                    {{__('cms.students')}}
+                                    Students
                                     <i class="fas fa-angle-left right"></i>
                                 </p>
                             </a>
                             <ul class="nav nav-treeview" style="display: none;">
-                                @can('Read-Users')
+                                @can('Read-Students-Admin')
 
                                 <li class="nav-item">
                                     <a href="{{route('students.index')}}" class="nav-link">
@@ -225,14 +225,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                     </a>
                                 </li>
                                 @endcan
-                                @can('Create-Student')
-                                <li class="nav-item">
-                                    <a href="{{route('students.create')}}" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>{{__('cms.create')}}</p>
-                                    </a>
-                                </li>
-                                @endcan
+{{--                                @can('Create-Student')--}}
+{{--                                <li class="nav-item">--}}
+{{--                                    <a href="{{route('students.create')}}" class="nav-link">--}}
+{{--                                        <i class="far fa-circle nav-icon"></i>--}}
+{{--                                        <p>{{__('cms.create')}}</p>--}}
+{{--                                    </a>--}}
+{{--                                </li>--}}
+{{--                                @endcan--}}
                             </ul>
                         </li>
                         @endcanany
@@ -386,16 +386,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
                             </a>
                         </li>
                         @endcan
-{{--                        @can('Create-Appointments-Training')--}}
-{{--                        <li class="nav-item">--}}
-{{--                            <a href="{{route('appointments.create')}}" class="nav-link">--}}
-{{--                                <i class="nav-icon fas fa-th"></i>--}}
-{{--                                <p>--}}
-{{--                                    Create Appointments--}}
-{{--                                </p>--}}
-{{--                            </a>--}}
-{{--                        </li>--}}
-{{--                        @endcan--}}
 
                         @can('Read-Students')
                         <li class="nav-item">

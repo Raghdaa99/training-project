@@ -56,10 +56,17 @@ class PermissionSeeder extends Seeder
 //        Permission::create(['name' => 'Read-Data-Company', 'guard_name' => 'student']);
 
 
-        Permission::create(['name' => 'Create-Supervisor', 'guard_name' => 'admin']);
-        Permission::create(['name' => 'Read-Supervisors', 'guard_name' => 'admin']);
-        Permission::create(['name' => 'Update-Supervisor', 'guard_name' => 'admin']);
-        Permission::create(['name' => 'Delete-Supervisor', 'guard_name' => 'admin']);
+//        Permission::create(['name' => 'Create-Supervisor', 'guard_name' => 'admin']);
+//        Permission::create(['name' => 'Read-Supervisors', 'guard_name' => 'admin']);
+//        Permission::create(['name' => 'Update-Supervisor', 'guard_name' => 'admin']);
+//        Permission::create(['name' => 'Delete-Supervisor', 'guard_name' => 'admin']);
+
+//        Permission::create(['name' => 'Read-Students-Admin', 'guard_name' => 'admin']);
+
+
+//        Permission::create(['name' => 'Read-Students', 'guard_name' => 'supervisor']);
+
+//        Permission::create(['name' => 'Read-Students-Trainer', 'guard_name' => 'trainer']);
 
     }
 }
