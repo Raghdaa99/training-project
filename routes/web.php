@@ -5,7 +5,9 @@ use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\DepartmentController;
+use App\Http\Controllers\EvaluationController;
 use App\Http\Controllers\FieldController;
+use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\StudentsSupervisorsController;
 use App\Http\Controllers\StudentCompanyFieldController;
 use App\Http\Controllers\StudentController;
@@ -54,8 +56,10 @@ Route::prefix('cms/admin')->middleware('auth:admin')->group(function () {
     Route::resource('fields', FieldController::class);
     Route::resource('companies', CompanyController::class);
     Route::resource('registerStudentCourse', StudentsSupervisorsController::class);
+    Route::resource('questions', QuestionController::class);
 
 });
+
 
 Route::prefix('cms/admin')->middleware('auth:student,admin,supervisor')->group(function () {
     Route::resource('students', StudentController::class);
@@ -102,6 +106,14 @@ Route::prefix('cms')->middleware('auth:trainer,student,supervisor,admin')->group
 
 Route::prefix('cms/admin')->middleware('auth:student,admin,supervisor,trainer')->group(function () {
     Route::get('logout', [AuthController::class, 'logout'])->name('cms.logout');
+});
+Route::prefix('cms/')->middleware('auth:supervisor,trainer')->group(function () {
+    Route::resource('evaluations', EvaluationController::class);
+    Route::get('student/evaluation/{id}', [EvaluationController::class, 'show_student_evaluation'])->name('show.student.evaluation');
+
+    Route::get('student/evaluation/{student_company_id}/create', [EvaluationController::class, 'create_student_evaluation'])->name('create.student.evaluation');
+
+
 });
 
 Route::post('send/email/company', [SupervisorController::class, 'send_email'])->name('company.email');

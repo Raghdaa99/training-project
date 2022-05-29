@@ -50,6 +50,11 @@
                                                href="{{route('show.student.appointment',$student->id)}}">
                                                  Appointments
                                             </a>
+                                            <a class="btn btn-success btn-sm"
+                                               href="{{route('show.student.evaluation',$student->id)}}"
+                                            >
+                                                Evaluations
+                                            </a>
 
                                         </td>
 

@@ -29,7 +29,10 @@ class StudentCompanyField extends Model
 //    {
 //        return $this->belongsTo(Company::class, 'company_id', 'id');
 //    }
-
+    public function evaluation()
+    {
+        return $this->hasMany(Evaluation::class, 'company_field_id', 'id');
+    }
     public function companyField()
     {
         return $this->belongsTo(CompanyField::class, 'company_field_id', 'id');

@@ -145,7 +145,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         @endcanany
                         @endcanany
 
-                        @canany(['Create-Admin','Read-Admins','Create-Student','Read-Users'])
+                        @canany(['Create-Admin','Read-Admins','Create-Student'])
                         <li class="nav-header">{{__('cms.hr')}}</li>
                         @canany(['Create-Admin','Read-Admins'])
                         <li class="nav-item">
@@ -238,8 +238,37 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         @endcanany
                         @endcanany
 
-                        @canany(['Create-Department','Read-Departments','Create-Field','Read-Fields','Create-Company','Read-Companies'])
+                        @canany(['Create-Question','Read-Questions','Create-Department','Read-Departments','Create-Field','Read-Fields','Create-Company','Read-Companies'])
                         <li class="nav-header">{{__('cms.content_management')}}</li>
+                            @canany(['Create-Question','Read-Questions'])
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link">
+                                        <i class="nav-icon fas fa-table"></i>
+                                        <p>
+                                            Questions
+                                            <i class="fas fa-angle-left right"></i>
+                                        </p>
+                                    </a>
+                                    <ul class="nav nav-treeview" style="display: none;">
+                                        @can('Read-Questions')
+                                            <li class="nav-item">
+                                                <a href="{{route('questions.index')}}" class="nav-link">
+                                                    <i class="far fa-circle nav-icon"></i>
+                                                    <p>{{__('cms.index')}}</p>
+                                                </a>
+                                            </li>
+                                        @endcan
+                                        @can('Create-Question')
+                                            <li class="nav-item">
+                                                <a href="{{route('questions.create')}}" class="nav-link">
+                                                    <i class="far fa-circle nav-icon"></i>
+                                                    <p>{{__('cms.create')}}</p>
+                                                </a>
+                                            </li>
+                                        @endcan
+                                    </ul>
+                                </li>
+                            @endcanany
                         @canany(['Create-Department','Read-Departments'])
                         <li class="nav-item">
                             <a href="#" class="nav-link">
