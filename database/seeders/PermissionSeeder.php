@@ -68,5 +68,10 @@ class PermissionSeeder extends Seeder
 
 //        Permission::create(['name' => 'Read-Students-Trainer', 'guard_name' => 'trainer']);
 
+
+            Permission::create(['name' => 'Create-Question', 'guard_name' => 'admin']);
+            Permission::create(['name' => 'Read-Questions', 'guard_name' => 'admin']);
+
+
     }
 }

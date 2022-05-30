@@ -16,7 +16,7 @@ class AttendanceController extends Controller
      */
     public function index($student_company_id)
     {
-        $attendances = Attendance::where('student_company_id', $student_company_id)->get();
+        $attendances = Attendance::where('student_company_id', $student_company_id)->orderBy('date_attendance', 'asc')->get();
         return response()->view('cms.trainer');
     }
 

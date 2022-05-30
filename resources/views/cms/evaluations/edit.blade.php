@@ -26,22 +26,26 @@
                                 <thead>
                                 <tr>
                                     <th style="width: 10px">#</th>
-                                    <th> Elements Of Evaluation </th>
+                                    <th> Elements Of Evaluation</th>
                                     <th>Max Mark</th>
                                     <th>Mark</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @foreach($questions as $question)
-                                <tr>
-                                    <input type="hidden" class="form-control" value="{{$question->id}}" name="question_id[]">
-                                    <td>{{$loop->iteration}}</td>
-                                    <td>{{$question->title}}</td>
-                                    <td>{{$question->max_mark}}</td>
-                                    <td>
-                                        <input type="number" class="form-control" name="marks[]" id="marks[]" >
-                                    </td>
-                                </tr>
+                                @foreach ($evaluations as $evaluation)
+                                    <tr>
+                                        <td>{{$loop->iteration}}</td>
+                                        <td>{{$evaluation->question->title}}</td>
+                                        <td>{{$evaluation->question->max_mark}}</td>
+                                        <input type="hidden" class="form-control" value="{{$evaluation->question->id}}"
+                                               name="question_id[]">
+
+                                        <td>
+                                            <input type="number" class="form-control" value="{{$evaluation->mark}}"
+                                                   name="marks[]" id="marks[]">
+                                        </td>
+
+                                    </tr>
                                 @endforeach
 
 
@@ -71,24 +75,24 @@
 
         function performStore() {
             var marks = [];
-            $('input[name="marks[]"]').each(function(i, e) {
+            $('input[name="marks[]"]').each(function (i, e) {
                 marks.push($(this).val());
             });
             var question_id = [];
-            $('input[name="question_id[]"]').each(function(i, e) {
+            $('input[name="question_id[]"]').each(function (i, e) {
                 question_id.push($(this).val());
             });
-            axios.post('/cms/evaluations', {
+            axios.put('/cms/student/evaluation/update', {
                 student_company_id: {{$student_company_id}},
-                question_id:question_id,
+                question_id: question_id,
                 marks: marks,
             }).then(function (response) {
-                    //2xx
-                    console.log(response);
-                    toastr.success(response.data.message);
-                    // document.getElementById('create-form').reset();
+                //2xx
+                console.log(response);
+                toastr.success(response.data.message);
+                // document.getElementById('create-form').reset();
                 window.location.href = '/cms/student/evaluation/{{$student_company_id}}/show';
-                })
+            })
                 .catch(function (error) {
                     //4xx - 5xx
                     console.log(error.response.data.message);

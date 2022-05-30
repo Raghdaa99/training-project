@@ -49,4 +49,8 @@ class StudentCompanyField extends Model
     {
         return $this->status_supervisor ? 'Active' : 'Non-Active';
     }
+    public function reports()
+    {
+        return $this->hasMany(Report::class, 'company_field_id', 'id');
+    }
 }

@@ -92,6 +92,12 @@ class SupervisorController extends Controller
         return response()->view('cms.supervisor.show_students', ['company_students' => $company_students]);
     }
 
+    public function show_students_details($id)
+    {
+        $company_student = StudentCompanyField::findOrFail($id);
+        return response()->view('cms.supervisor.show-details-student', ['company_student' => $company_student]);
+    }
+
     public function updateSupervisorStatus(Request $request)
     {
         $validator = Validator($request->all(), [

@@ -8,6 +8,7 @@ use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\EvaluationController;
 use App\Http\Controllers\FieldController;
 use App\Http\Controllers\QuestionController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\StudentsSupervisorsController;
 use App\Http\Controllers\StudentCompanyFieldController;
 use App\Http\Controllers\StudentController;
@@ -66,6 +67,7 @@ Route::prefix('cms/admin')->middleware('auth:student,admin,supervisor')->group(f
 });
 Route::prefix('cms/supervisor')->middleware('auth:supervisor')->group(function () {
     Route::get('show/Students', [SupervisorController::class, 'show_students'])->name('supervisor.show.students');
+    Route::get('show/Student/{id}', [SupervisorController::class, 'show_students_details'])->name('supervisor.show.students.details');
     Route::post('search/Students', [SupervisorController::class, 'search_students'])->name('supervisor.search.students');
     Route::post('update-supervisor-status', [SupervisorController::class, 'updateSupervisorStatus']);
 });
@@ -81,6 +83,8 @@ Route::prefix('cms/student')->middleware('auth:student,supervisor')->group(funct
     Route::resource('registerStudentCompany', StudentCompanyFieldController::class);
     Route::get('registerCompany/{student_no}', [StudentCompanyFieldController::class, 'create_company_field'])->name('register.Student.Company');
     Route::get('registerCompany/{studentCompanyField}/edit/{company_id?}', [StudentCompanyFieldController::class, 'edit_company_field'])->name('edit.Student.Company');
+    Route::get('reports/{id}', [ReportController::class, 'create_report'])->name('create.report');
+    Route::resource('reports', ReportController::class);
 });
 
 
@@ -109,9 +113,12 @@ Route::prefix('cms/admin')->middleware('auth:student,admin,supervisor,trainer')-
 });
 Route::prefix('cms/')->middleware('auth:supervisor,trainer')->group(function () {
     Route::resource('evaluations', EvaluationController::class);
-    Route::get('student/evaluation/{id}', [EvaluationController::class, 'show_student_evaluation'])->name('show.student.evaluation');
+    Route::get('student/evaluation/{id}/show', [EvaluationController::class, 'show_student_evaluation'])->name('show.student.evaluation');
+    Route::get('supervisor/evaluation-trainer/{id}/show', [EvaluationController::class, 'show_supervisor_evaluation_trainer'])->name('show.supervisor.evaluation.trainer');
 
     Route::get('student/evaluation/{student_company_id}/create', [EvaluationController::class, 'create_student_evaluation'])->name('create.student.evaluation');
+    Route::get('student/evaluation/{student_company_id}/edit', [EvaluationController::class, 'edit_student_evaluation'])->name('edit.student.evaluation');
+    Route::put('student/evaluation/update', [EvaluationController::class, 'update'])->name('update.student.evaluation');
 
 
 });

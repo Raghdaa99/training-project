@@ -20,37 +20,8 @@
         <div class="container-fluid">
             <div class="row">
                 <!-- left column -->
-                @if(session()->has('message'))
-                    <div class="alert alert-success alert-dismissible">
-                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                        <h5><i class="icon fas fa-check"></i> Success!</h5>
-                        {{session('message')}}
-                    </div>
-                @endif
                 <div class="col-md-12">
-                    @if(count($evaluations)>0)
-{{--                        <form action="{{route('evaluations.destroy',$evaluations[0]->id)}}" method="POST">--}}
-{{--                            @csrf--}}
-{{--                            @method('DELETE')--}}
-                            <a href="{{route('edit.student.evaluation',$evaluations[0]->student_company_id)}}" class="btn btn-warning"
-                               style="width: 100px; ">
-                                <i class="fas fa-edit"> Edit </i>
-                            </a>
 
-{{--                            <button class="btn btn-danger" type="submit"--}}
-{{--                                    style="width: 100px; ">--}}
-{{--                                <i class="fas fa-edit"> Delete </i>--}}
-{{--                            </button>--}}
-{{--                        </form>--}}
-
-                    @endif
-
-                    @if(count($evaluations)==0)
-                        <a href="{{route('create.student.evaluation',$student_company_id)}}" class="btn btn-secondary"
-                           style="width: 200px; ">
-                            <i class="fas fa-plus-circle"> Create Evaluation</i>
-                        </a>
-                    @endif
                 <!-- general form elements -->
                     @if(count($evaluations)>0)
                         <div class="card card-primary">
@@ -80,18 +51,12 @@
 
                                         </tr>
                                     @endforeach
-
                                     </tbody>
-                                    {{--                                    @endif--}}
-
-
                                 </table>
                             </div>
 
                             <!-- /.card-header -->
                             <!-- form start -->
-
-
                         </div>
                     @else
                         {{--                            <p style="align-content: center"></p>--}}

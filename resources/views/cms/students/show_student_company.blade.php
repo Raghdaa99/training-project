@@ -17,74 +17,104 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="card">
-                        <div class="card-header">
-                            <h3 class="card-title">Bordered Table</h3>
-                        </div>
                         <!-- /.card-header -->
                         <div class="card-body">
                             @if($item != null)
                                 <table class="table table-bordered table-striped table-hover">
                                     <thead>
                                     <tr>
-{{--                                        <th style="width: 10px">#</th>--}}
                                         <th>Student No</th>
+                                        <td>{{$item->student_no}}</td>
+                                    </tr>
+                                    <tr>
                                         <th>Student Name</th>
+                                        <td>{{$item->student->student->name}}</td>
+                                    </tr>
+                                    <tr>
                                         <th>Company Name</th>
+                                        <td>{{$item->companyField->company->name}}</td>
+
+                                    </tr>
+                                    <tr>
                                         <th>Field Name</th>
+                                        <td>{{$item->companyField->field->name}}</td>
+                                    </tr>
+                                    <tr>
                                         <th>Status Supervisor</th>
+                                        <td><span
+                                                class="badge @if($item->status_supervisor) bg-success @else bg-danger @endif">{{$item->supervisor_status}}</span>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
                                         @if($item->status_supervisor==0)
                                             <th style="width: 30px">Settings</th>
-                                        @endif
-                                        @if($item->status_company==1)
-                                            <th style="width: 60px">Appointments</th>
-                                            <th style="width: 60px">Attendances</th>
+                                            <td>
+                                                <div class="btn-group">
+                                                    <a href="{{route('edit.Student.Company',$item->id)}}"
+                                                       class="btn btn-warning">
+                                                        <i class="fas fa-edit"></i>
+                                                    </a>
+                                                    <a href="#" onclick="confirmDelete('{{$item->id}}',this)"
+                                                       class=" btn btn-danger">
+                                                        <i class="fas fa-trash"></i>
+                                                    </a>
+                                                </div>
+
+                                            </td>
                                         @endif
                                     </tr>
+                                    @if($item->status_company==1)
+                                        <tr>
+                                            {{--                                        <th style="width: 10px">#</th>--}}
+                                            <th style="width: 60px">Appointments</th>
+                                            <td>
+                                                <div class="btn-group">
+                                                    <a href="{{route('show.student.appointment',$item->id)}}"
+                                                       class="btn btn-warning">
+                                                        <i class="fas fa-table"> Show</i>
+                                                    </a>
+
+                                                </div>
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <th style="width: 60px">Attendances</th>
+                                            <td><a class="btn btn-secondary btn-sm"
+                                                   href="{{route('show.student.attendances',$item->id)}}">
+                                                    Attendance
+                                                </a></td>
+                                        </tr>
+
+                                        <tr>
+                                            <th style="width: 60px">Reports</th>
+                                            <td><a class="btn btn-primary btn-sm"
+                                                   href="{{route('create.report',$item->id)}}">
+                                                    Repotrs
+                                                </a></td>
+                                        </tr>
+                                    @endif
                                     </thead>
+
+
                                     <tbody>
 
-{{--                                    @foreach ($items as $item)--}}
-                                        <tr>
-{{--                                            <td>{{$loop->iteration}}</td>--}}
-                                            <td>{{$item->student_no}}</td>
-                                            <td>{{$item->student->student->name}}</td>
-                                            <td>{{$item->companyField->company->name}}</td>
-                                            <td>{{$item->companyField->field->name}}</td>
-                                            <td><span
-                                                    class="badge @if($item->status_supervisor) bg-success @else bg-danger @endif">{{$item->supervisor_status}}</span>
-                                            </td>
-                                            @if($item->status_supervisor==0)
-                                                <td>
-                                                    <div class="btn-group">
-                                                        <a href="{{route('edit.Student.Company',$item->id)}}"
-                                                           class="btn btn-warning">
-                                                            <i class="fas fa-edit"></i>
-                                                        </a>
-                                                        <a href="#" onclick="confirmDelete('{{$item->id}}',this)"
-                                                           class=" btn btn-danger">
-                                                            <i class="fas fa-trash"></i>
-                                                        </a>
-                                                    </div>
+                                    {{--                                    @foreach ($items as $item)--}}
+                                    <tr>
+                                        {{--                                            <td>{{$loop->iteration}}</td>--}}
 
-                                                </td>
-                                            @endif
-                                            @if($item->status_company==1)
-                                                <td>
-                                                    <div class="btn-group">
-                                                        <a href="{{route('show.student.appointment',$item->id)}}"
-                                                           class="btn btn-warning">
-                                                            <i class="fas fa-table"> Show</i>
-                                                        </a>
 
-                                                    </div>
-                                                </td>
-                                                <td><a class="btn btn-secondary btn-sm"
-                                                       href="{{route('show.student.attendances',$item->id)}}">
-                                                        Attendance
-                                                    </a></td>
-                                            @endif
-                                        </tr>
-{{--                                    @endforeach--}}
+
+                                        {{--                                        @if($item->status_supervisor==0)--}}
+                                        {{--                                           --}}
+                                        {{--                                        @endif--}}
+{{--                                        @if($item->status_company==1)--}}
+
+{{--                                           --}}
+{{--                                        @endif--}}
+                                    </tr>
+                                    {{--                                    @endforeach--}}
 
 
                                     </tbody>
@@ -129,7 +159,7 @@
 
         function performDelete(id, reference) {
 
-            axios.delete('/cms/student/registerStudentCompany/'+id)
+            axios.delete('/cms/student/registerStudentCompany/' + id)
                 .then(function (response) {
                     //2xx
                     console.log(response);

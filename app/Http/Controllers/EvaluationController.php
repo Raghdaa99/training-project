@@ -6,6 +6,7 @@ use App\Models\Evaluation;
 use App\Models\Question;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Response;
 
 class EvaluationController extends Controller
@@ -19,21 +20,50 @@ class EvaluationController extends Controller
     {
         return response()->view('cms.evaluations.index');
     }
-    public function create_student_evaluation($id){
 
-        $guard = Auth('supervisor')->check()?'supervisor':'trainer';
+    public function create_student_evaluation($id)
+    {
+
+        $guard = Auth('supervisor')->check() ? 'supervisor' : 'trainer';
         $questions = Question::where('guard', '=', $guard)->get();
-        return response()->view('cms.evaluations.create' ,[
-            'questions' =>$questions ,'student_company_id'=>$id]);
+        return response()->view('cms.evaluations.create', [
+            'questions' => $questions, 'student_company_id' => $id]);
 
     }
+
     public function show_student_evaluation($id)
     {
-        $guard = Auth('supervisor')->check()?'supervisor':'trainer';
-        $evaluations = Question::where('guard', '=', $guard)->get();
-        return response()->view('cms.evaluations.show', ['evaluations' => $evaluations,
-            'student_company_id' => $id]);
+        $guard = Auth('supervisor')->check() ? 'supervisor' : 'trainer';
+//        $evaluations = Evaluation::where('student_company_id', '=', $id)->get();
+        $evaluations = Evaluation::whereHas('question', function ($query) use ($guard) {
+            $query->where('guard', '=', $guard);
+        })->where('student_company_id', '=', $id)->get();
+
+        return response()->view('cms.evaluations.show', ['evaluations' => $evaluations, 'student_company_id' => $id]);
     }
+
+    public function show_supervisor_evaluation_trainer($id)
+    {
+//        $guard = Auth('supervisor')->check() ? 'supervisor' : 'trainer';
+//        $evaluations = Evaluation::where('student_company_id', '=', $id)->get();
+        $evaluations = Evaluation::whereHas('question', function ($query) {
+            $query->where('guard', '=', 'trainer');
+        })->where('student_company_id', '=', $id)->get();
+
+        return response()->view('cms.evaluations.show-evaluations-trainer-to-supervisor',
+            ['evaluations' => $evaluations, 'student_company_id' => $id]);
+    }
+
+    public function edit_student_evaluation($id)
+    {
+        $guard = Auth('supervisor')->check() ? 'supervisor' : 'trainer';
+//        $evaluations = Evaluation::where('student_company_id', '=', $id)->get();
+        $evaluations = Evaluation::whereHas('question', function ($query) use ($guard) {
+            $query->where('guard', '=', $guard);
+        })->where('student_company_id', '=', $id)->get();
+        return response()->view('cms.evaluations.edit', ['evaluations' => $evaluations, 'student_company_id' => $id]);
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -48,26 +78,37 @@ class EvaluationController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse
      */
     public function store(Request $request)
     {
-        dd($request->question_id);
-        $validator = Validator($request->all(), [
 
+        $validator = Validator($request->all(), [
 //            'student_company_id' => 'required|numeric|exists:students_company_field,id|unique:appointments,student_company_id',
 //            'question_id' => 'required|numeric|exists:students_company_field,id|unique:appointments,student_company_id',
-            'mark' => 'required|numeric',
+//            'mark' => 'required|numeric',
 
         ]);
 
         if (!$validator->fails()) {
-            $evaluation = new Evaluation();
-            $evaluation->student_company_id = $request->input('student_company_id');
-            $evaluation->mark = $request->input('mark');
+//            $evaluation = new Evaluation();
+//            $evaluation->student_company_id = $request->input('student_company_id');
 
-            $isSaved = $evaluation->save();
+            $questions_marks = $request->input('question_id');
+            $marks = $request->input('marks');
+            $isSaved = false;
+            foreach ($questions_marks as $key => $value) {
+                DB::table('evaluations')->insert([
+                    'mark' => $marks[$key],
+                    'question_id' => $value,
+                    'student_company_id' => $request->input('student_company_id'),
+                ]);
+                if ($key == count($questions_marks) - 1) {
+                    $isSaved = true;
+                }
+            }
+//            $isSaved = $evaluation->save();
             return response()->json(
                 [
                     'message' => $isSaved ? 'Evaluation created successfully' : 'Create failed!'
@@ -84,7 +125,7 @@ class EvaluationController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Evaluation  $evaluation
+     * @param \App\Models\Evaluation $evaluation
      * @return \Illuminate\Http\Response
      */
     public function show(Evaluation $evaluation)
@@ -95,7 +136,7 @@ class EvaluationController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Evaluation  $evaluation
+     * @param \App\Models\Evaluation $evaluation
      * @return \Illuminate\Http\Response
      */
     public function edit(Evaluation $evaluation)
@@ -106,19 +147,61 @@ class EvaluationController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Evaluation  $evaluation
-     * @return \Illuminate\Http\Response
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Request $request, Evaluation $evaluation)
+    public function update(Request $request)
     {
-        //
+//        dd($request->marks);
+        $validator = Validator($request->all(), [
+//            'student_company_id' => 'required|numeric|exists:students_company_field,id|unique:appointments,student_company_id',
+//            'question_id' => 'required|numeric|exists:students_company_field,id|unique:appointments,student_company_id',
+//            'mark' => 'required|numeric',
+
+        ]);
+
+        if (!$validator->fails()) {
+//            $evaluation = new Evaluation();
+//            $evaluation->student_company_id = $request->input('student_company_id');
+
+//            DB::table('evaluations')->where('student_company_id', '=', $request->input('student_company_id'))
+//                ->delete();
+            $guard = Auth('supervisor')->check() ? 'supervisor' : 'trainer';
+            $deleted = Evaluation::whereHas('question', function ($query) use ($guard) {
+                $query->where('guard', '=', $guard);
+            })->where('student_company_id', '=', $request->input('student_company_id'))->delete();
+
+            $questions_marks = $request->input('question_id');
+            $marks = $request->input('marks');
+
+            $isSaved = false;
+            foreach ($questions_marks as $key => $value) {
+                DB::table('evaluations')->insert([
+                    'mark' => $marks[$key],
+                    'question_id' => $value,
+                    'student_company_id' => $request->input('student_company_id'),
+                ]);
+                if ($key == count($questions_marks) - 1) {
+                    $isSaved = true;
+                }
+            }
+            return response()->json(
+                [
+                    'message' => $isSaved ? 'Evaluation Updated successfully' : 'Updated failed!'
+                ],
+                $isSaved ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST,
+            );
+            // }
+
+        } else {
+            return response()->json(['message' => $validator->getMessageBag()->first()], Response::HTTP_BAD_REQUEST);
+        }
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Evaluation  $evaluation
+     * @param \App\Models\Evaluation $evaluation
      * @return \Illuminate\Http\Response
      */
     public function destroy(Evaluation $evaluation)
