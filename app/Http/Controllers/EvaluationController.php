@@ -39,7 +39,13 @@ class EvaluationController extends Controller
             $query->where('guard', '=', $guard);
         })->where('student_company_id', '=', $id)->get();
 
-        return response()->view('cms.evaluations.show', ['evaluations' => $evaluations, 'student_company_id' => $id]);
+        $sum_max_mark = DB::table('questions')->where('guard', '=', $guard)->sum('max_mark');
+//        $sum_mark = DB::table('evaluations')->where('student_company_id', '=', $id)->sum('mark');
+
+
+        return response()->view('cms.evaluations.show', ['evaluations' => $evaluations, 'student_company_id' => $id,
+            'sum_max_mark'=>$sum_max_mark,
+            ]);
     }
 
     public function show_supervisor_evaluation_trainer($id)

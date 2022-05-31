@@ -114,11 +114,19 @@ class AppointmentsController extends Controller
 
     public function show_student_appointment($id)
     {
-//        $student_no = auth()->guard('student')->id();
+        if (auth('student')->check()) {
+            $guard = 'student';
+        } elseif (auth('trainer')->check()) {
+            $guard = 'trainer';
+        } else {
+            $guard = 'supervisor';
+        }
 //        $student_company_id = StudentCompanyField::where('')
         $appointment = Appointments::where('student_company_id', '=', $id)->first();
-        return response()->view('cms.appointments.show', ['appointment' => $appointment,
-            'student_company_id' => $id]);
+        return response()->view('cms.appointments.show', [
+            'appointment' => $appointment,
+            'student_company_id' => $id,
+            'guard' => $guard ]);
     }
 
     /**

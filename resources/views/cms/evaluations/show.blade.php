@@ -80,6 +80,12 @@
 
                                         </tr>
                                     @endforeach
+                                    <tr>
+                                        <th style="width: 10px">Sum</th>
+                                        <th></th>
+                                        <th>{{$sum_max_mark}}</th>
+                                        <th></th>
+                                    </tr>
 
                                     </tbody>
                                     {{--                                    @endif--}}

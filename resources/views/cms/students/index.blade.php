@@ -25,38 +25,36 @@
             <table class="table table-bordered table-striped table-hover">
               <thead>
                 <tr>
-                  <th style="width: 10px">#</th>
+                  <th style="width: 10px">Academic Number</th>
                   <th>{{__('cms.name')}}</th>
-                  <th>{{__('cms.email')}}</th>
-                  <th>{{__('cms.gender')}}</th>
-                  <th>{{__('cms.created_at')}}</th>
-                  <th>{{__('cms.updated_at')}}</th>
-                  <th style="width: 40px">Settings</th>
+                  <th>Phone</th>
+                  <th>Id Number</th>
                 </tr>
               </thead>
               <tbody>
-                @foreach ($users as $user)
+                @foreach ($students as $student)
                 <tr>
-                  <td>{{$user->id}}</td>
-                  <td>{{$user->name}}</td>
-                  <td>{{$user->email}}</td>
-                  <td>{{$user->gender}}</td>
-                  <td>{{$user->created_at}}</td>
-                  <td>{{$user->updated_at}}</td>
+                  <td>{{$student->student_no}}</td>
+                  <td>{{$student->name}}</td>
+                  <td>{{$student->phone}}</td>
+                  <td>{{$student->id_number}}</td>
+                    @canany(['Update-Student','Delete-Student'])
                   <td>
                     <div class="btn-group">
                       @can('Update-Student')
-                      <a href="{{route('students.edit',$user->id)}}" class="btn btn-warning">
+                      <a href="{{route('students.edit',$student->id)}}" class="btn btn-warning">
                         <i class="fas fa-edit"></i>
                       </a>
                       @endcan
                       @can('Delete-Student')
-                      <a href="#" onclick="confirmDelete('{{$user->id}}',this)" class=" btn btn-danger">
+                      <a href="#" onclick="confirmDelete('{{$student->id}}',this)" class=" btn btn-danger">
                         <i class="fas fa-trash"></i>
                       </a>
                       @endcan
                     </div>
                   </td>
+                    @endcanany
+
                 </tr>
                 @endforeach
 

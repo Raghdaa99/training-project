@@ -29,8 +29,8 @@
                 @endif
                 <div class="col-md-12">
                     @if($appointment !== null)
-
-
+{{--                        @if($guard == 'trainer')--}}
+                        @auth('trainer')
                         <form action="{{route('appointments.destroy',$appointment->id)}}" method="POST">
                             @csrf
                             @method('DELETE')
@@ -44,8 +44,12 @@
                                 <i class="fas fa-edit"> Delete </i>
                             </button>
                         </form>
+                        @endauth
+
+{{--                    @endif--}}
 
                     @endif
+                        @auth('trainer')
 
                     @if($appointment === null)
                         <a href="{{route('create.student.appointment',$student_company_id)}}" class="btn btn-secondary"
@@ -53,6 +57,7 @@
                             <i class="fas fa-plus-circle"> Create Appointment</i>
                         </a>
                     @endif
+                        @endauth
                 <!-- general form elements -->
                     @if($appointment !== null)
                         <div class="card card-primary">
