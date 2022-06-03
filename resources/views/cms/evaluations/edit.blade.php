@@ -6,9 +6,9 @@
 
 @endsection
 
-@section('large-page-name',__('cms.create'))
+@section('large-page-name',__('cms.update'))
 @section('main-page-name',__('Evaluation'))
-@section('small-page-name',__('cms.create'))
+@section('small-page-name',__('cms.update'))
 
 @section('content')
     <!-- Main content -->
@@ -39,6 +39,7 @@
                                         <td>{{$evaluation->question->max_mark}}</td>
                                         <input type="hidden" class="form-control" value="{{$evaluation->question->id}}"
                                                name="question_id[]">
+                                        <input type="hidden" class="form-control" value="{{$evaluation->question->max_mark}}" name="max_marks[]">
 
                                         <td>
                                             <input type="number" class="form-control" value="{{$evaluation->mark}}"
@@ -82,8 +83,15 @@
             $('input[name="question_id[]"]').each(function (i, e) {
                 question_id.push($(this).val());
             });
+            var max_marks = [];
+            $('input[name="max_marks[]"]').each(function(i, e) {
+                max_marks.push($(this).val());
+            });
+
+
             axios.put('/cms/student/evaluation/update', {
                 student_company_id: {{$student_company_id}},
+                max_marks: max_marks,
                 question_id: question_id,
                 marks: marks,
             }).then(function (response) {

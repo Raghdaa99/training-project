@@ -84,7 +84,7 @@
                                         <th style="width: 10px">Sum</th>
                                         <th></th>
                                         <th>{{$sum_max_mark}}</th>
-                                        <th></th>
+                                        <th>{{$sum_mark}}</th>
                                     </tr>
 
                                     </tbody>
@@ -102,11 +102,20 @@
                     @else
                         {{--                            <p style="align-content: center"></p>--}}
                         <br>
+                        @auth('trainer')
                         <div class="alert alert-warning alert-dismissible" style="margin: 15px">
                             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
                             <h5><i class="icon fas fa-exclamation-triangle"></i> Alert!</h5>
                             No Evaluations yet from Trainer
                         </div>
+                        @endauth
+                            @auth('supervisor')
+                                <div class="alert alert-warning alert-dismissible" style="margin: 15px">
+                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                                    <h5><i class="icon fas fa-exclamation-triangle"></i> Alert!</h5>
+                                    No Evaluations yet from Supervisor
+                                </div>
+                        @endauth
                 @endif
 
 

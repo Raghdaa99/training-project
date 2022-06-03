@@ -45,7 +45,7 @@
                     <tbody>
                                     @foreach ($questions as $question)
                     <tr>
-                        <td>{{$question->id}}</td>
+                        <td>{{$loop->iteration}}</td>
                         <td>{{$question->title}}</td>
                         <td>{{$question->guard}}</td>
                         <td>{{$question->max_mark}}</td>

@@ -51,6 +51,12 @@
 
                                         </tr>
                                     @endforeach
+                                    <tr>
+                                        <th style="width: 10px">Sum</th>
+                                        <th></th>
+                                        <th>{{$sum_max_mark}}</th>
+                                        <th>{{$sum_mark}}</th>
+                                    </tr>
                                     </tbody>
                                 </table>
                             </div>

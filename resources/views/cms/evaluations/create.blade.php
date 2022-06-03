@@ -38,8 +38,9 @@
                                     <td>{{$loop->iteration}}</td>
                                     <td>{{$question->title}}</td>
                                     <td>{{$question->max_mark}}</td>
+                                    <input type="hidden" class="form-control" value="{{$question->max_mark}}" name="max_marks[]">
                                     <td>
-                                        <input type="number" class="form-control" name="marks[]" id="marks[]" >
+                                        <input type="number" class="form-control" max="{{$question->max_mark}}" name="marks[]" id="marks[]" >
                                     </td>
                                 </tr>
                                 @endforeach
@@ -74,6 +75,12 @@
             $('input[name="marks[]"]').each(function(i, e) {
                 marks.push($(this).val());
             });
+
+            var max_marks = [];
+            $('input[name="max_marks[]"]').each(function(i, e) {
+                max_marks.push($(this).val());
+            });
+
             var question_id = [];
             $('input[name="question_id[]"]').each(function(i, e) {
                 question_id.push($(this).val());
@@ -82,6 +89,7 @@
                 student_company_id: {{$student_company_id}},
                 question_id:question_id,
                 marks: marks,
+                max_marks: max_marks,
             }).then(function (response) {
                     //2xx
                     console.log(response);

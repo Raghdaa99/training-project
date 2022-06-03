@@ -40,12 +40,17 @@ class EvaluationController extends Controller
         })->where('student_company_id', '=', $id)->get();
 
         $sum_max_mark = DB::table('questions')->where('guard', '=', $guard)->sum('max_mark');
+        $sum_mark = Evaluation::whereHas('question', function ($query) use ($guard) {
+            $query->where('guard', '=', $guard);
+        })->where('student_company_id', '=', $id)
+            ->sum('mark');
 //        $sum_mark = DB::table('evaluations')->where('student_company_id', '=', $id)->sum('mark');
 
 
         return response()->view('cms.evaluations.show', ['evaluations' => $evaluations, 'student_company_id' => $id,
-            'sum_max_mark'=>$sum_max_mark,
-            ]);
+            'sum_max_mark' => $sum_max_mark,
+            'sum_mark' => $sum_mark
+        ]);
     }
 
     public function show_supervisor_evaluation_trainer($id)
@@ -56,8 +61,14 @@ class EvaluationController extends Controller
             $query->where('guard', '=', 'trainer');
         })->where('student_company_id', '=', $id)->get();
 
+        $sum_max_mark = DB::table('questions')->where('guard', '=', 'trainer')->sum('max_mark');
+        $sum_mark = Evaluation::whereHas('question', function ($query) {
+            $query->where('guard', '=', 'trainer');
+        })->where('student_company_id', '=', $id)
+            ->sum('mark');
         return response()->view('cms.evaluations.show-evaluations-trainer-to-supervisor',
-            ['evaluations' => $evaluations, 'student_company_id' => $id]);
+            ['evaluations' => $evaluations, 'student_company_id' => $id, 'sum_max_mark' => $sum_max_mark,
+                'sum_mark' => $sum_mark]);
     }
 
     public function edit_student_evaluation($id)
@@ -91,7 +102,7 @@ class EvaluationController extends Controller
     {
 
         $validator = Validator($request->all(), [
-//            'student_company_id' => 'required|numeric|exists:students_company_field,id|unique:appointments,student_company_id',
+            'student_company_id' => 'required|numeric|exists:students_company_field,id',
 //            'question_id' => 'required|numeric|exists:students_company_field,id|unique:appointments,student_company_id',
 //            'mark' => 'required|numeric',
 
@@ -103,24 +114,38 @@ class EvaluationController extends Controller
 
             $questions_marks = $request->input('question_id');
             $marks = $request->input('marks');
-            $isSaved = false;
-            foreach ($questions_marks as $key => $value) {
-                DB::table('evaluations')->insert([
-                    'mark' => $marks[$key],
-                    'question_id' => $value,
-                    'student_company_id' => $request->input('student_company_id'),
-                ]);
-                if ($key == count($questions_marks) - 1) {
-                    $isSaved = true;
+            $max_marks = $request->input('max_marks');
+            $isValid = true;
+
+            foreach ($max_marks as $key => $value) {
+                if ($marks[$key] > $max_marks[$key]) {
+                    $isValid = false;
+                    break;
                 }
             }
+            if ($isValid) {
+                $isSaved = false;
+                foreach ($questions_marks as $key => $value) {
+                    DB::table('evaluations')->insert([
+                        'mark' => $marks[$key],
+                        'question_id' => $value,
+                        'student_company_id' => $request->input('student_company_id'),
+                    ]);
+                    if ($key == count($questions_marks) - 1) {
+                        $isSaved = true;
+                    }
+                }
 //            $isSaved = $evaluation->save();
-            return response()->json(
-                [
-                    'message' => $isSaved ? 'Evaluation created successfully' : 'Create failed!'
-                ],
-                $isSaved ? Response::HTTP_CREATED : Response::HTTP_BAD_REQUEST,
-            );
+                return response()->json(
+                    [
+                        'message' => $isSaved ? 'Evaluation created successfully' : 'Create failed!'
+                    ],
+                    $isSaved ? Response::HTTP_CREATED : Response::HTTP_BAD_REQUEST,
+                );
+            } else {
+                return response()->json(['message' => 'error in data of max marks'], Response::HTTP_BAD_REQUEST);
+            }
+
             // }
 
         } else {
@@ -172,31 +197,49 @@ class EvaluationController extends Controller
 
 //            DB::table('evaluations')->where('student_company_id', '=', $request->input('student_company_id'))
 //                ->delete();
-            $guard = Auth('supervisor')->check() ? 'supervisor' : 'trainer';
-            $deleted = Evaluation::whereHas('question', function ($query) use ($guard) {
-                $query->where('guard', '=', $guard);
-            })->where('student_company_id', '=', $request->input('student_company_id'))->delete();
 
             $questions_marks = $request->input('question_id');
             $marks = $request->input('marks');
+            $max_marks = $request->input('max_marks');
+            $isValid = true;
 
-            $isSaved = false;
-            foreach ($questions_marks as $key => $value) {
-                DB::table('evaluations')->insert([
-                    'mark' => $marks[$key],
-                    'question_id' => $value,
-                    'student_company_id' => $request->input('student_company_id'),
-                ]);
-                if ($key == count($questions_marks) - 1) {
-                    $isSaved = true;
+            foreach ($max_marks as $key => $value) {
+                if ($marks[$key] > $max_marks[$key]) {
+                    $isValid = false;
+                    break;
                 }
             }
-            return response()->json(
-                [
-                    'message' => $isSaved ? 'Evaluation Updated successfully' : 'Updated failed!'
-                ],
-                $isSaved ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST,
-            );
+
+
+            if ($isValid) {
+                $guard = Auth('supervisor')->check() ? 'supervisor' : 'trainer';
+                $deleted = Evaluation::whereHas('question', function ($query) use ($guard) {
+                    $query->where('guard', '=', $guard);
+                })->where('student_company_id', '=', $request->input('student_company_id'))->delete();
+
+                $questions_marks = $request->input('question_id');
+                $marks = $request->input('marks');
+
+                $isSaved = false;
+                foreach ($questions_marks as $key => $value) {
+                    DB::table('evaluations')->insert([
+                        'mark' => $marks[$key],
+                        'question_id' => $value,
+                        'student_company_id' => $request->input('student_company_id'),
+                    ]);
+                    if ($key == count($questions_marks) - 1) {
+                        $isSaved = true;
+                    }
+                }
+                return response()->json(
+                    [
+                        'message' => $isSaved ? 'Evaluation Updated successfully' : 'Updated failed!'
+                    ],
+                    $isSaved ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST,
+                );
+            } else {
+                return response()->json(['message' => 'error in data of max marks'], Response::HTTP_BAD_REQUEST);
+            }
             // }
 
         } else {
