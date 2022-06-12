@@ -20,8 +20,79 @@
                         <div class="card-header">
                             <h3 class="card-title">Evaluation</h3>
                         </div>
+                        @if($sum_mark != null)
+                        @auth('supervisor')
+                            <div class="card-body">
+                                <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">Evaluation of Trainer</h3>
+                                </div>
+                                <table class="table table-bordered table-striped table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th style="width: 10px">#</th>
+                                        <th>Title Question</th>
+                                        <th>Max OF Mark</th>
+                                        <th>Mark</th>
+                                    </tr>
+                                    </thead>
+
+                                    <tbody>
+                                    </tbody>
+                                    <tbody>
+                                    @foreach ($evaluations as $evaluation)
+                                        <tr>
+                                            <td>{{$loop->iteration}}</td>
+                                            <td>{{$evaluation->question->title}}</td>
+                                            <td>{{$evaluation->question->max_mark}}</td>
+                                            <td>{{$evaluation->mark}}</td>
+
+                                        </tr>
+                                    @endforeach
+                                    <tr>
+                                        <th style="width: 10px">Sum</th>
+                                        <th></th>
+                                        <th>{{$sum_max_mark}}</th>
+                                        <th>{{$sum_mark}}</th>
+                                    </tr>
+
+                                    </tbody>
+                                    {{--                                    @endif--}}
+
+
+                                </table>
+                            </div>
+                            </div>
+
+
+                        @else
+                            <br>
+
+                                <div class="alert alert-warning alert-dismissible" style="margin: 15px">
+                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                                    <h5><i class="icon fas fa-exclamation-triangle"></i> Alert!</h5>
+                                    No Evaluations yet from Trainer
+                                </div>
+
+
+                    @endif
+                    @endauth
                         <!-- /.card-header -->
                         <div class="card-body">
+                            @auth('trainer')
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">Evaluation of Trainer</h3>
+                                </div>
+                                </div>
+                            @endauth
+                                @auth('supervisor')
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h3 class="card-title">Evaluation of Supervisor</h3>
+                                        </div>
+                                    </div>
+                                @endauth
                             <table class="table table-bordered table-striped table-hover">
                                 <thead>
                                 <tr>

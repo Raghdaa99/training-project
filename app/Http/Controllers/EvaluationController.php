@@ -25,9 +25,25 @@ class EvaluationController extends Controller
     {
 
         $guard = Auth('supervisor')->check() ? 'supervisor' : 'trainer';
+
         $questions = Question::where('guard', '=', $guard)->get();
+        $evaluations = Evaluation::whereHas('question', function ($query) use ($guard) {
+            $query->where('guard', '=', 'trainer');
+        })->where('student_company_id', '=', $id)->get();
+
+        $sum_max_mark = DB::table('questions')->where('guard', '=','trainer' )->sum('max_mark');
+        $sum_mark = Evaluation::whereHas('question', function ($query) use ($guard) {
+            $query->where('guard', '=', 'trainer');
+        })->where('student_company_id', '=', $id)
+            ->sum('mark');
         return response()->view('cms.evaluations.create', [
-            'questions' => $questions, 'student_company_id' => $id]);
+            'questions' => $questions,
+            'student_company_id' => $id,
+            'guard'=>$guard,
+            'evaluations' => $evaluations,
+            'sum_max_mark' => $sum_max_mark,
+            'sum_mark' => $sum_mark
+            ]);
 
     }
 
@@ -47,7 +63,9 @@ class EvaluationController extends Controller
 //        $sum_mark = DB::table('evaluations')->where('student_company_id', '=', $id)->sum('mark');
 
 
-        return response()->view('cms.evaluations.show', ['evaluations' => $evaluations, 'student_company_id' => $id,
+        return response()->view('cms.evaluations.show',
+            ['evaluations' => $evaluations,
+                'student_company_id' => $id,
             'sum_max_mark' => $sum_max_mark,
             'sum_mark' => $sum_mark
         ]);
