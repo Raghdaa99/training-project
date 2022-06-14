@@ -239,7 +239,7 @@ class AuthController extends Controller
             $guard = 'admin';
         } elseif (auth('trainer')->check()) {
             $guard = 'trainer';
-        } else {
+        } elseif (auth('supervisor')->check()) {
             $guard = 'supervisor';
         }
         Auth::guard($guard)->logout();

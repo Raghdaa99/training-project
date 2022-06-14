@@ -31,12 +31,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <li class="nav-item">
                     <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
                 </li>
-                <li class="nav-item d-none d-sm-inline-block">
-                    <a href="index3.html" class="nav-link">Home</a>
-                </li>
-                <li class="nav-item d-none d-sm-inline-block">
-                    <a href="#" class="nav-link">Contact</a>
-                </li>
             </ul>
 
         </nav>
@@ -46,9 +40,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <!-- Main Sidebar Container -->
         <aside class="main-sidebar sidebar-dark-primary elevation-4">
             <!-- Brand Logo -->
-            <a href="index3.html" class="brand-link">
-                <img src="{{asset('cms/dist/img/AdminLTELogo.png')}}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
-                <span class="brand-text font-weight-light">AdminLTE 3</span>
+            <a href="{{route('home')}}" class="brand-link">
+                <img src="{{asset('cms/dist/img/logo-faculty.jpeg')}}" alt="Logo" class="brand-image img-circle elevation-3">
+                <span class="brand-text font-weight-light">Training System</span>
             </a>
 
             <!-- Sidebar -->
@@ -59,7 +53,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
                 <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                     <div class="image">
-                        <img src="{{asset('cms/dist/img/user2-160x160.jpg')}}" class="img-circle elevation-2" alt="User Image">
+                        <img src="{{asset('cms/dist/img/user.png')}}" class="img-circle elevation-2" alt="User Image">
                     </div>
 
                     <div class="info">
@@ -77,73 +71,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         @auth('admin')
                         <li class="nav-item">
                             <a href="{{route('cms.admin.dashboard')}}" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
+                                <i class="nav-icon fas fa-tachometer-alt"></i>
                                 <p>Dashboard</p>
                             </a>
                         </li>
                         @endauth
 
-                        @canany(['Create-Role','Read-Roles', 'Create-Permission','Read-Permissions'])
-                        <li class="nav-header">{{__('cms.roles_permissions')}}</li>
-                        @canany(['Create-Role','Read-Roles'])
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon fas fa-key"></i>
-                                <p>
-                                    {{__('cms.roles')}}
-                                    <i class="fas fa-angle-left right"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview" style="display: none;">
-                                @can('Read-Roles')
-                                <li class="nav-item">
-                                    <a href="{{route('roles.index')}}" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>{{__('cms.index')}}</p>
-                                    </a>
-                                </li>
-                                @endcan
-                                @can('Create-Role')
-                                <li class="nav-item">
-                                    <a href="{{route('roles.create')}}" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>{{__('cms.create')}}</p>
-                                    </a>
-                                </li>
-                                @endcan
-                            </ul>
-                        </li>
-                        @endcanany
-                        @canany(['Create-Permission','Read-Permissions'])
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon fas fa-key"></i>
-                                <p>
-                                    {{__('cms.permissions')}}
-                                    <i class="fas fa-angle-left right"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview" style="display: none;">
-                                @can('Read-Permissions')
-                                <li class="nav-item">
-                                    <a href="{{route('permissions.index')}}" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>{{__('cms.index')}}</p>
-                                    </a>
-                                </li>
-                                @endcan
-                                @can('Create-Permission')
-                                <li class="nav-item">
-                                    <a href="{{route('permissions.create')}}" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>{{__('cms.create')}}</p>
-                                    </a>
-                                </li>
-                                @endcan
-                            </ul>
-                        </li>
-                        @endcanany
-                        @endcanany
+
 
                         @canany(['Create-Admin','Read-Admins','Create-Student'])
                         <li class="nav-header">{{__('cms.hr')}}</li>
@@ -384,15 +318,76 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         </li>
                         @endcan
 
-                        @can('Registered-Students')
-                        <li class="nav-item">
-                            <a href="{{route('registerStudentCourse.index')}}" class="nav-link">
-                                <i class="nav-icon fas fa-th"></i>
-                                <p>
-                                    Registered Students
-                                </p>
-                            </a>
-                        </li>
+                        @canany(['Create-Role','Read-Roles', 'Create-Permission','Read-Permissions'])
+                            <li class="nav-header">{{__('cms.roles_permissions')}}</li>
+                            @canany(['Create-Role','Read-Roles'])
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link">
+                                        <i class="nav-icon fas fa-key"></i>
+                                        <p>
+                                            {{__('cms.roles')}}
+                                            <i class="fas fa-angle-left right"></i>
+                                        </p>
+                                    </a>
+                                    <ul class="nav nav-treeview" style="display: none;">
+                                        @can('Read-Roles')
+                                            <li class="nav-item">
+                                                <a href="{{route('roles.index')}}" class="nav-link">
+                                                    <i class="far fa-circle nav-icon"></i>
+                                                    <p>{{__('cms.index')}}</p>
+                                                </a>
+                                            </li>
+                                        @endcan
+                                        @can('Create-Role')
+                                            <li class="nav-item">
+                                                <a href="{{route('roles.create')}}" class="nav-link">
+                                                    <i class="far fa-circle nav-icon"></i>
+                                                    <p>{{__('cms.create')}}</p>
+                                                </a>
+                                            </li>
+                                        @endcan
+                                    </ul>
+                                </li>
+                            @endcanany
+                            @canany(['Create-Permission','Read-Permissions'])
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link">
+                                        <i class="nav-icon fas fa-key"></i>
+                                        <p>
+                                            {{__('cms.permissions')}}
+                                            <i class="fas fa-angle-left right"></i>
+                                        </p>
+                                    </a>
+                                    <ul class="nav nav-treeview" style="display: none;">
+                                        @can('Read-Permissions')
+                                            <li class="nav-item">
+                                                <a href="{{route('permissions.index')}}" class="nav-link">
+                                                    <i class="far fa-circle nav-icon"></i>
+                                                    <p>{{__('cms.index')}}</p>
+                                                </a>
+                                            </li>
+                                        @endcan
+                                        @can('Create-Permission')
+                                            <li class="nav-item">
+                                                <a href="{{route('permissions.create')}}" class="nav-link">
+                                                    <i class="far fa-circle nav-icon"></i>
+                                                    <p>{{__('cms.create')}}</p>
+                                                </a>
+                                            </li>
+                                        @endcan
+                                    </ul>
+                                </li>
+                            @endcanany
+                        @endcanany
+{{--                        @can('Registered-Students')--}}
+{{--                        <li class="nav-item">--}}
+{{--                            <a href="{{route('registerStudentCourse.index')}}" class="nav-link">--}}
+{{--                                <i class="nav-icon fas fa-th"></i>--}}
+{{--                                <p>--}}
+{{--                                    Registered Students--}}
+{{--                                </p>--}}
+{{--                            </a>--}}
+{{--                        </li>--}}
 
                         {{-- <li class="nav-item">--}}
                         {{-- <a href="{{route('registerStudentCourse.create')}}" class="nav-link">--}}
@@ -402,7 +397,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         {{-- </p>--}}
                         {{-- </a>--}}
                         {{-- </li>--}}
-                        @endcan
+{{--                        @endcan--}}
 
 
                         @can('Read-Students-Trainer')
@@ -437,7 +432,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         </li>
                         <li class="nav-item">
                             <a href="{{route('cms.logout')}}" class="nav-link">
-                                <i class="nav-icon far fa-circle text-danger"></i>
+                                <i class="nav-icon fas fa-sign-out-alt"></i>
                                 <p class="text">{{__('cms.logout')}}</p>
                             </a>
                         </li>
@@ -489,11 +484,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <!-- Main Footer -->
         <footer class="main-footer">
             <!-- To the right -->
-            <div class="float-right d-none d-sm-inline">
-                Anything you want
-            </div>
+
             <!-- Default to the left -->
-            <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">AdminLTE.io</a>.</strong> All rights reserved.
+            <strong>Copyright &copy; 2022 </strong> All rights reserved.
         </footer>
     </div>
     <!-- ./wrapper -->

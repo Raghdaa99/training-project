@@ -54,28 +54,28 @@
                                            value="{{$company->address}}">
                                 </div>
 
-                                <div class="form-group">
-                                    <label> Training Fields Company :</label>
-                                    <div class="icheck-success d-block">
-                                        {{--                                        @php($fields_req = [])--}}
+{{--                                <div class="form-group">--}}
+{{--                                    <label> Training Fields Company :</label>--}}
+{{--                                    <div class="icheck-success d-block">--}}
+{{--                                        --}}{{--                                        @php($fields_req = [])--}}
 
-                                        @foreach($fields as $field)
-                                            <?php $checked = false;?>
-                                            @foreach($fields_companies as $field_company)
-                                                @if($field->id ==$field_company->id )
-                                                    <?php $checked= true;?>
-                                                    @endif
-                                            @endforeach
-                                                <input type="checkbox" value="{{$field->id}}" class="ids" name="ids[]"{{$checked ? 'checked':''}}>
-                                                <label for="ids[]">
-                                                    {{$field->name}}
-                                                </label>
+{{--                                        @foreach($fields as $field)--}}
+{{--                                            <?php $checked = false;?>--}}
+{{--                                            @foreach($fields_companies as $field_company)--}}
+{{--                                                @if($field->id ==$field_company->id )--}}
+{{--                                                    <?php $checked= true;?>--}}
+{{--                                                    @endif--}}
+{{--                                            @endforeach--}}
+{{--                                                <input type="checkbox" value="{{$field->id}}" class="ids" name="ids[]"{{$checked ? 'checked':''}}>--}}
+{{--                                                <label for="ids[]">--}}
+{{--                                                    {{$field->name}}--}}
+{{--                                                </label>--}}
 {{--                                            --}}
-                                            {{--                                            <label for="field_{{$field->id}}">{{$field->name}}</label>--}}
-                                            <br>
-                                        @endforeach
-                                    </div>
-                                </div>
+{{--                                            --}}{{--                                            <label for="field_{{$field->id}}">{{$field->name}}</label>--}}
+{{--                                            <br>--}}
+{{--                                        @endforeach--}}
+{{--                                    </div>--}}
+{{--                                </div>--}}
                             </div>
                             <!-- /.card-body -->
 

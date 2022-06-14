@@ -7,7 +7,7 @@
 @endsection
 
 @section('large-page-name',__('cms.index'))
-@section('main-page-name',__('cms.students'))
+@section('main-page-name','Students')
 @section('small-page-name',__('cms.index'))
 
 @section('content')
