@@ -1,6 +1,6 @@
 @extends('cms.parent')
 
-@section('title',__('cms.training_data'))
+@section('title','Add Company')
 
 @section('styles')
 
@@ -16,7 +16,7 @@
                     <!-- general form elements -->
                     <div class="card card-primary">
                         <div class="card-header">
-                            <h3 class="card-title">{{__('cms.training_data')}}</h3>
+                            <h3 class="card-title">Add Company</h3>
                         </div>
                         <!-- /.card-header -->
                         <!-- form start -->

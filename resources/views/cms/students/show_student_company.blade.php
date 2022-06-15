@@ -6,8 +6,8 @@
 
 @endsection
 
-@section('large-page-name',__('cms.index'))
-@section('main-page-name',__('cms.students'))
+@section('large-page-name','Training Data')
+@section('main-page-name','Student')
 @section('small-page-name',__('cms.index'))
 
 @section('content')
@@ -120,7 +120,17 @@
                                     </tbody>
                                 </table>
                             @else
-                                <p> no company registerd</p>
+                                <p> </p>
+
+                                <a href="{{route('register.Student.Company',auth()->user()->student_no)}}" class="btn btn-success"
+                                   style="width: 200px; ">
+                                    <i class="fas fa-plus-circle"> Add Company </i>
+                                </a>
+                                <div class="alert alert-warning alert-dismissible" style="margin: 15px">
+{{--                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>--}}
+                                    <h5><i class="icon fas fa-exclamation-triangle"></i> Alert!</h5>
+                                    no company registered , Add Company !!!
+                                </div>
                             @endif
                         </div>
                         <!-- /.card-body -->

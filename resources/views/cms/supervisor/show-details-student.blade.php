@@ -69,14 +69,14 @@
                                         Attendance
                                     </a>
                                 </div>
-                                <div class="form-group">
-                                    <label for="trainer_name">Evaluations from Trainer :</label>
-                                    <a class="btn btn-info btn-sm"
-                                       href="{{route('show.supervisor.evaluation.trainer',$company_student->id)}}"
-                                    >
-                                        Evaluations Trainer
-                                    </a>
-                                </div>
+{{--                                <div class="form-group">--}}
+{{--                                    <label for="trainer_name">Evaluations from Trainer :</label>--}}
+{{--                                    <a class="btn btn-info btn-sm"--}}
+{{--                                       href="{{route('show.supervisor.evaluation.trainer',$company_student->id)}}"--}}
+{{--                                    >--}}
+{{--                                        Evaluations Trainer--}}
+{{--                                    </a>--}}
+{{--                                </div>--}}
                                 <div class="form-group">
                                     <label for="trainer_name">Evaluations from Supervisor :</label>
                                     <a class="btn btn-success btn-sm"

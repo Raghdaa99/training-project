@@ -82,9 +82,11 @@
                     <!-- /.col -->
                 </div>
             </form>
+            @if($guard == 'student' || $guard == 'supervisor')
             <p class="mb-0">
                 <a href="{{route('cms.check.credentials',$guard)}}" class="text-center">Register a new membership</a>
             </p>
+            @endif
         </div>
         <!-- /.card-body -->
     </div>

@@ -165,6 +165,12 @@ class TrainerController extends Controller
         //
     }
 
+    public function show_trainer_personal_data()
+    {
+        $id = Auth::user()->id;
+        $trainer = Trainer::findOrFail($id);
+        return view('cms.trainer.personal-data', ['trainer' => $trainer]);
+    }
     /**
      * Show the form for editing the specified resource.
      *

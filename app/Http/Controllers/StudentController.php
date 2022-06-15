@@ -83,6 +83,12 @@ class StudentController extends Controller
         //
     }
 
+    public function show_students_personal_data()
+    {
+        $student_no = Auth::user()->student_no;
+        $student = Student::findOrFail($student_no);
+        return view('cms.students.personal-data', ['student' => $student]);
+    }
 
 //    public function showAddCompany()
 //    {

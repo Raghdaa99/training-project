@@ -121,6 +121,7 @@ class EvaluationController extends Controller
 
         $validator = Validator($request->all(), [
             'student_company_id' => 'required|numeric|exists:students_company_field,id',
+            'marks.*' => 'required'
 //            'question_id' => 'required|numeric|exists:students_company_field,id|unique:appointments,student_company_id',
 //            'mark' => 'required|numeric',
 

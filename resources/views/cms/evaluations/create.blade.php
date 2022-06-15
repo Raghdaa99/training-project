@@ -20,8 +20,9 @@
                         <div class="card-header">
                             <h3 class="card-title">Evaluation</h3>
                         </div>
-                        @if($sum_mark != null)
                         @auth('supervisor')
+                        @if($sum_mark != null)
+
                             <div class="card-body">
                                 <div class="card">
                                 <div class="card-header">

@@ -296,27 +296,49 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
                         {{-- {{auth()->guard('student')->check()}}--}}
 
-                        @can('Add-Data-Company')
-                        <li class="nav-item">
-                            <a href="{{route('register.Student.Company',auth()->user()->student_no)}}" class="nav-link">
-                                <i class="nav-icon fas fa-th"></i>
-                                <p>
-                                    Add Company
-                                </p>
-                            </a>
-                        </li>
-                        @endcan
+{{--                        @can('Add-Data-Company')--}}
+{{--                        <li class="nav-item">--}}
+{{--                            <a href="{{route('register.Student.Company',auth()->user()->student_no)}}" class="nav-link">--}}
+{{--                                <i class="nav-icon fas fa-th"></i>--}}
+{{--                                <p>--}}
+{{--                                    Add Company--}}
+{{--                                </p>--}}
+{{--                            </a>--}}
+{{--                        </li>--}}
+{{--                        @endcan--}}
 
                         @can('Read-Data-Company')
                         <li class="nav-item">
                             <a href="{{route('registerStudentCompany.index')}}" class="nav-link">
                                 <i class="nav-icon fas fa-th"></i>
                                 <p>
-                                    Read Data
+                                    Training Data
                                 </p>
                             </a>
                         </li>
                         @endcan
+
+                        @auth('student')
+                            <li class="nav-item">
+                                <a href="{{route('student.personal.data')}}" class="nav-link">
+                                    <i class="nav-icon fas fa-user"></i>
+                                    <p>
+                                        Personal Data
+                                    </p>
+                                </a>
+                            </li>
+                        @endauth
+
+                        @auth('trainer')
+                            <li class="nav-item">
+                                <a href="{{route('trainer.personal.data')}}" class="nav-link">
+                                    <i class="nav-icon fas fa-user"></i>
+                                    <p>
+                                        Personal Data
+                                    </p>
+                                </a>
+                            </li>
+                        @endauth
 
                         @canany(['Create-Role','Read-Roles', 'Create-Permission','Read-Permissions'])
                             <li class="nav-header">{{__('cms.roles_permissions')}}</li>
@@ -403,9 +425,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         @can('Read-Students-Trainer')
                         <li class="nav-item">
                             <a href="{{route('trainers.index')}}" class="nav-link">
-                                <i class="nav-icon fas fa-th"></i>
+                                <i class="nav-icon fas fa-user-friends"></i>
                                 <p>
-                                    index Students
+                                    All Students
                                 </p>
                             </a>
                         </li>
@@ -416,7 +438,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                             <a href="{{route('supervisor.show.students')}}" class="nav-link">
                                 <i class="nav-icon fas fa-th"></i>
                                 <p>
-                                    Read Students
+                                     All Students
                                 </p>
                             </a>
                         </li>

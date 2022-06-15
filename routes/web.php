@@ -82,10 +82,14 @@ Route::group(['middleware' => 'prevent-back-history'], function () {
         Route::get('registerCompany/{studentCompanyField}/edit/{company_id?}', [StudentCompanyFieldController::class, 'edit_company_field'])->name('edit.Student.Company');
         Route::get('reports/{id}', [ReportController::class, 'create_report'])->name('create.report');
         Route::resource('reports', ReportController::class);
+        Route::get('show/Student/personal-data', [StudentController::class, 'show_students_personal_data'])->name('student.personal.data');
+
     });
 
     Route::prefix('cms/trainer')->middleware('auth:trainer')->group(function () {
         Route::resource('trainers', TrainerController::class);
+        Route::get('show/trainer-personal-data', [TrainerController::class, 'show_trainer_personal_data'])->name('trainer.personal.data');
+
 
     });
 
