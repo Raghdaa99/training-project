@@ -42,6 +42,15 @@
                                     <span>   {{$company_student->student->student->name}}</span>
                                 </div>
                                 <div class="form-group">
+                                    <label for="trainer_name">Company :</label>
+
+                                    <span>  {{$company_student->companyField->company->name }}</span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="trainer_name">Field :</label>
+                                    <span>  {{$company_student->companyField->field->name }}</span>
+                                </div>
+                                <div class="form-group">
                                     <label for="trainer_name">Department Name :</label>
 
                                     <span>   {{$company_student->student->student->department->name}}</span>
@@ -110,8 +119,9 @@
     <script src="{{asset('cms/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js')}}"></script>
 
     <script src="{{asset('cms/plugins/daterangepicker/daterangepicker.js')}}"></script>
-
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
+
         function confirmSendEmail($id, $email) {
             Swal.fire({
                 title: 'Are you sure?',

@@ -86,12 +86,12 @@
         var academic_number = document.getElementById('number').value;
         var id_number =  document.getElementById('id_number').value;
         axios.post('/cms/check', {
-            number: academic_number,
+            academic_number: academic_number,
             id_number: id_number,
             guard: '{{$guard}}',
         })
             .then(function (response) {
-                toastr.success(response.data.message);
+                // toastr.success(response.data.message);
                 console.log(response);
                 window.location.href = '/cms/{{$guard}}/register?academic_number='+academic_number+'&id_number='+id_number;
             })

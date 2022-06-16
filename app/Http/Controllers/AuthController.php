@@ -24,9 +24,6 @@ class AuthController extends Controller
     public function showLogin(Request $request)
     {
         $request->merge(['guard' => $request->guard]);
-        //dd($request->all());
-        //dd($request->guard);
-
         $validator = Validator($request->all(), [
             'guard' => 'required|string|in:student,admin,supervisor,trainer'
         ]);
@@ -44,27 +41,19 @@ class AuthController extends Controller
         $validator = Validator($request->all(), [
 //            'number' => "required|exists:register_students_course,student_no",
             'number' => [
-                'required',
-//                function ($attribute, $value, $fail) {
-//                    if (StudentSupervisor::where('supervisor_no', $value)->first() == null ||
-//                        StudentSupervisor::where('student_no', $value)->first() == null) {
-//                        $fail('Failed Login');
-//                    }
-
-               // }
-            ],
-            'password' => 'required|string|min:3',
+                'required',],
+            'password' => 'required|string',
             'remember' => 'required|boolean',
             'guard' => 'required|string|in:student,admin,supervisor,trainer'
         ], [
-//            'number.exists' => 'you are not allowed'
+            'number.required' => 'Empty Fields'
         ]);
 
         if (!$validator->fails()) {
             $guard = $request->input('guard') . "_no";
             if ($request->input('guard') == 'trainer') {
                 $guard = 'email';
-            } elseif ($request->input('guard') == 'student') {
+            } elseif ($request->input('guard') == 'student') {;
                 $student = StudentSupervisor::where('student_no', '=', $request->input('number'))->first();
                 if ($student != null && $student->student->status == 0) {
                     return response()->json(
@@ -81,6 +70,8 @@ class AuthController extends Controller
                     );
                 }
             }
+
+
             $credentials = ["$guard" => $request->input('number'), 'password' => $request->input('password')];
             if (Auth::guard($request->input('guard'))->attempt($credentials, $request->input('remember'))) {
                 return response()->json(['message' => 'Logged in Success'], Response::HTTP_OK);
@@ -167,14 +158,14 @@ class AuthController extends Controller
                 return response()->view('cms.auth.register', ['guard' => $request->input('guard'),
                     'user' => $user, 'departments' => $departments]);
             } else {
-                dd('www');
+                abort(Response::HTTP_NOT_FOUND);
             }
         } else {
             abort(Response::HTTP_NOT_FOUND);
         }
     }
 
-    public function checkCredentials(Request $request)
+    public function showCheckCredentials(Request $request)
     {
         $request->merge(['guard' => $request->guard]);
         $validator = Validator($request->all(), [
@@ -188,27 +179,21 @@ class AuthController extends Controller
         }
     }
 
-    public function check_credential(Request $request)
+    public function checkCredential(Request $request)
     {
         $request->merge(['guard' => $request->guard]);
         $validator = Validator($request->all(), [
-            'number' => "required|numeric",
-            // 'number' => ['required', 'numeric', function ($attribute, $value, $fail) {
-            //     if (!DB::table('students')->where('student_no', $value)->exists() || !DB::table('supervisors')->where('supervisor_no', $value)->exists()) {
-            //         return $fail("The provided $attribute is not valid.");
-            //     }
-            // },],
+            'academic_number' => "required|numeric",
             'id_number' => 'required|numeric',
             'guard' => 'required|string|in:student,supervisor'
         ]);
-        $departments = Department::all();
         if (!$validator->fails()) {
             $guard = $request->input('guard') . "_no";
             if ($request->input('guard') == 'student') {
-                $user = Student::where($guard, '=', $request->input('number'))
+                $user = Student::where($guard, '=', $request->input('academic_number'))
                     ->where('id_number', '=', $request->input('id_number'))->first();
             } else if ($request->input('guard') == 'supervisor') {
-                $user = Supervisor::where($guard, '=', $request->input('number'))
+                $user = Supervisor::where($guard, '=', $request->input('academic_number'))
                     ->where('id_number', '=', $request->input('id_number'))->first();
             }
 
@@ -217,8 +202,6 @@ class AuthController extends Controller
                     'guard' => $request->input('guard'),
                     'academic_number' => $user->$guard, 'id_number' => $user->id_number
                 ]);
-                //                return response()->json(['message' => 'Logged in Success'], Response::HTTP_OK);
-
             } else {
                 return response()->json(
                     ['message' => 'Checked Failed , check your credentials'],

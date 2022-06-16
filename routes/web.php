@@ -40,10 +40,10 @@ Route::group(['middleware' => 'prevent-back-history'], function () {
     Route::prefix('cms')->middleware('guest:student,admin,supervisor,trainer')->group(function () {
         Route::get('{guard}/login', [AuthController::class, 'showLogin'])->name('cms.login');
         Route::get('{guard}/register', [AuthController::class, 'showRegister'])->name('cms.register');
-        Route::get('{guard}/check', [AuthController::class, 'checkCredentials'])->name('cms.check.credentials');
+        Route::get('{guard}/check', [AuthController::class, 'showCheckCredentials'])->name('cms.check.credentials');
         Route::post('login', [AuthController::class, 'login']);
         Route::put('register', [AuthController::class, 'register']);
-        Route::post('check', [AuthController::class, 'check_credential']);
+        Route::post('check', [AuthController::class, 'checkCredential']);
 
     });
     Route::prefix('cms')->middleware('auth:student,admin,supervisor,trainer')->group(function () {

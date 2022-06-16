@@ -22,44 +22,52 @@
                         <!-- form start -->
                         <form id="create-form">
                             @csrf
-                            <div class="card-body">
-                                <div class="form-group">
-                                    <label for="company_id">{{__('cms.company')}}</label>
-                                    <select class="custom-select form-control-border" id="company_id"
-                                            onchange="showFields()">
+                            @if(count($companies)>0)
+                                <div class="card-body">
 
-                                        @foreach ($companies as $company)
-                                            <option
-                                                value="{{$company->id}}" {{ $company_id == $company->id ? 'selected' : '' }}>{{$company->name}}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
+                                    <div class="form-group">
+                                        <label for="company_id">{{__('cms.company')}}</label>
+                                        <select class="custom-select form-control-border" id="company_id"
+                                                onchange="showFields()">
 
-                                <div class="form-group">
-                                    <label for="field_id">{{__('cms.fields')}}</label>
-                                    @if($fields != null)
-                                        @foreach ($fields as $field)
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="field_id"
-                                                       value="{{$field->id}}" id="field_id">
-                                                <label class="form-check-label">{{$field->name}}</label>
-                                            </div>
-                                        @endforeach
-                                    @else
-                                        <p> no fields to this Company</p>
-                                    @endif
+                                            @foreach ($companies as $company)
+                                                <option
+                                                    value="{{$company->id}}" {{ $company_id == $company->id ? 'selected' : '' }}>{{$company->name}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="field_id">{{__('cms.fields')}}</label>
+                                        @if($fields != null)
+                                            @foreach ($fields as $field)
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" name="field_id"
+                                                           value="{{$field->id}}" id="field_id">
+                                                    <label class="form-check-label">{{$field->name}}</label>
+                                                </div>
+                                            @endforeach
+                                        @else
+                                            <p> no fields to this Company</p>
+                                        @endif
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="notes">Notes</label>
+                                        <textarea id="notes" name="notes"
+                                                  class="form-control"></textarea>
+                                    </div>
                                 </div>
-                                <div class="form-group">
-                                    <label for="notes">Notes</label>
-                                    <textarea id="notes" name="notes"
-                                              class="form-control"></textarea>
+                                <!-- /.card-body -->
+                                <div class="card-footer">
+                                    <button type="button" onclick="performStore()"
+                                            class="btn btn-primary">{{__('cms.save')}}</button>
                                 </div>
-                            </div>
-                            <!-- /.card-body -->
-                            <div class="card-footer">
-                                <button type="button" onclick="performStore()"
-                                        class="btn btn-primary">{{__('cms.save')}}</button>
-                            </div>
+                            @else
+                                <div class="alert alert-warning alert-dismissible" style="margin: 15px">
+                                    <h5><i class="icon fas fa-exclamation-triangle"></i> Alert!</h5>
+                                    No Companies Added
+                                </div>
+                            @endif
                         </form>
                     </div>
                     <!-- /.card -->
@@ -102,7 +110,7 @@
                         window.location.href = '/cms/student/registerStudentCompany';
                     @endauth
 
-                    @auth('supervisor')
+                        @auth('supervisor')
                         window.location.href = '/cms/supervisor/show/Students';
                     @endauth
 

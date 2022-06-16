@@ -124,7 +124,22 @@
     height: 8px;
     cursor: pointer;
 }
+.trainer-section{
+    padding: 40px 0;
+    direction: ltr;
+    margin-bottom: 7%;
+}
 
+.trainer-section h2{
+    font-family: 'Cairo', Arial, sans-serif;
+    font-weight: bold;
+}
+.trainer-section p{
+    font-family: 'Cairo', Arial, sans-serif;
+    font-weight: normal;
+    font-size: 20px;
+    padding:0 100px;
+}
 /* Start Features*/
 .features {
     padding: 40px 0;
@@ -431,6 +446,7 @@
     padding: 50px 0;
     background-color: #636769;
     direction: rtl;
+
 }
 
 

@@ -59,7 +59,10 @@ class StudentCompanyFieldController extends Controller
         if ($request->company_id != null) {
             $company_id = $request->input('company_id');
         } else {
-            $company_id = Company::first()->id;
+//            $company =  Company::first();
+//            if ($company != null){
+                $company_id = Company::first()->id;
+//            }
         }
 
 

@@ -308,7 +308,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 {{--                        @endcan--}}
 
                         @can('Read-Data-Company')
-                        <li class="nav-item">
+                        <li class="nav-item" style="margin-top:30px ">
                             <a href="{{route('registerStudentCompany.index')}}" class="nav-link">
                                 <i class="nav-icon fas fa-th"></i>
                                 <p>
@@ -432,6 +432,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                             </a>
                         </li>
                         @endcan
+
 
                         @can('Read-Students')
                         <li class="nav-item">

@@ -90,42 +90,15 @@
                                                    class="btn btn-info btn-sm">
                                                     <i class="fas fa-table"> Show</i>
                                                 </a>
-{{--                                                <a class="btn btn-primary btn-sm"--}}
-{{--                                                   onclick="confirmSendEmail('{{$company_student->studentCompany->id}}','{{$company_student->studentCompany->companyField->company->email}}')">--}}
-{{--                                                    <i class="fa fa-envelope"></i>--}}
 
-{{--                                                    Send Email to Company--}}
-{{--                                                </a>--}}
-                                                @if($company_student->studentCompany->status_company==1)
-                                                    <div class="btn-group">
 
-{{--                                                        <a href="{{route('show.student.appointment',$company_student->studentCompany->id)}}"--}}
-{{--                                                           class="btn btn-warning btn-sm">--}}
-{{--                                                            <i class="fas fa-table"> Show Appointments</i>--}}
-{{--                                                        </a>--}}
-{{--                                                        <a class="btn btn-secondary btn-sm"--}}
-{{--                                                           href="{{route('show.student.attendances',$company_student->studentCompany->id)}}">--}}
-{{--                                                            Attendance--}}
-{{--                                                        </a>--}}
-{{--                                                        <a class="btn btn-success btn-sm"--}}
-{{--                                                           href="{{route('show.student.evaluation',$company_student->studentCompany->id)}}"--}}
-{{--                                                        >--}}
-{{--                                                            Evaluations--}}
-{{--                                                        </a>--}}
-{{--                                                        <a class="btn btn-info btn-sm"--}}
-{{--                                                           href="{{route('show.supervisor.evaluation.trainer',$company_student->studentCompany->id)}}"--}}
-{{--                                                        >--}}
-{{--                                                            Evaluations from Trainer--}}
-{{--                                                        </a>--}}
-                                                    </div>
-                                                @endif
                                             </td>
                                         @else
                                             <td> No company</td>
-                                            <td>
+                                            <td style="text-align:center" colspan="3">
                                                 <div class="btn-group">
                                                     <a href="{{route('register.Student.Company',$company_student->student_no)}}"
-                                                       class="btn btn-dark btn-sm">
+                                                       class="btn btn-dark btn-bg">
                                                         <i class="fas fa-plus-circle"> Add Company</i>
                                                     </a>
                                                 </div>

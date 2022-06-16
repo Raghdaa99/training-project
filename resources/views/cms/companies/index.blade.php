@@ -17,12 +17,12 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="card">
-                        <div class="card-header">
-                            <h3 class="card-title">Bordered Table</h3>
-                        </div>
+
                         <!-- /.card-header -->
                         <div class="card-body">
                             <table class="table table-bordered table-striped table-hover">
+                                @if(count($companies)>0)
+
                                 <thead>
                                 <tr>
                                     <th style="width: 10px">#</th>
@@ -64,7 +64,17 @@
                                 @endforeach
 
                                 </tbody>
+                                @else
+                                    <div class="alert alert-warning alert-dismissible" style="margin: 15px">
+                                        <h5><i class="icon fas fa-exclamation-triangle"></i> Alert!</h5>
+                                        No Companies Added
+                                    </div>
+                                @endif
                             </table>
+                            {{-- Pagination --}}
+{{--                            <div class="d-flex justify-content-center">--}}
+{{--                                {!! $companies->links() !!}--}}
+{{--                            </div>--}}
                         </div>
                         <!-- /.card-body -->
                         <div class="card-footer clearfix">

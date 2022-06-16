@@ -3,7 +3,7 @@
 use function PHPSTORM_META\map;
 
 return [
-    'app_name' => 'UN-Project',
+    'app_name' => 'Training System',
     'index' => 'Index',
     'create' => 'Create',
     'show' => 'Show',
