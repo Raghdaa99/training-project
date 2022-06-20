@@ -7,6 +7,7 @@ use App\Models\CompanyField;
 use App\Models\Field;
 use App\Models\StudentCompanyField;
 use App\Models\StudentSupervisor;
+use Hashids\Hashids;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -186,8 +187,9 @@ class StudentCompanyFieldController extends Controller
      */
     public function show($id)
     {
-//        dd($id);
-        $studentCompanyField = StudentCompanyField::findOrFail($id);
+        $hashids = new Hashids();
+        $hex = $hashids->decodeHex($id);
+        $studentCompanyField = StudentCompanyField::findOrFail($hex);
 //        dd($studentCompanyField);
         return response()->view('cms.companies.show_students_company', ['item' => $studentCompanyField]);
     }

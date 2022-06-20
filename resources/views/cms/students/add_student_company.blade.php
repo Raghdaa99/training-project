@@ -84,10 +84,8 @@
     <script>
         function showFields() {
             $company_id = document.getElementById('company_id').value;
-            // window.location.href = '/cms/student/registerCompany/' + $company_id;
-
-            window.location.replace('/cms/student/registerCompany/{{$student_no}}/?company_id=' + $company_id);
-
+            window.location.replace('/cms/student/registerCompany?company_id=' + $company_id);
+            {{--window.location.replace('/cms/supervisor/registerCompany/?student_no={{$student_no}}'+'&company_id=' + $company_id);--}}
 
         }
 
@@ -106,13 +104,8 @@
                     console.log(response);
                     toastr.success(response.data.message);
                     // document.getElementById('create-form').reset();
-                    @auth('student')
-                        window.location.href = '/cms/student/registerStudentCompany';
-                    @endauth
 
-                        @auth('supervisor')
-                        window.location.href = '/cms/supervisor/show/Students';
-                    @endauth
+                    window.location.href = '/cms/student/registerStudentCompany';
 
                 })
                 .catch(function (error) {

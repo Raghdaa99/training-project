@@ -2,6 +2,7 @@
 
 namespace App\Mail;
 
+use Hashids\Hashids;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -31,7 +32,9 @@ class CompanyEmail extends Mailable
      */
     public function build()
     {
-        $url = Url::temporarySignedRoute('company.send.email', now()->addHours(24), ['id'=>$this->id]);
+        $hashids = new Hashids();
+        $id = $hashids->encodeHex($this->id);
+        $url = Url::temporarySignedRoute('company.send.email', now()->addHours(24), ['id'=>$id]);
         return $this->markdown('emails.company.show_email',['url'=>$url]);
     }
 }
