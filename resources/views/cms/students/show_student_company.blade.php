@@ -122,7 +122,7 @@
                             @else
                                 <p> </p>
 
-                                <a href="{{route('register.Student.Company',auth()->user()->student_no)}}" class="btn btn-success"
+                                <a href="{{route('register.Student.Company')}}" class="btn btn-success"
                                    style="width: 200px; ">
                                     <i class="fas fa-plus-circle"> Add Company </i>
                                 </a>
@@ -163,6 +163,7 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     performDelete(id, reference);
+                    location.reload();
                 }
             });
         }

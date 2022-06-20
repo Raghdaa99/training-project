@@ -6,6 +6,7 @@ use App\Models\Company;
 use App\Models\CompanyField;
 use App\Models\Field;
 use App\Models\StudentCompanyField;
+use App\Models\StudentSupervisor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -43,17 +44,50 @@ class StudentCompanyFieldController extends Controller
 //                'student' => $student]);
     }
 
-    public function create_company_field(Request $request, $student_no)
+    public function create_company_field_supervisor(Request $request)
     {
 
-        $guard = Auth::guard('student')->check() ? 'student' : 'supervisor';
-        if ($guard == 'student') {
-            $student_no = Auth::guard('student')->user()->student_no;
-        }
 
+        $request->merge(['student_no' => $request->student_no]);
 
         $request->merge(['company_id' => $request->company_id]);
-        $request->merge(['student_no' => $student_no]);
+        $student_no = $request->student_no;
+//Validate -------------
+
+
+        if ($request->company_id != null) {
+            $company_id = $request->input('company_id');
+        } else {
+//            $company =  Company::first();
+//            if ($company != null){
+            $company_id = Company::first()->id;
+//            }
+        }
+//dd($request->student_no);
+        $companies = Company::all();
+        $fields = Field::whereHas('companies', function ($query) use ($company_id) {
+            $query->where('company_id', '=', $company_id);
+        })->get();
+//        $student = Auth::guard('student')->user();
+
+        $supervisor_no = Auth::guard('supervisor')->user()->supervisor_no;
+        $student = StudentSupervisor::where('student_no', $student_no)->where('supervisor_no', $supervisor_no)->first();
+        $response = [];
+        if ($student == null) {
+            $response = ['error' => 'you cannot add company'];
+        }
+
+        return response()->view('cms.supervisor.add_student_company',
+            ['companies' => $companies,
+                'fields' => $fields, 'company_id' => $company_id,
+                'student_no' => $student_no,
+                'guard' => 'supervisor', 'error' => $response]);
+    }
+
+    public function create_company_field_student(Request $request)
+    {
+        $student_no = Auth::guard('student')->user()->student_no;
+        $request->merge(['company_id' => $request->company_id]);
 //Validate -------------
 
         if ($request->company_id != null) {
@@ -61,21 +95,19 @@ class StudentCompanyFieldController extends Controller
         } else {
 //            $company =  Company::first();
 //            if ($company != null){
-                $company_id = Company::first()->id;
+            $company_id = Company::first()->id;
 //            }
         }
-
 
         $companies = Company::all();
         $fields = Field::whereHas('companies', function ($query) use ($company_id) {
             $query->where('company_id', '=', $company_id);
         })->get();
-//        $student = Auth::guard('student')->user();
         return response()->view('cms.students.add_student_company',
             ['companies' => $companies,
                 'fields' => $fields, 'company_id' => $company_id,
                 'student_no' => $student_no,
-                'guard' => $guard]);
+                'guard' => 'student']);
     }
 
     public function edit_company_field(StudentCompanyField $studentCompanyField, $company_id = 2)

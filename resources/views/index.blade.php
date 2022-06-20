@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="{{asset('cms/home/css/aos.css')}}" type="text/css">
 </head>
 
-<body>
+<body class="d-flex flex-column min-vh-100">
 
 <!-- Start Upper bar -->
 <div class="upper-bar">

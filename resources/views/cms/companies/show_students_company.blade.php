@@ -1,19 +1,5 @@
-{{--@extends('cms.parent')--}}
+<!DOCTYPE html>
 
-{{--@section('title',__('cms.students'))--}}
-
-{{--@section('styles')--}}
-
-{{--@endsection--}}
-
-{{--@section('large-page-name',__('cms.index'))--}}
-{{--@section('main-page-name',__('cms.students'))--}}
-{{--@section('small-page-name',__('cms.index'))--}}
-    <!DOCTYPE html>
-<!--
-This is a starter template page. Use this page to start your new project from
-scratch. This page gets rid of all links and provides the needed markup only.
--->
 <html lang="en">
 
 <head>
@@ -49,39 +35,19 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 </a>
             </div>
             <div class="col-xs-1 center-block" style="text-align:center;margin-top:15px">
-                    <span class="center-block">جامعة الاقصى</span>
-                    <i class="nav-icon fas fa-home"></i>
+                <span class="center-block">جامعة الاقصى</span>
+                <i class="nav-icon fas fa-home"></i>
             </div>
         </div>
     </div>
 </div>
-<!-- End Upper bar -->
-{{--    <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">--}}
-{{--        <div class="container">--}}
-{{--            <div class="row">--}}
-{{--                <div class="col-sm text-left">--}}
-{{--                    <a href="{{route('home')}}" class="brand-link">--}}
-{{--                        <img src="{{asset('cms/dist/img/logo-faculty.jpeg')}}" alt="Logo" class="brand-image img-circle elevation-3">--}}
 
-{{--                        <span class="brand-text font-weight-light" style="color: white"> Training System</span>--}}
-{{--                    </a>--}}
-{{--                </div>--}}
-{{--                <div class="col-sm text-right">--}}
-
-{{--                    <span>جامعة الاقصى</span>--}}
-{{--                    <i class="nav-icon fas fa-home"></i>--}}
-{{--                </div>--}}
-{{--            </div>--}}
-{{--        </div>--}}
-
-
-{{--    </nav>--}}
 
 <br>
 <br>
 <br>
 <br>
-<section class="content">
+<section class="company-section">
     <div class="container">
         <div class="row">
             <div class="col-md-12">
@@ -90,34 +56,62 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
                 <!-- general form elements -->
                 <div class="card card-primary">
-                    <div class="card-header">
-                        <h3 class="card-title">Student</h3>
+                    <div class="card-header  d-flex align-items-center justify-content-center">
+                        <h3 class="card-title">تدريب ميداني</h3>
                     </div>
                     <!-- /.card-header -->
                     <!-- form start -->
                     <form>
                         <div class="card-body">
+                            <div class="row"  style="direction: rtl; padding: 0 70px;font-size: 18px;">
+                                <div class="col-12 text-right">
+                                    <p>
+                                        مؤسسة {{$item->companyField->company->name}} الموقرة
+                                    </p>
+                                    <p style="font-weight: bold">
+                                       تحية طيبة وبعد ،،،
+                                    </p>
+                                </div>
+                            </div>
+                            <p class="card-text text-justify"
+                               style="direction: rtl; padding: 40px 70px; padding-top:10px;line-height: 30px;font-size: 18px;">
+                                نهديكم أطيب التحيات ، وأرجو العلم بأن الطالب/ة <u
+                                    style="text-underline: auto"> {{$item->student->student->name}}</u> ،
+                                الذي(التي) ت/يحمل الرقم الجامعي <u>{{$item->student_no}}</u>،
+                                هو/هي احد/ى الطلبة/ات في تخصص <u>{{$item->student->student->department->name}}</u> ،
+                                في كلية الحاسبات وتكنولوجيا المعلومات بجامعة الأقصى ،
+                                ومن أجل استكمال متطلبات تخرجه/ا ،يجب أن ت/يكون قد أنهى /ت متطلبات مساق التدريب الميداني.
+                                <br>
+                                آمل موافقتكم بالسماح للطالب/ة المذكور/ة بالتدرب في مؤسستكم الموقرة في المجال
+                                <u>{{$item->companyField->field->name}}</u> ما مدته<u> 120</u> ساعة تدريبية ،
 
-                            <div class="form-group">
-                                <label for="name">Student No</label>
-                                <input type="text" class="form-control" id="name"
-                                       name="name" value="{{$item->student_no}}" disabled>
-                            </div>
-                            <div class="form-group">
-                                <label for="email">Student Name</label>
-                                <input type="email" class="form-control" id="email"
-                                       name="email" value="{{$item->student->student->name}}" disabled>
-                            </div>
-                            <div class="form-group">
-                                <label for="email">Field Name</label>
-                                <input type="email" class="form-control" id="email"
-                                       name="email" value="{{$item->companyField->field->name}}" disabled>
-                            </div>
-                            <div class="form-group">
-                                <label for="email">University Name</label>
-                                <input type="email" class="form-control" id="email"
-                                       name="email" value="Al-Aqsa University" disabled>
-                            </div>
+                               علما بأنه سيلتزم بجميع الأنظمة والقوانين داخل المؤسسة .
+                                <br>
+                                <br>
+                                <strong class="text-center">وتفضلوا بقبول فائق الاحترام والتقدير ،،،</strong>
+
+                            </p>
+
+                            {{--                            <div class="form-group">--}}
+                            {{--                                <label for="name">Student No</label>--}}
+                            {{--                                <input type="text" class="form-control" id="name"--}}
+                            {{--                                       name="name" value="{{$item->student_no}}" disabled>--}}
+                            {{--                            </div>--}}
+                            {{--                            <div class="form-group">--}}
+                            {{--                                <label for="email">Student Name</label>--}}
+                            {{--                                <input type="email" class="form-control" id="email"--}}
+                            {{--                                       name="email" value="{{$item->student->student->name}}" disabled>--}}
+                            {{--                            </div>--}}
+                            {{--                            <div class="form-group">--}}
+                            {{--                                <label for="email">Field Name</label>--}}
+                            {{--                                <input type="email" class="form-control" id="email"--}}
+                            {{--                                       name="email" value="{{$item->companyField->field->name}}" disabled>--}}
+                            {{--                            </div>--}}
+                            {{--                            <div class="form-group">--}}
+                            {{--                                <label for="email">University Name</label>--}}
+                            {{--                                <input type="email" class="form-control" id="email"--}}
+                            {{--                                       name="email" value="Al-Aqsa University" disabled>--}}
+                            {{--                            </div>--}}
                             <button type="button" onclick="performUpdate()"
                                     class="btn btn-success">
                                 <i class="fas fa-check">

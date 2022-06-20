@@ -53,17 +53,34 @@ class AuthController extends Controller
             $guard = $request->input('guard') . "_no";
             if ($request->input('guard') == 'trainer') {
                 $guard = 'email';
-            } elseif ($request->input('guard') == 'student') {;
-                $student = StudentSupervisor::where('student_no', '=', $request->input('number'))->first();
-                if ($student != null && $student->student->status == 0) {
+            } elseif ($request->input('guard') == 'student') {
+                $student = Student::where('student_no', '=', $request->input('number'))->first();
+                if ($student != null && $student->status != 0) {
+                    $student = StudentSupervisor::where('student_no', '=', $request->input('number'))->first();
+                    if ($student == null) {
+                        return response()->json(
+                            ['message' => 'Not allowed'],
+                            Response::HTTP_BAD_REQUEST
+                        );
+                    }
+                } else {
                     return response()->json(
                         ['message' => 'You dont have account'],
                         Response::HTTP_BAD_REQUEST
                     );
                 }
+
             } elseif ($request->input('guard') == 'supervisor') {
-                $supervisor = StudentSupervisor::where('supervisor_no', '=', $request->input('number'))->first();
-                if ($supervisor != null && $supervisor->supervisor->status == 0) {
+                $supervisor = Supervisor::where('supervisor_no', '=', $request->input('number'))->first();
+                if ($supervisor != null && $supervisor->status != 0) {
+                    $supervisor = StudentSupervisor::where('supervisor_no', '=', $request->input('number'))->first();
+                    if ($supervisor == null) {
+                        return response()->json(
+                            ['message' => 'Not allowed'],
+                            Response::HTTP_BAD_REQUEST
+                        );
+                    }
+                } else {
                     return response()->json(
                         ['message' => 'You dont have account'],
                         Response::HTTP_BAD_REQUEST
@@ -86,7 +103,8 @@ class AuthController extends Controller
         }
     }
 
-    public function register(Request $request)
+    public
+    function register(Request $request)
     {
 
         $validator = Validator($request->all(), [
@@ -131,7 +149,8 @@ class AuthController extends Controller
         }
     }
 
-    public function showRegister(Request $request)
+    public
+    function showRegister(Request $request)
     {
 
         $request->merge(['guard' => $request->guard]);
@@ -165,7 +184,8 @@ class AuthController extends Controller
         }
     }
 
-    public function showCheckCredentials(Request $request)
+    public
+    function showCheckCredentials(Request $request)
     {
         $request->merge(['guard' => $request->guard]);
         $validator = Validator($request->all(), [
@@ -179,7 +199,8 @@ class AuthController extends Controller
         }
     }
 
-    public function checkCredential(Request $request)
+    public
+    function checkCredential(Request $request)
     {
         $request->merge(['guard' => $request->guard]);
         $validator = Validator($request->all(), [
@@ -213,7 +234,8 @@ class AuthController extends Controller
         }
     }
 
-    public function logout(Request $request)
+    public
+    function logout(Request $request)
     {
         //        $guard = auth('web')->check() ? 'web' : 'admin';
         if (auth('student')->check()) {
@@ -230,7 +252,8 @@ class AuthController extends Controller
         return redirect()->route('cms.login', $guard);
     }
 
-    public function update_password(Request $request)
+    public
+    function update_password(Request $request)
     {
         // $id = Auth::guard('supervisor')->user()->supervisor_no;
         //$user = Student::find($id);
@@ -299,7 +322,8 @@ class AuthController extends Controller
         }
     }
 
-    public function update_pass_show(Request $request)
+    public
+    function update_pass_show(Request $request)
     {
 
         return view('cms.auth.update-password');

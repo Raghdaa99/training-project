@@ -26,6 +26,7 @@
                     <!-- general form elements -->
 
                     <div class="card card-primary">
+                        @if(count($error)==0)
                         <div class="card-header">
                             <h3 class="card-title">Details</h3>
                         </div>
@@ -99,7 +100,12 @@
 
 
                         </form>
-
+                        @else
+                            <div class="alert alert-danger alert-dismissible" style="margin: 15px">
+                                <h5><i class="icon fas fa-exclamation-triangle"></i> Alert!</h5>
+                                {{$error['error']}}
+                            </div>
+                        @endif
                     </div>
 
 

@@ -62,7 +62,6 @@ Route::group(['middleware' => 'prevent-back-history'], function () {
         Route::resource('fields', FieldController::class);
         Route::resource('companies', CompanyController::class);
         Route::post('update-companies-fields', [CompanyController::class, 'updateCompanyFields']);
-
         Route::resource('registerStudentCourse', StudentsSupervisorsController::class);
         Route::resource('questions', QuestionController::class);
         Route::resource('students', StudentController::class);
@@ -74,11 +73,15 @@ Route::group(['middleware' => 'prevent-back-history'], function () {
         Route::get('show/Student/{id}', [SupervisorController::class, 'show_students_details'])->name('supervisor.show.students.details');
         Route::post('search/Students', [SupervisorController::class, 'search_students'])->name('supervisor.search.students');
         Route::post('update-supervisor-status', [SupervisorController::class, 'updateSupervisorStatus']);
+//        Route::get('registerCompany/{student_no}', [StudentCompanyFieldController::class, 'create_company_field_supervisor'])->name('register.Student.Company');
+        Route::get('registerCompany', [StudentCompanyFieldController::class, 'create_company_field_supervisor'])->name('register.Student.Company');
+
     });
 
     Route::prefix('cms/student')->middleware('auth:student,supervisor')->group(function () {
         Route::resource('registerStudentCompany', StudentCompanyFieldController::class);
-        Route::get('registerCompany/{student_no}', [StudentCompanyFieldController::class, 'create_company_field'])->name('register.Student.Company');
+        Route::get('registerCompany', [StudentCompanyFieldController::class, 'create_company_field_student'])->name('register.Student.Company');
+//        Route::get('registerCompany/{student_no}', [StudentCompanyFieldController::class, 'create_company_field'])->name('register.Student.Company');
         Route::get('registerCompany/{studentCompanyField}/edit/{company_id?}', [StudentCompanyFieldController::class, 'edit_company_field'])->name('edit.Student.Company');
         Route::get('reports/{id}', [ReportController::class, 'create_report'])->name('create.report');
         Route::resource('reports', ReportController::class);
@@ -111,9 +114,7 @@ Route::group(['middleware' => 'prevent-back-history'], function () {
         Route::get('student/appointment/{student_company_id}/create', [AppointmentsController::class, 'create_student_appointment'])->name('create.student.appointment');
         Route::get('update-password', [AuthController::class, 'update_pass_show'])->name('cms.update.password');
         Route::post('update-password', [AuthController::class, 'update_password']);
-
         Route::resource('attendances', AttendanceController::class);
-
         Route::get('trainer/show_attendances_student/{student_company_id}', [TrainerController::class, 'show_attendances_students'])->name('show.student.attendances');
 
     });

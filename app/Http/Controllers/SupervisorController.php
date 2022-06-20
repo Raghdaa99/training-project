@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Mail\CompanyEmail;
+use App\Models\Company;
 use App\Models\Department;
 use App\Models\StudentSupervisor;
 use App\Models\Student;
@@ -62,40 +63,105 @@ class SupervisorController extends Controller
     public function search_students(Request $request)
     {
 //        dd('5555');
-        $search = $request->input('search');
+        $search_student_no = $request->input('student_no');
+        $search_student_name = $request->input('student_name');
+        $search_company_id = $request->input('company_id');
         $supervisor = Auth::guard('supervisor')->user();
-        $company_students = StudentCompanyField::whereHas('student', function ($query) use ($search, $supervisor) {
-            $query->where('supervisor_no', '=', $supervisor->supervisor_no)
-                ->where('student_no', '=', $search);
-        })->get();
+        $company_students = StudentSupervisor::query();
+        $company_students = $company_students->whereHas('supervisor', function ($query) use ($search_student_name, $search_student_no, $supervisor) {
+            $query->where('supervisor_no', '=', $supervisor->supervisor_no);
+//                ->OrWhere('student_no', '=', $search_student_no);
+        });
 
-        return response()->view('cms.supervisor.show_students', ['students' => $company_students]);
+        $student_name = '';
+        $student_no = '';
+        if ($search_student_no != null) {
+            $company_students = $company_students->where('student_no', '=', $search_student_no);
+            $student_no = 'student_no=' . $search_student_no;
+        }
+        if ($search_student_name != null) {
+            $company_students = $company_students->whereHas('student', function ($query_student_name) use ($search_student_name) {
+                $query_student_name->where('name', 'like', '%' . $search_student_name . '%');
+                $student_name = 'student_name=' . $search_student_name;
+            });
+        }
+        $company_students = $company_students->get();
+        $companies = Company::all();
+//dd($company_students);
+
+        return redirect()->route('supervisor.show.students', $student_no . $student_name)
+            ->with(
+                [
+                    'company_students' => $company_students,
+                    'companies' => $companies,
+                ]
+            );
+
+//        return response()->view('cms.supervisor.show_students', ['company_students' => $company_students,
+//            'search_student_no' => $search_student_no,
+//            'search_student_name' => $search_student_name,
+//            'companies' => $companies]);
+
 
     }
 
 
-    public function show_students()
+    public function show_students(Request $request)
     {
-
+        $search_student_no = $request->input('student_no');
+        $search_student_name = $request->input('student_name');
+        $search_company_id = $request->input('company_id');
         $supervisor = Auth::guard('supervisor')->user();
-//        $search=StudentCompanyField::
-//        $company_students = StudentCompanyField::whereHas('student', function ($query) use ($supervisor) {
-//            $query->where('supervisor_no', '=', $supervisor->supervisor_no);
-//        })->get();
-        $company_students = StudentSupervisor::whereHas('supervisor', function ($query) use ($supervisor) {
+        $company_students = StudentSupervisor::query();
+        $company_students = $company_students->whereHas('supervisor', function ($query) use ($search_student_name, $search_student_no, $supervisor) {
             $query->where('supervisor_no', '=', $supervisor->supervisor_no);
-        })->get();
+//                ->OrWhere('student_no', '=', $search_student_no);
+        });
+
+
+        if ($search_student_no != null) {
+            $company_students = $company_students->where('student_no', '=', $search_student_no);
+        }
+        if ($search_student_name != null) {
+            $company_students = $company_students->whereHas('student', function ($query_student_name) use ($search_student_name) {
+                $query_student_name->where('name', 'like', '%' . $search_student_name . '%');
+            });
+        }
+        $companies = Company::all();
+        if ($search_company_id != null) {
+            $company_students = $company_students->whereHas('studentCompany', function ($query) use ($search_company_id) {
+                $query->whereHas('companyField', function ($query_company) use ($search_company_id) {
+                    $query_company->whereHas('company', function ($query_inner_company) use ($search_company_id) {
+                        $query_inner_company->where('id', $search_company_id);
+                    });
+                });
+            });
+
+        }
+
+        $company_students = $company_students->get();
+
 //        dd($company_students);
 
-//        dd($company_student);
-//        dd($students[1]->studentCompanyField->companies->name);
-        return response()->view('cms.supervisor.show_students', ['company_students' => $company_students]);
+        return response()->view('cms.supervisor.show_students', ['company_students' => $company_students,
+            'search_student_no' => $search_student_no,
+            'search_student_name' => $search_student_name,
+            'search_company_id' => $search_company_id,
+            'companies' => $companies]);
+
     }
 
     public function show_students_details($id)
     {
         $company_student = StudentCompanyField::findOrFail($id);
-        return response()->view('cms.supervisor.show-details-student', ['company_student' => $company_student]);
+        $student_no = $company_student->student_no;
+        $supervisor_no = Auth::guard('supervisor')->user()->supervisor_no;
+        $student = StudentSupervisor::where('student_no', $student_no)->where('supervisor_no', $supervisor_no)->first();
+        $response = [];
+        if ($student == null) {
+            $response = ['error' => 'you cannot see details '];
+        }
+        return response()->view('cms.supervisor.show-details-student', ['company_student' => $company_student, 'error' => $response]);
     }
 
     public function updateSupervisorStatus(Request $request)

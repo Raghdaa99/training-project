@@ -124,10 +124,15 @@
     height: 8px;
     cursor: pointer;
 }
+.company-section{
+    /*padding: 40px 0;*/
+    direction: ltr;
+    margin-bottom: 5%;
+}
 .trainer-section{
     padding: 40px 0;
     direction: ltr;
-    margin-bottom: 7%;
+    margin-bottom: 5%;
 }
 
 .trainer-section h2{
