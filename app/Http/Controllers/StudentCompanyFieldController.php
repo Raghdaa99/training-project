@@ -15,6 +15,13 @@ use Symfony\Component\HttpFoundation\Response;
 
 class StudentCompanyFieldController extends Controller
 {
+//    public $hashids;
+//
+//    public function __construct()
+//    {
+//        $hashids = new Hashids();
+//    }
+
     /**
      * Display a listing of the resource.
      *
@@ -187,9 +194,12 @@ class StudentCompanyFieldController extends Controller
      */
     public function show($id)
     {
-        $hashids = new Hashids();
-        $hex = $hashids->decodeHex($id);
-        $studentCompanyField = StudentCompanyField::findOrFail($hex);
+
+//        $hashids =;
+
+//        $hex = $hashids->decodeHex($id);
+//        $studentCompanyField = StudentCompanyField::findOrFail($hex);
+        $studentCompanyField = StudentCompanyField::findBySlugOrFail($id);
 //        dd($studentCompanyField);
         return response()->view('cms.companies.show_students_company', ['item' => $studentCompanyField]);
     }
@@ -197,6 +207,7 @@ class StudentCompanyFieldController extends Controller
     public function update_status(Request $request, $id)
     {
 //        dd($request->all());
+
         $item = StudentCompanyField::findOrFail($id);
         $validator = Validator($request->all(), [
             'status' => 'required'

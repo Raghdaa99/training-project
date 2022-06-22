@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
+use Balping\HashSlug\HasHashSlug;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Permission\Traits\HasRoles;
 
 class StudentCompanyField extends Model
 {
-    use HasFactory , HasRoles;
+    use HasFactory , HasRoles , HasHashSlug;
     protected $table = 'students_company_field';
 
     public function student()
@@ -53,4 +54,6 @@ class StudentCompanyField extends Model
     {
         return $this->hasMany(Report::class, 'company_field_id', 'id');
     }
+
+
 }

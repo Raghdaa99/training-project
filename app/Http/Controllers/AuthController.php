@@ -21,6 +21,11 @@ use Symfony\Component\HttpFoundation\Response;
 
 class AuthController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('guest')->except('logout');
+    }
+
     public function showLogin(Request $request)
     {
         $request->merge(['guard' => $request->guard]);
@@ -103,8 +108,7 @@ class AuthController extends Controller
         }
     }
 
-    public
-    function register(Request $request)
+    public function register(Request $request)
     {
 
         $validator = Validator($request->all(), [
@@ -149,8 +153,7 @@ class AuthController extends Controller
         }
     }
 
-    public
-    function showRegister(Request $request)
+    public function showRegister(Request $request)
     {
 
         $request->merge(['guard' => $request->guard]);
@@ -184,8 +187,7 @@ class AuthController extends Controller
         }
     }
 
-    public
-    function showCheckCredentials(Request $request)
+    public function showCheckCredentials(Request $request)
     {
         $request->merge(['guard' => $request->guard]);
         $validator = Validator($request->all(), [
@@ -199,8 +201,7 @@ class AuthController extends Controller
         }
     }
 
-    public
-    function checkCredential(Request $request)
+    public function checkCredential(Request $request)
     {
         $request->merge(['guard' => $request->guard]);
         $validator = Validator($request->all(), [
@@ -234,8 +235,7 @@ class AuthController extends Controller
         }
     }
 
-    public
-    function logout(Request $request)
+    public function logout(Request $request)
     {
         //        $guard = auth('web')->check() ? 'web' : 'admin';
         if (auth('student')->check()) {
@@ -252,8 +252,7 @@ class AuthController extends Controller
         return redirect()->route('cms.login', $guard);
     }
 
-    public
-    function update_password(Request $request)
+    public function update_password(Request $request)
     {
         // $id = Auth::guard('supervisor')->user()->supervisor_no;
         //$user = Student::find($id);
@@ -322,8 +321,7 @@ class AuthController extends Controller
         }
     }
 
-    public
-    function update_pass_show(Request $request)
+    public function update_pass_show(Request $request)
     {
 
         return view('cms.auth.update-password');

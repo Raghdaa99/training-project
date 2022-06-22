@@ -104,10 +104,6 @@ Route::group(['middleware' => 'prevent-back-history'], function () {
     Route::post('trainer/store/new', [TrainerController::class, 'store'])->name('trainer.store.new');
 
 
-
-
-
-
     Route::prefix('cms')->middleware('auth:trainer,student,supervisor,admin')->group(function () {
         Route::resource('appointments', AppointmentsController::class);
         Route::get('student/appointment/{id}', [AppointmentsController::class, 'show_student_appointment'])->name('show.student.appointment');
@@ -118,7 +114,6 @@ Route::group(['middleware' => 'prevent-back-history'], function () {
         Route::get('trainer/show_attendances_student/{student_company_id}', [TrainerController::class, 'show_attendances_students'])->name('show.student.attendances');
 
     });
-
 
 
     Route::prefix('cms')->middleware('auth:supervisor,trainer')->group(function () {

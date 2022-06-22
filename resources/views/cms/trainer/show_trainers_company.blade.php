@@ -59,16 +59,17 @@
     <div class="container">
         <h2 class="text-center">تسجيل بيانات المدرب </h2>
         <p class="section-description text-center">
-        تقوم الشركة بتسجيل بيانات المدرب لكي يصبح قادر على الدخول الى النظام
-            ومتابعة الاجراءات الخاصة بالطالب متل تسجيل مواعيد التدريب ، وتسجيل حضور وانصراف الطالب وتقييم أداء الطالب خلال مرحلة التدريب
+            تقوم الشركة بتسجيل بيانات المدرب لكي يصبح قادر على الدخول الى النظام
+            ومتابعة الاجراءات الخاصة بالطالب متل تسجيل مواعيد التدريب ، وتسجيل حضور وانصراف الطالب وتقييم أداء الطالب
+            خلال مرحلة التدريب
         </p>
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-{{--                        <a href="{{route('trainer.create',$student_company_id)}}" class="btn btn-info">--}}
-{{--                            <i class="icon fas fa-plus-circle"> Create Trainer</i>--}}
-{{--                        </a>--}}
+                        {{--                        <a href="{{route('trainer.create',$student_company_id)}}" class="btn btn-info">--}}
+                        {{--                            <i class="icon fas fa-plus-circle"> Create Trainer</i>--}}
+                        {{--                        </a>--}}
                         <a onclick="RegisterTrainer()" class="btn btn-info">
                             <i class="icon fas fa-plus-circle"> Create Trainer</i>
                         </a>
@@ -221,7 +222,6 @@
 <script>
 
 
-
     function performRegister() {
         var trainer_id = $('input[type="radio"]:checked').val();
         axios.post('/trainer/store', {
@@ -267,25 +267,29 @@
             html:
                 '<input id="trainer-name" class="swal2-input" placeholder="Trainer Name">' +
                 '<input id="trainer-phone" class="swal2-input" placeholder="Trainer Phone">' +
-                '<input id="trainer-email" class="swal2-input" placeholder="Trainer Email">',
+                '<input id="trainer-email" class="swal2-input" placeholder="Trainer Email">' +
+                '<h6>سوف يتم ارسال كلمة مرور عشوائية للمدرب على ايميله الخاص لكي يتمكن من الدخول الى النظام</h6>'
+            ,
             focusConfirm: false,
         }).then(function (result) {
             if (result.value) {
                 $name = $('#trainer-name').val();
                 $phone = $('#trainer-phone').val();
                 $email = $('#trainer-email').val();
-                performStore($name, $phone,$email);
+                performStore($name, $phone, $email);
 
             }
         });
     }
-    function performStore($name, $phone,$email) {
+
+    function performStore($name, $phone, $email) {
         console.log('555');
+        console.log('{{$student_company_id}}');
         axios.post('/trainer/store/new', {
             name: $name,
             email: $email,
             phone: $phone,
-            company_student_id:{{$student_company_id}},
+            company_student_id: '{{$student_company_id}}',
         })
             .then(function (response) {
                 //2xx
@@ -293,7 +297,7 @@
                 toastr.success(response.data.message);
                 location.reload();
                 // document.getElementById('create-form').reset();
-{{--                window.location.href = '/show/company/trainers/{{$student_company_id}}';--}}
+                {{--                window.location.href = '/show/company/trainers/{{$student_company_id}}';--}}
 
             })
             .catch(function (error) {

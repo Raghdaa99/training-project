@@ -37,7 +37,7 @@ class TrainerController extends Controller
 
     public function show_trainers_company($id): \Illuminate\Http\Response
     {
-        $student_company_field = StudentCompanyField::findOrFail($id);
+        $student_company_field = StudentCompanyField::findBySlugOrFail($id);
         $trainers = Trainer::where('company_id', '=', $student_company_field->companyField->company->id)->get();
         return response()->view('cms.trainer.show_trainers_company', ['trainers' => $trainers, 'student_company_id' => $id]);
     }
@@ -71,15 +71,16 @@ class TrainerController extends Controller
 
     public function create_trainer_to_company(Request $request)
     {
+//        $company_student_id = $request->input('company_student_id');
+        $item = StudentCompanyField::findBySlugOrFail($request->input('company_student_id'));
         $validator = Validator($request->all(), [
-            'company_student_id' => 'required|numeric|exists:students_company_field,id',
+//            'company_student_id' => 'required|numeric|exists:students_company_field,id',
             'trainer_id' => 'required|numeric|exists:trainers,id',
         ], [
             'trainer_id.required' => 'select the trainer',
         ]);
         if (!$validator->fails()) {
-            $company_student_id = $request->input('company_student_id');
-            $item = StudentCompanyField::findOrFail($company_student_id);
+
             $item->trainer_id = $request->trainer_id;
             $isSavedTrainer = $item->save();
             return response()->json(
@@ -104,16 +105,17 @@ class TrainerController extends Controller
     {
 //        $trainer = Trainer::where('email', '=', $request->input('email'))->first();
 //        dd($trainer);
+        $company_student_id = $request->input('company_student_id');
+        $item = StudentCompanyField::findBySlugOrFail($company_student_id);
         $validator = Validator($request->all(), [
             'name' => 'required|string|min:3|max:100',
             'email' => 'required|email|unique:trainers,email',
             'phone' => 'required|string|unique:trainers,phone',
 //            'password' => 'required|string|min:3|max:20',
-            'company_student_id' => 'required|numeric|exists:students_company_field,id',
+//            'company_student_id' => 'required|numeric|exists:students_company_field,id',
 
         ]);
-        $company_student_id = $request->input('company_student_id');
-        $item = StudentCompanyField::findOrFail($company_student_id);
+
         $company_id = $item->companyField->company_id;
         if (!$validator->fails()) {
 //            if ($trainer == null) {
@@ -171,6 +173,7 @@ class TrainerController extends Controller
         $trainer = Trainer::findOrFail($id);
         return view('cms.trainer.personal-data', ['trainer' => $trainer]);
     }
+
     /**
      * Show the form for editing the specified resource.
      *

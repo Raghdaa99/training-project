@@ -32,12 +32,12 @@ class SupervisorController extends Controller
     public function send_email(Request $request)
     {
         $validator = Validator($request->all(), [
-            'id' => 'required|numeric|exists:students_company_field,id',
+//            'id' => 'required|numeric|exists:students_company_field,id',
             'email' => 'required|email|exists:companies,email',
         ]);
-
+         $slug = StudentCompanyField::findBySlugOrFail($request->id);
         if (!$validator->fails()) {
-            Mail::to($request->email)->send(new CompanyEmail($request->id));
+            Mail::to($request->email)->send(new CompanyEmail($slug));
             return response()->json(['message' => 'success'], Response::HTTP_OK);
 
         } else {
@@ -153,7 +153,7 @@ class SupervisorController extends Controller
 
     public function show_students_details($id)
     {
-        $company_student = StudentCompanyField::findOrFail($id);
+        $company_student = StudentCompanyField::findBySlugOrFail($id);
         $student_no = $company_student->student_no;
         $supervisor_no = Auth::guard('supervisor')->user()->supervisor_no;
         $student = StudentSupervisor::where('student_no', $student_no)->where('supervisor_no', $supervisor_no)->first();

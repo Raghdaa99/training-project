@@ -226,7 +226,7 @@
             //2xx
             console.log(response);
             toastr.success(response.data.message);
-            window.location.href = '/show/company/trainers/{{$item->id}}';
+            window.location.href = '/show/company/trainers/{{$item->slug()}}';
         })
             .catch(function (error) {
                 //4xx - 5xx

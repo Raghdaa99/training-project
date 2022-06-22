@@ -59,7 +59,7 @@
                                 <div class="form-group">
                                     <label for="trainer_name">Send Email to Company:</label>
                                     <a class="btn btn-primary btn-sm"
-                                       onclick="confirmSendEmail('{{$company_student->id}}','{{$company_student->companyField->company->email}}')">
+                                       onclick="confirmSendEmail('{{$company_student->slug()}}','{{$company_student->companyField->company->email}}')">
                                         <i class="fa fa-envelope"></i>
 
                                         Send
@@ -67,7 +67,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="trainer_name">Show Appointments :</label>
-                                    <a href="{{route('show.student.appointment',$company_student->id)}}"
+                                    <a href="{{route('show.student.appointment',$company_student->slug())}}"
                                        class="btn btn-warning btn-sm">
                                         <i class="fas fa-table"> Show</i>
                                     </a>

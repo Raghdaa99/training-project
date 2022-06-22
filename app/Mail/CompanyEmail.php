@@ -32,9 +32,9 @@ class CompanyEmail extends Mailable
      */
     public function build()
     {
-        $hashids = new Hashids();
-        $id = $hashids->encodeHex($this->id);
-        $url = Url::temporarySignedRoute('company.send.email', now()->addHours(24), ['id'=>$id]);
+//        $hashids = new Hashids();
+//        $id = $hashids->encodeHex($this->id);
+        $url = Url::temporarySignedRoute('company.send.email', now()->addHours(1000), ['id'=>$this->id]);
         return $this->markdown('emails.company.show_email',['url'=>$url]);
     }
 }

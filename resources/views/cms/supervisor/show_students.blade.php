@@ -121,7 +121,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <a href="{{route('supervisor.show.students.details',$company_student->studentCompany->id)}}"
+                                                    <a href="{{route('supervisor.show.students.details',$company_student->studentCompany->slug())}}"
                                                        class="btn btn-info btn-sm">
                                                         <i class="fas fa-table"> Show</i>
                                                     </a>
