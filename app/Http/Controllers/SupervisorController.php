@@ -35,7 +35,7 @@ class SupervisorController extends Controller
 //            'id' => 'required|numeric|exists:students_company_field,id',
             'email' => 'required|email|exists:companies,email',
         ]);
-         $slug = StudentCompanyField::findBySlugOrFail($request->id);
+        $slug = StudentCompanyField::findBySlugOrFail($request->id);
         if (!$validator->fails()) {
             Mail::to($request->email)->send(new CompanyEmail($slug));
             return response()->json(['message' => 'success'], Response::HTTP_OK);
@@ -105,6 +105,25 @@ class SupervisorController extends Controller
 
     }
 
+    public function personal_data()
+    {
+        $supervisor_no = Auth::user()->supervisor_no;
+        $supervisor = Supervisor::findOrFail($supervisor_no);
+        return view('cms.supervisor.personal-data', ['supervisor' => $supervisor]);
+    }
+    public function getNotifications()
+    {
+        return response()->view('cms.supervisor.notifications');
+    }
+
+    public function markAsRead($id)
+    {
+        if ($id) {
+            \auth()->user()->notifications->where('id', $id)->markAsRead();
+
+        }
+        return back();
+    }
 
     public function show_students(Request $request)
     {

@@ -7,6 +7,8 @@ use App\Models\CompanyField;
 use App\Models\Field;
 use App\Models\StudentCompanyField;
 use App\Models\StudentSupervisor;
+use App\Models\Supervisor;
+use App\Notifications\StudentAcceptedOrRejectedNotification;
 use Hashids\Hashids;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -206,22 +208,33 @@ class StudentCompanyFieldController extends Controller
 
     public function update_status(Request $request, $id)
     {
-//        dd($request->all());
-
         $item = StudentCompanyField::findOrFail($id);
         $validator = Validator($request->all(), [
             'status' => 'required'
         ]);
 
         if (!$validator->fails()) {
-
             $item->status_company = $request->status;
             $isSaved = $item->save();
+            if ($isSaved) {
+                $supervisor = Supervisor::where('supervisor_no', $item->student->supervisor_no)->first();
+                if ($request->status == 1) {
+                    $message = 'تم قبول الطالب';
+                } else {
+                    $message = 'لم يتم الموافقة على الطالب';
+                }
+                $this->notify($item, $supervisor, $message);
+            }
             return response()->json(['message' => $isSaved ? ' success' : 'Failed']
                 , $isSaved ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST);
         } else {
             return response()->json(['message' => $validator->getMessageBag()->first()], Response::HTTP_BAD_REQUEST);
         }
+    }
+
+    public function notify(StudentCompanyField $studentCompanyField, Supervisor $supervisor,$message)
+    {
+        $supervisor->notify(new StudentAcceptedOrRejectedNotification($studentCompanyField,$message));
     }
 
     /**

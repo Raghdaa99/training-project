@@ -67,7 +67,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="trainer_name">Show Appointments :</label>
-                                    <a href="{{route('show.student.appointment',$company_student->slug())}}"
+                                    <a href="{{route('show.student.appointment',$company_student->id)}}"
                                        class="btn btn-warning btn-sm">
                                         <i class="fas fa-table"> Show</i>
                                     </a>

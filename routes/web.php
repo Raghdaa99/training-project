@@ -75,7 +75,9 @@ Route::group(['middleware' => 'prevent-back-history'], function () {
         Route::post('update-supervisor-status', [SupervisorController::class, 'updateSupervisorStatus']);
 //        Route::get('registerCompany/{student_no}', [StudentCompanyFieldController::class, 'create_company_field_supervisor'])->name('register.Student.Company');
         Route::get('registerCompany', [StudentCompanyFieldController::class, 'create_company_field_supervisor'])->name('register.Student.Company');
-
+        Route::get('personal-data', [SupervisorController::class, 'personal_data'])->name('supervisor.personal.data');
+        Route::get('notifications', [SupervisorController::class, 'getNotifications'])->name('notifications');
+        Route::get('markAsRead/{id}', [SupervisorController::class, 'markAsRead'])->name('markAsRead');
     });
 
     Route::prefix('cms/student')->middleware('auth:student,supervisor')->group(function () {
@@ -85,6 +87,7 @@ Route::group(['middleware' => 'prevent-back-history'], function () {
         Route::get('registerCompany/{studentCompanyField}/edit/{company_id?}', [StudentCompanyFieldController::class, 'edit_company_field'])->name('edit.Student.Company');
         Route::get('reports/{id}', [ReportController::class, 'create_report'])->name('create.report');
         Route::resource('reports', ReportController::class);
+        Route::get('download/{file}', [ReportController::class, 'download'])->name('download.report');
         Route::get('show/Student/personal-data', [StudentController::class, 'show_students_personal_data'])->name('student.personal.data');
 
     });
@@ -98,6 +101,7 @@ Route::group(['middleware' => 'prevent-back-history'], function () {
 
     Route::get('show/company/{id}/show', [StudentCompanyFieldController::class, 'show'])->name('company.send.email');
     Route::put('show/company/{id}/update', [StudentCompanyFieldController::class, 'update_status']);
+//    Route::put('show/company/{id}/update_cancel', [StudentCompanyFieldController::class, 'update_status_cancel']);
     Route::get('show/company/trainers/{id}', [TrainerController::class, 'show_trainers_company'])->name('show.trainers.company');
     Route::post('trainer/store', [TrainerController::class, 'create_trainer_to_company']);
     Route::get('trainer/create/{company_student_id}', [TrainerController::class, 'create_trainer'])->name('trainer.create');

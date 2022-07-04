@@ -13,41 +13,47 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="card">
-                        {{--                        @auth('student')--}}
-                        {{--                            <div class="card-header">--}}
-                        {{--                                <a onclick="RegisterAttendance()" class="btn btn-success">--}}
-                        {{--                                    <i>Register Attends Student</i>--}}
-                        {{--                                </a>--}}
-                        {{--                            </d
-                        {{--                    @endauth--}}
-                        @if ($message = Session::get('success'))
-                            <div class="alert alert-success alert-block">
-                                <button type="button" class="close" data-dismiss="alert">×</button>
-                                <strong>{{ $message }}</strong>
-                            </div>
-{{--                            <img src="uploads/{{ Session::get('file') }}">--}}
-                            <a href="uploads/{{ Session::get('file') }}" target="_blank">Download Spec Sheet</a>
-                        @endif
 
-                        @if (count($errors) > 0)
-                            <div class="alert alert-danger">
-                                <strong>Whoops!</strong> There were some problems with your input.
-                                <ul>
-                                    @foreach ($errors->all() as $error)
-                                        <li>{{ $error }}</li>
-                                    @endforeach
-                                </ul>
-                            </div>
-                        @endif
+
+                        {{--                        @if (count($errors) > 0)--}}
+                        {{--                            <div class="alert alert-danger">--}}
+                        {{--                                <strong>Whoops!</strong> There were some problems with your input.--}}
+                        {{--                                <ul>--}}
+                        {{--                                    @foreach ($errors->all() as $error)--}}
+                        {{--                                        <li>{{ $error }}</li>--}}
+                        {{--                                    @endforeach--}}
+                        {{--                                </ul>--}}
+                        {{--                            </div>--}}
+                        {{--                        @endif--}}
                         @auth('student')
+                            {{--                            @if ($message = Session::get('success'))--}}
+                            {{--                                <div class="alert alert-success alert-block">--}}
+                            {{--                                    <button type="button" class="close" data-dismiss="alert">×</button>--}}
+                            {{--                                    <strong>{{ $message }}</strong>--}}
+                            {{--                                </div>--}}
+                            {{--                                <img src="uploads/{{ Session::get('file') }}">--}}
+                            {{--                            @endif--}}
+
+
                             <form action="{{route('reports.store')}}" method="POST" enctype="multipart/form-data">
                                 @csrf
                                 <div class="row">
-
-                                    <div class="col-md-6">
-                                        <input type="file" name="file" class="form-control">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <input type="hidden" name="student_company_id" value="{{$id}}">
+                                            <input type="file" name="file" placeholder="Choose file" id="file">
+                                            @error('file')
+                                            <div class="alert alert-danger mt-1 mb-1">{{ $message }}</div>
+                                            @enderror
+                                        </div>
                                     </div>
-
+                                    @if(session()->has('error'))
+                                        <div class="alert">
+                                            <ul>
+                                                <li class="text-red"> {{session('error')}}</li>
+                                            </ul>
+                                        </div>
+                                    @endif
                                     <div class="col-md-6">
                                         <button type="submit" class="btn btn-success">Upload</button>
                                     </div>
@@ -64,28 +70,30 @@
                                     <th style="width: 10px">#</th>
 
                                     <th>Report</th>
+
                                     @auth('student')
                                         <th>Settings</th>
                                     @endauth
                                 </tr>
                                 </thead>
                                 <tbody>
-{{--                                @foreach ($reports as $report)--}}
-{{--                                    <tr>--}}
-{{--                                        <td>{{$loop->iteration}}</td>--}}
-{{--                                        <td>{{$report->url}}</td>--}}
-{{--                                        @auth('student')--}}
-{{--                                            <td>--}}
-{{--                                                <div class="btn-group">--}}
-{{--                                                    <a href="#" onclick="confirmDelete('{{$report->id}}',this)"--}}
-{{--                                                       class=" btn btn-danger">--}}
-{{--                                                        <i class="fas fa-trash"> Delete</i>--}}
-{{--                                                    </a>--}}
-{{--                                                </div>--}}
-{{--                                            </td>--}}
-{{--                                        @endauth--}}
-{{--                                    </tr>--}}
-{{--                                @endforeach--}}
+                                @foreach ($reports as $report)
+                                    <tr>
+                                        <td>{{$loop->iteration}}</td>
+                                        <td><a href="{{route('download.report',$report->url)}}">{{$report->url}}</a>
+                                        </td>
+                                        @auth('student')
+                                            <td>
+                                                <div class="btn-group">
+                                                    <a href="#" onclick="confirmDelete('{{$report->id}}',this)"
+                                                       class=" btn btn-danger">
+                                                        <i class="fas fa-trash"> Delete</i>
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        @endauth
+                                    </tr>
+                                @endforeach
 
                                 </tbody>
                             </table>
@@ -94,7 +102,7 @@
 
                         <!-- /.card-body -->
 
-                    </d>
+                    </div>
                     <!-- /.col -->
                 </div>
             </div>
@@ -112,22 +120,17 @@
 
             // console.log(document.getElementById('student_no').value);
 
-            axios.post('/cms/student/registerStudentCompany', {
+            axios.post('/cms/student/reports', {
 
-{{--                student_no: {{$student_no}},--}}
+                student_company_id: {{$id}},
+                file: document.getElementById('file').value,
+
             })
                 .then(function (response) {
                     //2xx
                     console.log(response);
                     toastr.success(response.data.message);
-                    // document.getElementById('create-form').reset();
-                    @auth('student')
-                        window.location.href = '/cms/student/registerStudentCompany';
-                    @endauth
-
-                        @auth('supervisor')
-                        window.location.href = '/cms/supervisor/show/Students';
-                    @endauth
+                    location.reload();
 
                 })
                 .catch(function (error) {

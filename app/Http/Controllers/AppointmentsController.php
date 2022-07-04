@@ -114,7 +114,7 @@ class AppointmentsController extends Controller
 
     public function show_student_appointment($id)
     {
-        $student_company = StudentCompanyField::findBySlugOrFail($id);
+//        $student_company = StudentCompanyField::findBySlugOrFail($id);
         if (auth('student')->check()) {
             $guard = 'student';
         } elseif (auth('trainer')->check()) {
@@ -123,7 +123,7 @@ class AppointmentsController extends Controller
             $guard = 'supervisor';
         }
 //        $student_company_id = StudentCompanyField::where('')
-        $appointment = Appointments::where('student_company_id', '=', $student_company->id)->first();
+        $appointment = Appointments::where('student_company_id', '=', $id)->first();
         return response()->view('cms.appointments.show', [
             'appointment' => $appointment,
             'student_company_id' => $id,

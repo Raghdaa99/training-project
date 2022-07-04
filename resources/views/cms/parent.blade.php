@@ -340,6 +340,17 @@ scratch. This page gets rid of all links and provides the needed markup only.
                             </li>
                         @endauth
 
+                        @auth('supervisor')
+                            <li class="nav-item">
+                                <a href="{{route('supervisor.personal.data')}}" class="nav-link">
+                                    <i class="nav-icon fas fa-user"></i>
+                                    <p>
+                                        Personal Data
+                                    </p>
+                                </a>
+                            </li>
+                        @endauth
+
                         @canany(['Create-Role','Read-Roles', 'Create-Permission','Read-Permissions'])
                             <li class="nav-header">{{__('cms.roles_permissions')}}</li>
                             @canany(['Create-Role','Read-Roles'])
@@ -443,6 +454,17 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                 </p>
                             </a>
                         </li>
+                            <li class="nav-item">
+                                <a href="{{route('notifications')}}" class="nav-link">
+                                    <i class="nav-icon fas fa-bell">
+                                    </i>
+
+                                    <p>
+                                       Notifications
+                                    </p>
+                                    <span class="badge badge-warning right">{{count(auth()->user()->unreadnotifications)}}</span>
+                                </a>
+                            </li>
                         @endcan
 
                         <li class="nav-header">{{__('cms.settings')}}</li>

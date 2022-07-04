@@ -5,11 +5,12 @@ namespace App\Models;
 use Balping\HashSlug\HasHashSlug;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
 
 class StudentCompanyField extends Model
 {
-    use HasFactory , HasRoles , HasHashSlug;
+    use HasFactory , HasRoles , HasHashSlug,Notifiable;
     protected $table = 'students_company_field';
 
     public function student()
