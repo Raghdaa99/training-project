@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Report;
+use App\Models\StudentCompanyField;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\Response;
@@ -31,23 +32,25 @@ class ReportController extends Controller
 
     public function create_report($id)
     {
-        $reports = Report::where('student_company_id', $id)->get();
-        return response()->view('cms.students.create_report', ['id' => $id, 'reports' => $reports]);
+        $student_company = StudentCompanyField::findBySlugOrFail($id);
+
+        $reports = Report::where('student_company_id', $student_company->id)->get();
+        return response()->view('cms.students.create_report', ['id' => $student_company->id, 'reports' => $reports]);
     }
 
-    public function download(Request $request, $file)
+    public function download($file)
     {
-//        dd(public_path('uploads/') . $file);
+        return response()->download(storage_path('app\reports\\' . $file));
 
-//        return response()->download(public_path('uploads/') . $file);
-//        return response()->download(storage_path('app/reports/' . $file));
-//        echo public_path('reports/') . $file;
-        if (file_exists(public_path(). "/reports/".$file)) {
-//            return Storage::download(public_path(). "/reports/cv.pdf");
-            return response()->download(public_path(). "/reports/".$file);
-        } else {
-            echo('File not found.dddd');
-        }
+//        dd(storage_path('app/reports/' . $file));
+//        return Storage::download('reports/' . $file);
+
+//        if (file_exists(public_path(). "/reports/".$file)) {
+//            return response()->download(public_path(). "/reports/".$file);
+//        } else {
+//            echo('File not found.');
+//        }
+
     }
 
     /**
@@ -60,7 +63,7 @@ class ReportController extends Controller
     {
         $validator = Validator($request->all(), [
             'student_company_id' => 'required|numeric|exists:students_company_field,id',
-            'file' => 'required|mimes:pdf,txt,xlx,csv,docx|max:2048',
+            'file' => 'required|mimes:pdf,txt,xlx,csv,docx,jpg|max:2048',
         ]);
 
         if (!$validator->fails()) {
@@ -70,11 +73,11 @@ class ReportController extends Controller
 //            $fileName = time() . '.' . $request->file->extension();
 
 //            $request->file->move(public_path('uploads'), $fileName);
-//            $request->file->storeAs('reports',$fileName);
 //            Storage::put('reports', $fileName);
             $name = $request->file('file')->getClientOriginalName();
-
-            $request->file('file')->move('reports', $name);
+            $request->file->storeAs('reports', $name);
+//            Storage::put('reports', $name);
+//            $request->file('file')->move('reports', $name);
 
             $report = new Report();
             $report->url = $name;
@@ -126,10 +129,24 @@ class ReportController extends Controller
      * Remove the specified resource from storage.
      *
      * @param \App\Models\Report $report
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy(Report $report)
     {
-        //
+
+        if (Storage::exists('reports/' . $report->url)) {
+            Storage::delete('reports/' . $report->url);
+            $isDeleted = $report->delete();
+            return response()->json(
+                ['message' => $isDeleted ? 'Deleted successfully' : 'Delete failed!'],
+                $isDeleted ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST
+            );
+        } else {
+            return response()->json(
+                [
+                    'message' => 'Deleted Failed', Response::HTTP_BAD_REQUEST
+                ]);
+        }
+
     }
 }

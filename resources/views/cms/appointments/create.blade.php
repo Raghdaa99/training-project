@@ -183,7 +183,7 @@
 
         function performStore() {
             axios.post('/cms/appointments', {
-                student_company_id: {{$student_company_id}},
+                student_company_id: '{{$student_company_id}}',
                 no_hours_of_training: document.getElementById('no_hours_of_training').value,
                 start_date: document.getElementById('start_date_appointment').value,
                 end_date: document.getElementById('end_date_appointment').value,

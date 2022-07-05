@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
+use Balping\HashSlug\HasHashSlug;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Evaluation extends Model
 {
-    use HasFactory;
+    use HasFactory,HasHashSlug;
     public function companyField()
     {
         return $this->belongsTo(CompanyField::class, 'company_field_id', 'id');

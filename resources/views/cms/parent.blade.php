@@ -435,7 +435,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
                         @can('Read-Students-Trainer')
                         <li class="nav-item">
-                            <a href="{{route('trainers.index')}}" class="nav-link">
+                            <a href="{{route('trainer.show.students')}}" class="nav-link">
                                 <i class="nav-icon fas fa-user-friends"></i>
                                 <p>
                                     All Students
@@ -454,6 +454,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                 </p>
                             </a>
                         </li>
+                        @auth('supervisor')
                             <li class="nav-item">
                                 <a href="{{route('notifications')}}" class="nav-link">
                                     <i class="nav-icon fas fa-bell">
@@ -465,6 +466,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                     <span class="badge badge-warning right">{{count(auth()->user()->unreadnotifications)}}</span>
                                 </a>
                             </li>
+                            @endauth
                         @endcan
 
                         <li class="nav-header">{{__('cms.settings')}}</li>

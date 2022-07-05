@@ -23,16 +23,21 @@
 <div class="login-box">
     <!-- /.login-logo -->
     <div class="card card-outline card-primary">
+        <h1 class="h2 card-header text-center" id="yui_3_17_2_1_1657042721205_31">
+            <span class="sr-only">بوابة التعليم الإلكتروني- جامعة الأقصى: Log in</span>
+            <img src="https://moodle.alaqsa.edu.ps/pluginfile.php/1/core_admin/logo/0x200/1647336089/alaqsa_logo.png" class="img-fluid" alt="" id="yui_3_17_2_1_1657042721205_32">
+        </h1>
+
         <div class="card-header text-center">
             {{--            {{$guard}}--}}
             @if($guard == 'student')
-                <a href="" class="h1"><b>Student </b></a>
+                <a href="" class="h3"><b>Student </b></a>
             @elseif($guard == 'admin')
-                <a href="" class="h1"><b>Admin </b></a>
+                <a href="" class="h3"><b>Admin </b></a>
             @elseif($guard == 'supervisor')
-                <a href="" class="h1"><b>Supervisor </b></a>
+                <a href="" class="h3"><b>Supervisor </b></a>
             @elseif($guard == 'trainer')
-                <a href="" class="h1"><b>Trainer </b></a>
+                <a href="" class="h3"><b>Trainer </b></a>
             @endif
         </div>
         <div class="card-body">

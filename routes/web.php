@@ -70,11 +70,11 @@ Route::group(['middleware' => 'prevent-back-history'], function () {
 
     Route::prefix('cms/supervisor')->middleware('auth:supervisor')->group(function () {
         Route::get('show/Students', [SupervisorController::class, 'show_students'])->name('supervisor.show.students');
-        Route::get('show/Student/{id}', [SupervisorController::class, 'show_students_details'])->name('supervisor.show.students.details');
+        Route::get('show/Student/{slug}', [SupervisorController::class, 'show_students_details'])->name('supervisor.show.students.details');
         Route::post('search/Students', [SupervisorController::class, 'search_students'])->name('supervisor.search.students');
         Route::post('update-supervisor-status', [SupervisorController::class, 'updateSupervisorStatus']);
 //        Route::get('registerCompany/{student_no}', [StudentCompanyFieldController::class, 'create_company_field_supervisor'])->name('register.Student.Company');
-        Route::get('registerCompany', [StudentCompanyFieldController::class, 'create_company_field_supervisor'])->name('register.Student.Company');
+        Route::get('registerCompany', [StudentCompanyFieldController::class, 'create_company_field_supervisor'])->name('register.Supervisor.Company');
         Route::get('personal-data', [SupervisorController::class, 'personal_data'])->name('supervisor.personal.data');
         Route::get('notifications', [SupervisorController::class, 'getNotifications'])->name('notifications');
         Route::get('markAsRead/{id}', [SupervisorController::class, 'markAsRead'])->name('markAsRead');
@@ -83,8 +83,7 @@ Route::group(['middleware' => 'prevent-back-history'], function () {
     Route::prefix('cms/student')->middleware('auth:student,supervisor')->group(function () {
         Route::resource('registerStudentCompany', StudentCompanyFieldController::class);
         Route::get('registerCompany', [StudentCompanyFieldController::class, 'create_company_field_student'])->name('register.Student.Company');
-//        Route::get('registerCompany/{student_no}', [StudentCompanyFieldController::class, 'create_company_field'])->name('register.Student.Company');
-        Route::get('registerCompany/{studentCompanyField}/edit/{company_id?}', [StudentCompanyFieldController::class, 'edit_company_field'])->name('edit.Student.Company');
+        Route::get('registerCompany/{studentCompanyField}/edit', [StudentCompanyFieldController::class, 'edit_company_field'])->name('edit.Student.Company');
         Route::get('reports/{id}', [ReportController::class, 'create_report'])->name('create.report');
         Route::resource('reports', ReportController::class);
         Route::get('download/{file}', [ReportController::class, 'download'])->name('download.report');
@@ -95,6 +94,7 @@ Route::group(['middleware' => 'prevent-back-history'], function () {
     Route::prefix('cms/trainer')->middleware('auth:trainer')->group(function () {
         Route::resource('trainers', TrainerController::class);
         Route::get('show/trainer-personal-data', [TrainerController::class, 'show_trainer_personal_data'])->name('trainer.personal.data');
+        Route::get('show/students', [TrainerController::class, 'index'])->name('trainer.show.students');
 
 
     });

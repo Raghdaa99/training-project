@@ -32,17 +32,7 @@
                                             <option
 
                                                 value="{{$company->id}}" {{ $company_id == $company->id ? 'selected' : '' }}>{{$company->name}}</option>
-                                            </option>
-{{--                                                @if($state == true)--}}
-{{--                                                value="{{$company->id}}"--}}
-{{--                                                {{$company_id == $company->id ? 'selected' : ''}}--}}
 
-{{--                                                @else--}}
-{{--                                                value="{{$studentCompanyField->companyField->company->id}}"--}}
-{{--                                                {{$company->id == $studentCompanyField->companyField->company->id ? 'selected' : ''}}--}}
-{{--                                                @endif >--}}
-
-{{--                                                {{$company->name}}--}}
 
                                         @endforeach
                                     </select>
@@ -88,15 +78,13 @@
 
 @section('scripts')
     <script>
-        function showFields($id) {
-            $state = true;
+        function showFields() {
             $company_id = document.getElementById('company_id').value;
-            // window.location.href = '/cms/student/registerCompany/' + $company_id;
-            window.location.href = '/cms/student/registerCompany/' + $id + '/edit/' + $company_id ;
+            window.location.replace('/cms/student/registerCompany?company_id=' + $company_id);
 
         }
 
-        function performUpdate($id) {
+        function performUpdate() {
             // console.log(document.getElementById('field_id').value);
             var radio1 = $('input[type="radio"]:checked').val();
             axios.put('/cms/student/registerStudentCompany/{{$studentCompanyField->id}}', {

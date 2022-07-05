@@ -113,6 +113,8 @@
 @endsection
 
 @section('scripts')
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <script>
 
 
@@ -160,7 +162,7 @@
 
         function performDelete(id, reference) {
             console.log(id);
-            axios.delete('/cms/attendances/' + id)
+            axios.delete('/cms/student/reports/' + id)
                 .then(function (response) {
                     //2xx
                     console.log(response);

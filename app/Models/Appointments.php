@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
+use Balping\HashSlug\HasHashSlug;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Appointments extends Model
 {
-    use HasFactory;
+    use HasFactory,HasHashSlug;
     public function student()
     {
         return $this->belongsTo(StudentCompanyField::class, 'student_company_id', 'id');

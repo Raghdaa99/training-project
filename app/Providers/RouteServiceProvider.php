@@ -20,7 +20,7 @@ class RouteServiceProvider extends ServiceProvider
     public const HOME = '/cms/admin/';
     public const SHOW_STU_COM = '/cms/student/registerStudentCompany';
     public const SHOW_STU_SUP = '/cms/supervisor/show/Students';
-    public const SHOW_STU_TRA = '/cms/trainer/trainers';
+    public const SHOW_STU_TRA = '/cms/trainer/show/students';
 
     /**
      * Define your route model bindings, pattern filters, etc.

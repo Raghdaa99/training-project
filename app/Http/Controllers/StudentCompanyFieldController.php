@@ -120,8 +120,15 @@ class StudentCompanyFieldController extends Controller
                 'guard' => 'student']);
     }
 
-    public function edit_company_field(StudentCompanyField $studentCompanyField, $company_id = 2)
+    public function edit_company_field($studentCompanyField,Request $request)
     {
+        $request->merge(['company_id' => $request->company_id]);
+        if ($request->company_id != null) {
+            $company_id = $request->input('company_id');
+        }else {
+            $studentCompanyField = StudentCompanyField::findOrFail($studentCompanyField);
+            $company_id = $studentCompanyField->companyField->company->id;
+        }
         $companies = Company::all();
         $fields = Field::whereHas('companies', function ($query) use ($company_id) {
             $query->where('company_id', '=', $company_id);

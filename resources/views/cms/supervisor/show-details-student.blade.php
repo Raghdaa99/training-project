@@ -67,7 +67,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="trainer_name">Show Appointments :</label>
-                                    <a href="{{route('show.student.appointment',$company_student->id)}}"
+                                    <a href="{{route('show.student.appointment',$company_student->slug())}}"
                                        class="btn btn-warning btn-sm">
                                         <i class="fas fa-table"> Show</i>
                                     </a>
@@ -75,10 +75,13 @@
                                 <div class="form-group">
                                     <label for="trainer_name">Show Attendance :</label>
                                     <a class="btn btn-secondary btn-sm"
-                                       href="{{route('show.student.attendances',$company_student->id)}}">
+                                       href="{{route('show.student.attendances',$company_student->slug())}}">
                                         Attendance
                                     </a>
                                 </div>
+
+
+
 {{--                                <div class="form-group">--}}
 {{--                                    <label for="trainer_name">Evaluations from Trainer :</label>--}}
 {{--                                    <a class="btn btn-info btn-sm"--}}
@@ -93,6 +96,14 @@
                                        href="{{route('show.student.evaluation',$company_student->id)}}"
                                     >
                                         Evaluations Supervisor
+                                    </a>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="trainer_name"> Reports From Students :</label>
+                                    <a class="btn btn-primary btn-sm"
+                                       href="{{route('create.report',$company_student->slug())}}">
+                                        Repotrs
                                     </a>
                                 </div>
                             </div>

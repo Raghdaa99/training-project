@@ -55,7 +55,7 @@
                                         @auth('trainer')
                                             <td>
                                                 <div class="btn-group">
-                                                    <a href="#" onclick="confirmDelete('{{$attendance->id}}',this)"
+                                                    <a href="#" onclick="confirmDelete('{{$attendance->slug()}}',this)"
                                                        class=" btn btn-danger">
                                                         <i class="fas fa-trash"> Delete</i>
                                                     </a>

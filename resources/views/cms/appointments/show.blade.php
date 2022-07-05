@@ -31,10 +31,10 @@
                     @if($appointment !== null)
 {{--                        @if($guard == 'trainer')--}}
                         @auth('trainer')
-                        <form action="{{route('appointments.destroy',$appointment->id)}}" method="POST">
+                        <form action="{{route('appointments.destroy',$appointment->slug())}}" method="POST">
                             @csrf
                             @method('DELETE')
-                            <a href="{{route('appointments.edit',$appointment)}}" class="btn btn-warning"
+                            <a href="{{route('appointments.edit',$appointment->slug())}}" class="btn btn-warning"
                                style="width: 100px; ">
                                 <i class="fas fa-edit"> Edit </i>
                             </a>

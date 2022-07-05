@@ -22,11 +22,14 @@
     <div class="card card-outline card-primary">
 
         <div class="card-body">
+            <h1 class="h2 card-header text-center" id="yui_3_17_2_1_1657042721205_31">
+                <span class="sr-only">بوابة التعليم الإلكتروني- جامعة الأقصى: Log in</span>
+                <img src="https://moodle.alaqsa.edu.ps/pluginfile.php/1/core_admin/logo/0x200/1647336089/alaqsa_logo.png" class="img-fluid" alt="" id="yui_3_17_2_1_1657042721205_32">
+            </h1>
+
             <div class="card-header text-center">
                 <a href="" class="h1"><b>Register</b></a>
             </div>
-            <p class="login-box-msg">Register a new membership</p>
-
             <form>
                 <div class="input-group mb-3">
                     <input type="text" class="form-control" placeholder="Full name" id="name" value="{{$user->name}}" disabled>

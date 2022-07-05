@@ -47,30 +47,27 @@
                                     </tr>
 
                                     <tr>
-                                        @if($item->status_supervisor==0)
+                                        @if($item->status_supervisor==0 && $item->status_company==0)
                                             <th style="width: 30px">Settings</th>
                                             <td>
                                                 <div class="btn-group">
-                                                    <a href="{{route('edit.Student.Company',$item->id)}}"
-                                                       class="btn btn-warning">
-                                                        <i class="fas fa-edit"></i>
-                                                    </a>
+
                                                     <a href="#" onclick="confirmDelete('{{$item->id}}',this)"
                                                        class=" btn btn-danger">
-                                                        <i class="fas fa-trash"></i>
+                                                        <i class="fas fa-trash"> Delete</i>
                                                     </a>
                                                 </div>
 
                                             </td>
                                         @endif
                                     </tr>
-                                    @if($item->status_company==1)
+                                    @if($item->status_supervisor==1 &&$item->status_company==1)
                                         <tr>
                                             {{--                                        <th style="width: 10px">#</th>--}}
                                             <th style="width: 60px">Appointments</th>
                                             <td>
                                                 <div class="btn-group">
-                                                    <a href="{{route('show.student.appointment',$item->id)}}"
+                                                    <a href="{{route('show.student.appointment',$item->slug())}}"
                                                        class="btn btn-warning">
                                                         <i class="fas fa-table"> Show</i>
                                                     </a>
@@ -82,7 +79,7 @@
                                         <tr>
                                             <th style="width: 60px">Attendances</th>
                                             <td><a class="btn btn-secondary btn-sm"
-                                                   href="{{route('show.student.attendances',$item->id)}}">
+                                                   href="{{route('show.student.attendances',$item->slug())}}">
                                                     Attendance
                                                 </a></td>
                                         </tr>
@@ -90,7 +87,7 @@
                                         <tr>
                                             <th style="width: 60px">Reports</th>
                                             <td><a class="btn btn-primary btn-sm"
-                                                   href="{{route('create.report',$item->id)}}">
+                                                   href="{{route('create.report',$item->slug())}}">
                                                     Repotrs
                                                 </a></td>
                                         </tr>

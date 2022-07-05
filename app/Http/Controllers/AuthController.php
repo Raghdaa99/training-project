@@ -21,10 +21,10 @@ use Symfony\Component\HttpFoundation\Response;
 
 class AuthController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('guest')->except('logout');
-    }
+//    public function __construct()
+//    {
+//        $this->middleware('guest')->except('logout');
+//    }
 
     public function showLogin(Request $request)
     {
@@ -321,8 +321,9 @@ class AuthController extends Controller
         }
     }
 
-    public function update_pass_show(Request $request)
+    public function update_pass_show()
     {
+//        dd('ddd');
 
         return view('cms.auth.update-password');
     }

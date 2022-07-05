@@ -170,9 +170,9 @@ class SupervisorController extends Controller
 
     }
 
-    public function show_students_details($id)
+    public function show_students_details($slug)
     {
-        $company_student = StudentCompanyField::findBySlugOrFail($id);
+        $company_student = StudentCompanyField::findBySlugOrFail($slug);
         $student_no = $company_student->student_no;
         $supervisor_no = Auth::guard('supervisor')->user()->supervisor_no;
         $student = StudentSupervisor::where('student_no', $student_no)->where('supervisor_no', $supervisor_no)->first();

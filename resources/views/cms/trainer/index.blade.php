@@ -43,11 +43,11 @@
                                         <td>{{$student->companyField->field->name}}</td>
                                         <td>
                                             <a class="btn btn-primary btn-sm"
-                                               href="{{route('show.student.attendances',$student->id)}}">
+                                               href="{{route('show.student.attendances',$student->slug())}}">
                                                 Attendance
                                             </a>
                                             <a class="btn btn-warning btn-sm"
-                                               href="{{route('show.student.appointment',$student->id)}}">
+                                               href="{{route('show.student.appointment',$student->slug())}}">
                                                  Appointments
                                             </a>
                                             <a class="btn btn-success btn-sm"

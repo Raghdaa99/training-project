@@ -190,7 +190,7 @@
         });
 
         function performStore() {
-            axios.put('/cms/appointments/{{$appointment->id}}', {
+            axios.put('/cms/appointments/{{$appointment->slug()}}', {
                 {{--student_company_id: {{$student_company_id}},--}}
                 no_hours_of_training: document.getElementById('no_hours_of_training').value,
                 start_date: document.getElementById('start_date_appointment').value,
@@ -209,7 +209,7 @@
                     console.log(response);
                     toastr.success(response.data.message);
                     // document.getElementById('create-form').reset();
-                    window.location.href = '/cms/student/appointment/{{$appointment->student_company_id}}';
+                    window.location.href = '/cms/student/appointment/{{$student_company_id}}';
 
                 })
                 .catch(function (error) {
