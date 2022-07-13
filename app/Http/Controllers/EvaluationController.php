@@ -25,17 +25,19 @@ class EvaluationController extends Controller
     public function create_student_evaluation($id)
     {
 
+        $student_company = StudentCompanyField::findBySlugOrFail($id);
+
         $guard = Auth('supervisor')->check() ? 'supervisor' : 'trainer';
 
         $questions = Question::where('guard', '=', $guard)->get();
         $evaluations = Evaluation::whereHas('question', function ($query) use ($guard) {
             $query->where('guard', '=', 'trainer');
-        })->where('student_company_id', '=', $id)->get();
+        })->where('student_company_id', '=', $student_company->id)->get();
 
         $sum_max_mark = DB::table('questions')->where('guard', '=','trainer' )->sum('max_mark');
         $sum_mark = Evaluation::whereHas('question', function ($query) use ($guard) {
             $query->where('guard', '=', 'trainer');
-        })->where('student_company_id', '=', $id)
+        })->where('student_company_id', '=', $student_company->id)
             ->sum('mark');
         return response()->view('cms.evaluations.create', [
             'questions' => $questions,
