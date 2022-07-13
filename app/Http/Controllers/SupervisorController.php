@@ -32,7 +32,6 @@ class SupervisorController extends Controller
     public function send_email(Request $request)
     {
         $validator = Validator($request->all(), [
-//            'id' => 'required|numeric|exists:students_company_field,id',
             'email' => 'required|email|exists:companies,email',
         ]);
         $slug = StudentCompanyField::findBySlugOrFail($request->id);
@@ -62,7 +61,6 @@ class SupervisorController extends Controller
 
     public function search_students(Request $request)
     {
-//        dd('5555');
         $search_student_no = $request->input('student_no');
         $search_student_name = $request->input('student_name');
         $search_company_id = $request->input('company_id');
@@ -70,9 +68,7 @@ class SupervisorController extends Controller
         $company_students = StudentSupervisor::query();
         $company_students = $company_students->whereHas('supervisor', function ($query) use ($search_student_name, $search_student_no, $supervisor) {
             $query->where('supervisor_no', '=', $supervisor->supervisor_no);
-//                ->OrWhere('student_no', '=', $search_student_no);
         });
-
         $student_name = '';
         $student_no = '';
         if ($search_student_no != null) {
@@ -87,8 +83,6 @@ class SupervisorController extends Controller
         }
         $company_students = $company_students->get();
         $companies = Company::all();
-//dd($company_students);
-
         return redirect()->route('supervisor.show.students', $student_no . $student_name)
             ->with(
                 [

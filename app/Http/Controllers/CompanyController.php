@@ -164,7 +164,6 @@ class CompanyController extends Controller
 
     public function updateCompanyFields(Request $request)
     {
-
         $validator = Validator($request->all(), [
             'company_id' => 'required|numeric|exists:companies,id',
             'field_id' => 'required|numeric|exists:fields,id',
@@ -172,13 +171,11 @@ class CompanyController extends Controller
         if (!$validator->fails()) {
             $company_field = CompanyField::where('company_id', $request->company_id)->where('field_id', $request->field_id)->first();
             if ($company_field == null) {
-
 //insert
                 $company_field = new CompanyField();
                 $company_field->company_id = $request->company_id;
                 $company_field->field_id = $request->field_id;
                 $isSaved = $company_field->save();
-
                 return response()->json(['message' => $isSaved ? 'success Updated' : 'Failed']
                     , $isSaved ? Response::HTTP_CREATED : Response::HTTP_BAD_REQUEST);
             } else {
@@ -190,7 +187,6 @@ class CompanyController extends Controller
                         , $isDelete ? Response::HTTP_CREATED : Response::HTTP_BAD_REQUEST);
                 } else {
                     return response()->json(['message' => 'Company with this filed has been Taken'], Response::HTTP_BAD_REQUEST);
-
                 }
             }
         } else {

@@ -41,17 +41,12 @@ class AttendanceController extends Controller
         $validator = Validator($request->all(), [
             'student_company_id' => 'required|numeric|exists:students_company_field,id',
             'date_attendance' => 'required|date_format:d-m-Y',
-//            'day_attendance' => 'required|string',
-//            'start_time' => 'required|date_format:H:i:s',
-
         ]);
         if (!$validator->fails()) {
             $attendance = new Attendance();
             $attendance->student_company_id = $request->student_company_id;
             $attendance->date_attendance = Carbon::parse($request->input('date_attendance'))->format('Y-m-d');
             $attendance->day_attendance = Carbon::parse($request->input('date_attendance'))->format('l');
-//            $attendance->day_attendance = $request->day_attendance;
-
             $attendance->time_attendance = Carbon::now()->format('H:i');
             $isSaved = $attendance->save();
 

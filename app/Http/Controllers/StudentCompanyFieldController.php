@@ -151,11 +151,8 @@ class StudentCompanyFieldController extends Controller
      */
     public function store(Request $request)
     {
-
-
         $validator = Validator($request->all(), [
             'student_no' => 'required|numeric|unique:students_company_field,student_no,',
-            //'student_no' => 'required|numeric|exists:register_students_course,student_no,',
             'company_id' => 'required|numeric|exists:companies,id',
             'field_id' => 'required|numeric|exists:fields,id',
         ],
@@ -163,7 +160,6 @@ class StudentCompanyFieldController extends Controller
                 'student_no.unique' => 'The company already registered'
             ]
         );
-
         if (!$validator->fails()) {
             $company_id = $request->company_id;
             $field_id = $request->field_id;
@@ -176,20 +172,15 @@ class StudentCompanyFieldController extends Controller
             else
                 $student_no = $request->student_no;
 
-
             $item = new StudentCompanyField();
             $item->student_no = $student_no;
             $item->company_field_id = $company_field->id;
-
             $item->status_company = 0;
             $item->status_supervisor = 0;
             $item->notes = $request->notes;
             $isSaved = $item->save();
             return response()->json(['message' => $isSaved ? ' succsess Registered' : 'Faield']
                 , $isSaved ? Response::HTTP_CREATED : Response::HTTP_BAD_REQUEST);
-//            if (Auth::guard('student')->check()){
-//
-//            }
         } else {
             return response()->json(['message' => $validator->getMessageBag()->first()], Response::HTTP_BAD_REQUEST);
         }

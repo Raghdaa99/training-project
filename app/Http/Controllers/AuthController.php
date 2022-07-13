@@ -42,18 +42,14 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-        //dd($request->guard);
         $validator = Validator($request->all(), [
-//            'number' => "required|exists:register_students_course,student_no",
-            'number' => [
-                'required',],
+            'number' => ['required',],
             'password' => 'required|string',
             'remember' => 'required|boolean',
             'guard' => 'required|string|in:student,admin,supervisor,trainer'
         ], [
             'number.required' => 'Empty Fields'
         ]);
-
         if (!$validator->fails()) {
             $guard = $request->input('guard') . "_no";
             if ($request->input('guard') == 'trainer') {
@@ -110,7 +106,6 @@ class AuthController extends Controller
 
     public function register(Request $request)
     {
-
         $validator = Validator($request->all(), [
             'number' => "required|integer",
             'password' => 'required|min:6|required_with:password_confirmation|same:password_confirmation',
@@ -118,8 +113,6 @@ class AuthController extends Controller
             'guard' => 'required|string|in:student,supervisor',
             'department_no' => 'required|exists:departments,department_no'
         ]);
-        //        $guard = $request->input('guard') . "_no";
-
         if (!$validator->fails()) {
             if ($request->input('guard') == 'student') {
                 $user = Student::where('student_no', '=', $request->input('number'))->first();
@@ -127,7 +120,6 @@ class AuthController extends Controller
                 $user = Supervisor::where('supervisor_no', '=', $request->input('number'))->first();
             }
             if ($user != null && $user->status == 0) {
-
                 $user->password = Hash::make($request->input('password'));
                 $user->department_no = $request->input('department_no');
                 $user->status = 1;
@@ -218,7 +210,6 @@ class AuthController extends Controller
                 $user = Supervisor::where($guard, '=', $request->input('academic_number'))
                     ->where('id_number', '=', $request->input('id_number'))->first();
             }
-
             if ($user != null) {
                 return response()->redirectToRoute('cms.register', [
                     'guard' => $request->input('guard'),
@@ -254,16 +245,11 @@ class AuthController extends Controller
 
     public function update_password(Request $request)
     {
-        // $id = Auth::guard('supervisor')->user()->supervisor_no;
-        //$user = Student::find($id);
-
         $validator = Validator($request->all(), [
-
             'oldpassword' => 'required',
             'newpassword' => 'required|min:6|required_with:password_confirmation|same:password_confirmation',
             'password_confirmation' => 'required|min:6',
         ]);
-        //$2y$10$g/XYtoCTzSFE7RWDB/Jkl.okl9Q9oX36bWX0RzI5fzlb6HZiqnnnS
         if (!$validator->fails()) {
             if (auth('student')->check()) {
                 $id = Auth::guard('student')->user()->student_no;
@@ -278,18 +264,11 @@ class AuthController extends Controller
                 $id = Auth::guard('admin')->user()->admin_no;
                 $user = Admin::find($id);
             }
-
-            // $user = User::find($id);
             if ($user != null) {
                 $hashedPassword = $user->password;
-
                 if (Hash::check($request->oldpassword, $hashedPassword)) {
-
                     if (!Hash::check($request->newpassword, $hashedPassword)) {
-
-                        //$users =Auth::user()->id;
                         $user->password = Hash::make($request->newpassword);
-                        // User::where('id', $id)->update(array('password' =>  $user->password));
                         $isSaved = $user->save();
                         return response()->json(
                             [

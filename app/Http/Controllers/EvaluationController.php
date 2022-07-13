@@ -118,24 +118,15 @@ class EvaluationController extends Controller
      */
     public function store(Request $request)
     {
-
         $validator = Validator($request->all(), [
             'student_company_id' => 'required|numeric|exists:students_company_field,id',
             'marks.*' => 'required'
-//            'question_id' => 'required|numeric|exists:students_company_field,id|unique:appointments,student_company_id',
-//            'mark' => 'required|numeric',
-
         ]);
-
         if (!$validator->fails()) {
-//            $evaluation = new Evaluation();
-//            $evaluation->student_company_id = $request->input('student_company_id');
-
             $questions_marks = $request->input('question_id');
             $marks = $request->input('marks');
             $max_marks = $request->input('max_marks');
             $isValid = true;
-
             foreach ($max_marks as $key => $value) {
                 if ($marks[$key] > $max_marks[$key]) {
                     $isValid = false;
@@ -154,7 +145,6 @@ class EvaluationController extends Controller
                         $isSaved = true;
                     }
                 }
-//            $isSaved = $evaluation->save();
                 return response()->json(
                     [
                         'message' => $isSaved ? 'Evaluation created successfully' : 'Create failed!'
@@ -164,9 +154,6 @@ class EvaluationController extends Controller
             } else {
                 return response()->json(['message' => 'error in data of max marks'], Response::HTTP_BAD_REQUEST);
             }
-
-            // }
-
         } else {
             return response()->json(['message' => $validator->getMessageBag()->first()], Response::HTTP_BAD_REQUEST);
         }

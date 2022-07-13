@@ -40,6 +40,7 @@ class ReportController extends Controller
 
     public function download($file)
     {
+
         return response()->download(storage_path('app\reports\\' . $file));
 
 //        dd(storage_path('app/reports/' . $file));
