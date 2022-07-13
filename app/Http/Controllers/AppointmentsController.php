@@ -56,9 +56,7 @@ class AppointmentsController extends Controller
     public function store(Request $request)
     {
         $student_company = StudentCompanyField::findBySlugOrFail($request->input('student_company_id'));
-
         $validator = Validator($request->all(), [
-//            'student_company_id' => 'required|numeric|exists:students_company_field,id|unique:appointments,student_company_id',
             'no_hours_of_training' => 'required|numeric',
             'start_date' => 'required|date_format:d-m-Y',
             'end_date' => 'required|date_format:d-m-Y',
@@ -74,7 +72,6 @@ class AppointmentsController extends Controller
             'student_company_id.exists' => 'This Student not found',
             'student_company_id.unique' => 'This Student has appointment',
         ]);
-
         if (!$validator->fails()) {
             $appointment = new Appointments();
             $appointment->student_company_id = $student_company->id;

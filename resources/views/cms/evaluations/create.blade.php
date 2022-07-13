@@ -26,6 +26,7 @@
                             <div class="card-body">
                                 <div class="card">
                                 <div class="card-header">
+
                                     <h3 class="card-title">Evaluation of Trainer</h3>
                                 </div>
                                 <table class="table table-bordered table-striped table-hover">
@@ -158,7 +159,7 @@
                 question_id.push($(this).val());
             });
             axios.post('/cms/evaluations', {
-                student_company_id: {{$student_company_id}},
+                student_company_id: '{{$student_company_id}}',
                 question_id:question_id,
                 marks: marks,
                 max_marks: max_marks,

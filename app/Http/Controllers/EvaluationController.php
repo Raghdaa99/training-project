@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Evaluation;
 use App\Models\Question;
+use App\Models\StudentCompanyField;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -49,16 +50,18 @@ class EvaluationController extends Controller
 
     public function show_student_evaluation($id)
     {
+        $student_company = StudentCompanyField::findBySlugOrFail($id);
+
         $guard = Auth('supervisor')->check() ? 'supervisor' : 'trainer';
 //        $evaluations = Evaluation::where('student_company_id', '=', $id)->get();
         $evaluations = Evaluation::whereHas('question', function ($query) use ($guard) {
             $query->where('guard', '=', $guard);
-        })->where('student_company_id', '=', $id)->get();
+        })->where('student_company_id', '=', $student_company->id)->get();
 
         $sum_max_mark = DB::table('questions')->where('guard', '=', $guard)->sum('max_mark');
         $sum_mark = Evaluation::whereHas('question', function ($query) use ($guard) {
             $query->where('guard', '=', $guard);
-        })->where('student_company_id', '=', $id)
+        })->where('student_company_id', '=', $student_company->id)
             ->sum('mark');
 //        $sum_mark = DB::table('evaluations')->where('student_company_id', '=', $id)->sum('mark');
 
@@ -91,11 +94,13 @@ class EvaluationController extends Controller
 
     public function edit_student_evaluation($id)
     {
+        $student_company = StudentCompanyField::findBySlugOrFail($id);
+
         $guard = Auth('supervisor')->check() ? 'supervisor' : 'trainer';
 //        $evaluations = Evaluation::where('student_company_id', '=', $id)->get();
         $evaluations = Evaluation::whereHas('question', function ($query) use ($guard) {
             $query->where('guard', '=', $guard);
-        })->where('student_company_id', '=', $id)->get();
+        })->where('student_company_id', '=', $student_company->id)->get();
         return response()->view('cms.evaluations.edit', ['evaluations' => $evaluations, 'student_company_id' => $id]);
     }
 
@@ -118,8 +123,10 @@ class EvaluationController extends Controller
      */
     public function store(Request $request)
     {
+        $student_company = StudentCompanyField::findBySlugOrFail($request->input('student_company_id'));
+
         $validator = Validator($request->all(), [
-            'student_company_id' => 'required|numeric|exists:students_company_field,id',
+//            'student_company_id' => 'required|numeric|exists:students_company_field,id',
             'marks.*' => 'required'
         ]);
         if (!$validator->fails()) {
@@ -139,7 +146,7 @@ class EvaluationController extends Controller
                     DB::table('evaluations')->insert([
                         'mark' => $marks[$key],
                         'question_id' => $value,
-                        'student_company_id' => $request->input('student_company_id'),
+                        'student_company_id' => $student_company->id,
                     ]);
                     if ($key == count($questions_marks) - 1) {
                         $isSaved = true;
@@ -189,6 +196,8 @@ class EvaluationController extends Controller
      */
     public function update(Request $request)
     {
+        $student_company = StudentCompanyField::findBySlugOrFail($request->input('student_company_id'));
+
 //        dd($request->marks);
         $validator = Validator($request->all(), [
 //            'student_company_id' => 'required|numeric|exists:students_company_field,id|unique:appointments,student_company_id',
@@ -198,12 +207,6 @@ class EvaluationController extends Controller
         ]);
 
         if (!$validator->fails()) {
-//            $evaluation = new Evaluation();
-//            $evaluation->student_company_id = $request->input('student_company_id');
-
-//            DB::table('evaluations')->where('student_company_id', '=', $request->input('student_company_id'))
-//                ->delete();
-
             $questions_marks = $request->input('question_id');
             $marks = $request->input('marks');
             $max_marks = $request->input('max_marks');
@@ -221,7 +224,7 @@ class EvaluationController extends Controller
                 $guard = Auth('supervisor')->check() ? 'supervisor' : 'trainer';
                 $deleted = Evaluation::whereHas('question', function ($query) use ($guard) {
                     $query->where('guard', '=', $guard);
-                })->where('student_company_id', '=', $request->input('student_company_id'))->delete();
+                })->where('student_company_id', '=', $student_company->id)->delete();
 
                 $questions_marks = $request->input('question_id');
                 $marks = $request->input('marks');
@@ -231,7 +234,7 @@ class EvaluationController extends Controller
                     DB::table('evaluations')->insert([
                         'mark' => $marks[$key],
                         'question_id' => $value,
-                        'student_company_id' => $request->input('student_company_id'),
+                        'student_company_id' => $student_company->id,
                     ]);
                     if ($key == count($questions_marks) - 1) {
                         $isSaved = true;

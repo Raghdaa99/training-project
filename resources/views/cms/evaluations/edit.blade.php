@@ -90,7 +90,7 @@
 
 
             axios.put('/cms/student/evaluation/update', {
-                student_company_id: {{$student_company_id}},
+                student_company_id: '{{$student_company_id}}',
                 max_marks: max_marks,
                 question_id: question_id,
                 marks: marks,

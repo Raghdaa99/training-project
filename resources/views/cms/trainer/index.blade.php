@@ -51,7 +51,7 @@
                                                  Appointments
                                             </a>
                                             <a class="btn btn-success btn-sm"
-                                               href="{{route('show.student.evaluation',$student->id)}}"
+                                               href="{{route('show.student.evaluation',$student->slug())}}"
                                             >
                                                 Evaluations
                                             </a>

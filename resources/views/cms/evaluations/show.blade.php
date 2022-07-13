@@ -32,7 +32,7 @@
 {{--                        <form action="{{route('evaluations.destroy',$evaluations[0]->id)}}" method="POST">--}}
 {{--                            @csrf--}}
 {{--                            @method('DELETE')--}}
-                            <a href="{{route('edit.student.evaluation',$evaluations[0]->student_company_id)}}" class="btn btn-warning"
+                            <a href="{{route('edit.student.evaluation',$student_company_id)}}" class="btn btn-warning"
                                style="width: 100px; ">
                                 <i class="fas fa-edit"> Edit </i>
                             </a>
@@ -46,6 +46,7 @@
                     @endif
 
                     @if(count($evaluations)==0)
+
                         <a href="{{route('create.student.evaluation',$student_company_id)}}" class="btn btn-secondary"
                            style="width: 200px; ">
                             <i class="fas fa-plus-circle"> Create Evaluation</i>

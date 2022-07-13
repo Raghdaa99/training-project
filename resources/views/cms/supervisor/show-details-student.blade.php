@@ -93,7 +93,7 @@
                                 <div class="form-group">
                                     <label for="trainer_name">Evaluations from Supervisor :</label>
                                     <a class="btn btn-success btn-sm"
-                                       href="{{route('show.student.evaluation',$company_student->id)}}"
+                                       href="{{route('show.student.evaluation',$company_student->slug())}}"
                                     >
                                         Evaluations Supervisor
                                     </a>
