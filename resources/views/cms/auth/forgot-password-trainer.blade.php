@@ -1,8 +1,8 @@
 @extends('cms.auth.master')
 @section('section')
+
     <div class="hold-transition login-page">
         <div class="login-box">
-            <!-- /.login-logo -->
             <div class="card card-outline card-primary">
                 <h1 class="h2 card-header text-center" id="yui_3_17_2_1_1657042721205_31">
                     <span class="sr-only">بوابة التعليم الإلكتروني- جامعة الأقصى: Log in</span>
@@ -10,33 +10,20 @@
                         src="https://moodle.alaqsa.edu.ps/pluginfile.php/1/core_admin/logo/0x200/1647336089/alaqsa_logo.png"
                         class="img-fluid" alt="" id="yui_3_17_2_1_1657042721205_32">
                 </h1>
-
                 <div class="card-body">
-                    <p class="login-box-msg"><b>Recover Password</b></p>
-                    <form>
+                    <p class="login-box-msg">You forgot your password? Here you can easily retrieve a new password.</p>
+                    <form  method="post">
                         <div class="input-group mb-3">
-                            <input type="text" class="form-control" placeholder="Academic Number" id="number">
+                            <input type="email" class="form-control" placeholder="Email" id="email">
                             <div class="input-group-append">
                                 <div class="input-group-text">
-                                    <span class="fas fa-user"></span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="input-group mb-3">
-                            <input type="text" class="form-control" placeholder="ID Number" id="id_number">
-                            <div class="input-group-append">
-                                <div class="input-group-text">
-                                    <span class="fas fa-lock"></span>
+                                    <span class="fas fa-envelope"></span>
                                 </div>
                             </div>
                         </div>
                         <div class="row">
-                            <!-- /.col -->
-                            <div class="col">
-                                <button type="button" onclick="requestPassword()" class="btn btn-primary btn-block">
-                                    Request Password
-                                </button>
+                            <div class="col-12">
+                                <button type="button" onclick="requestPassword()" class="btn btn-primary btn-block">Request new password</button>
                             </div>
                             <!-- /.col -->
                         </div>
@@ -45,10 +32,10 @@
                         <a href="{{route('cms.login',$guard)}}">Login</a>
                     </p>
                 </div>
-                <!-- /.card-body -->
+                <!-- /.login-card-body -->
             </div>
-            <!-- /.card -->
         </div>
+        <!-- /.login-box -->
     </div>
     <!-- /.login-box -->
 @endsection
@@ -56,11 +43,9 @@
 @section('scripts')
     <script>
         function requestPassword() {
-            var academic_number = document.getElementById('number').value;
-            var id_number = document.getElementById('id_number').value;
-            axios.post('/cms/forget_password', {
-                academic_number: academic_number,
-                id_number: id_number,
+            var email = document.getElementById('email').value;
+            axios.post('/cms/forget_password_trainer', {
+                email: email,
                 guard: '{{$guard}}',
             })
                 .then(function (response) {
@@ -76,3 +61,4 @@
         }
     </script>
 @endsection
+

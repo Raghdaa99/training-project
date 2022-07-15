@@ -25,4 +25,8 @@ class Supervisor extends Authenticatable
         return $this->belongsToMany(Student::class, StudentSupervisor::class, 'supervisor_no', 'student_no');
     }
 
+    public function routeNotificationForVonage($notification)
+    {
+        return $this->phone;
+    }
 }

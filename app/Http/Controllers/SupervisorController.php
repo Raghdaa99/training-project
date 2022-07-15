@@ -32,6 +32,7 @@ class SupervisorController extends Controller
     public function send_email(Request $request)
     {
         $validator = Validator($request->all(), [
+//            'id' => 'required|numeric|exists:students_company_field,id',
             'email' => 'required|email|exists:companies,email',
         ]);
         $slug = StudentCompanyField::findBySlugOrFail($request->id);

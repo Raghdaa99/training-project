@@ -1,23 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Register</title>
 
-    <!-- Google Font: Source Sans Pro -->
-    <link rel="stylesheet"
-          href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="{{asset('cms/plugins/fontawesome-free/css/all.min.css')}}">
-    <!-- icheck bootstrap -->
-    <link rel="stylesheet" href="{{asset('cms/plugins/icheck-bootstrap/icheck-bootstrap.min.css')}}">
-    <!-- Theme style -->
-    <link rel="stylesheet" href="{{asset('cms/dist/css/adminlte.min.css')}}">
-    <!-- Toastr -->
-    <link rel="stylesheet" href="{{asset('cms/plugins/toastr/toastr.min.css')}}">
-</head>
-<body class="hold-transition register-page">
+@extends('cms.auth.master')
+@section('section')
+    <div class="hold-transition register-page">
 <div class="register-box">
     <div class="card card-outline card-primary">
 
@@ -108,44 +92,33 @@
         <!-- /.form-box -->
     </div><!-- /.card -->
 </div>
-<!-- /.register-box -->
+    </div>
+@endsection
 
-<!-- jQuery -->
-<script src="{{asset('cms/plugins/jquery/jquery.min.js')}}"></script>
-<!-- Bootstrap 4 -->
-<script src="{{asset('cms/plugins/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
-<!-- AdminLTE App -->
-<script src="{{asset('cms/dist/js/adminlte.min.js')}}"></script>
+@section('scripts')
+    <script>
+        function register() {
 
-<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-<!-- Toastr -->
-<script src="{{asset('cms/plugins/toastr/toastr.min.js')}}"></script>
-<script>
-    function register() {
+            axios.put('/cms/register', {
+                number: document.getElementById('number').value,
+                // name: document.getElementById('name').value,
+                // phone: document.getElementById('phone').value,
+                password: document.getElementById('password').value,
+                password_confirmation: document.getElementById('password_confirmation').value,
+                guard: '{{$guard}}',
+                department_no: document.getElementById('department_no').value,
 
-        axios.put('/cms/register', {
-            number: document.getElementById('number').value,
-            // name: document.getElementById('name').value,
-            // phone: document.getElementById('phone').value,
-            password: document.getElementById('password').value,
-            password_confirmation: document.getElementById('password_confirmation').value,
-            guard: '{{$guard}}',
-            department_no: document.getElementById('department_no').value,
-
-        })
-            .then(function (response) {
-                toastr.success(response.data.message);
-                console.log(response);
-                window.location.href = '/cms/{{$guard}}/login';
             })
-            .catch(function (error) {
+                .then(function (response) {
+                    toastr.success(response.data.message);
+                    console.log(response);
+                    window.location.href = '/cms/{{$guard}}/login';
+                })
+                .catch(function (error) {
 
-                toastr.error(error.response.data.message);
-                console.log(error.response.data.message);
-            });
-    }
-</script>
-
-
-</body>
-</html>
+                    toastr.error(error.response.data.message);
+                    console.log(error.response.data.message);
+                });
+        }
+    </script>
+@endsection

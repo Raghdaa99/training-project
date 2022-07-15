@@ -122,7 +122,7 @@ class TrainerController extends Controller
             $trainer->phone = $request->input('phone');
             $trainer->company_id = $company_id;
             $newPassword = Str::random(10);
-            $trainer->password = Hash::make($newPassword);;
+            $trainer->password = Hash::make($newPassword);
             $isSaved = $trainer->save();
             if ($isSaved) {
                 $trainer->assignRole(Role::findByName('trainer', 'trainer'));

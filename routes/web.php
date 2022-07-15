@@ -41,9 +41,13 @@ Route::group(['middleware' => 'prevent-back-history'], function () {
         Route::get('{guard}/login', [AuthController::class, 'showLogin'])->name('cms.login');
         Route::get('{guard}/register', [AuthController::class, 'showRegister'])->name('cms.register');
         Route::get('{guard}/check', [AuthController::class, 'showCheckCredentials'])->name('cms.check.credentials');
+        Route::get('{guard}/forget-password', [AuthController::class, 'showForgetPassword'])->name('forget.password');
+        Route::get('{guard}/forget-password-trainer', [AuthController::class, 'showForgetPasswordTrainer'])->name('forget.password.trainer');
         Route::post('login', [AuthController::class, 'login']);
         Route::put('register', [AuthController::class, 'register']);
         Route::post('check', [AuthController::class, 'checkCredential']);
+        Route::post('forget_password', [AuthController::class, 'forgetPassword']);
+        Route::post('forget_password_trainer', [AuthController::class, 'forgetPasswordTrainer']);
     });
     Route::prefix('cms')->middleware('auth:student,admin,supervisor,trainer')->group(function () {
         Route::get('logout', [AuthController::class, 'logout'])->name('cms.logout');
