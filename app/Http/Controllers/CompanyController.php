@@ -182,7 +182,7 @@ class CompanyController extends Controller
                 $student_company_field = StudentCompanyField::where('company_field_id', $company_field->id)->first();
                 if ($student_company_field == null) {
 //delete
-                    $isDelete =$company_field->delete();
+                    $isDelete = $company_field->delete();
                     return response()->json(['message' => $isDelete ? 'success Deleted' : 'Failed']
                         , $isDelete ? Response::HTTP_CREATED : Response::HTTP_BAD_REQUEST);
                 } else {
@@ -220,10 +220,38 @@ class CompanyController extends Controller
      */
     public function destroy(Company $company)
     {
+        $companies = Company::withCount('fields')->findOrFail($company->id);
+        if ($companies->fields_count == 0) {
+            return $this->deleted($company);
+        } else {
+            $students_companies = StudentCompanyField::whereHas('companyField', function ($query) use ($company) {
+                $query->whereHas('company', function ($query) use ($company) {
+                    $query->where('company_id', $company->id);
+                });
+            })->get()->toArray();
+
+            if (count($students_companies) > 0) {
+                return response()->json(['message' => 'it cannot deleted'], Response::HTTP_BAD_REQUEST);
+            } else {
+                $isDeleted = CompanyField::whereHas('company', function ($query) use ($company) {
+                    $query->where('company_id', $company->id);
+                })->delete();
+                if ($isDeleted) {
+                   return $this->deleted($company);
+                }else{
+                    return response()->json(['message' => 'Failed Deleted'], Response::HTTP_BAD_REQUEST);
+
+                }
+            }
+        }
+    }
+
+    public function deleted(Company $company)
+    {
         $isDeleted = $company->delete();
         return response()->json(
-            ['message' => $isDeleted ? 'Deleted successfully' : 'Delete failed!'],
-            $isDeleted ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST
+            ['message' => $isDeleted ? 'Deleted Successfully' : 'Delete failed'],
+            $isDeleted ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST,
         );
     }
 }

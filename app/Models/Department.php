@@ -17,4 +17,8 @@ class Department extends Model
     {
         return $this->hasMany(Student::class, 'department_no', 'department_no');
     }
+    public function supervisors()
+    {
+        return $this->hasMany(Supervisor::class, 'department_no', 'department_no');
+    }
 }

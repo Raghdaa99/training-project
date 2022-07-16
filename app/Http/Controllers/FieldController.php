@@ -105,10 +105,18 @@ class FieldController extends Controller
      */
     public function destroy(Field $field)
     {
-        $isDeleted = $field->delete();
-        return response()->json(
-            ['message' => $isDeleted ? 'Deleted successfully' : 'Delete failed!'],
-            $isDeleted ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST
-        );
+
+        $field = Field::withCount('companies')->findOrFail($field->id);
+        if ($field->companies_count == 0) {
+            $isDeleted = $field->delete();
+            return response()->json(
+                ['message' => $isDeleted ? 'Deleted Successfully' : 'Delete failed'],
+                $isDeleted ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST,
+            );
+        } else {
+            return response()->json(['message' => 'This Field has been taken'], Response::HTTP_BAD_REQUEST);
+
+        }
+
     }
 }

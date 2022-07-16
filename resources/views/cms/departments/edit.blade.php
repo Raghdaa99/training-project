@@ -7,7 +7,7 @@
 @endsection
 
 @section('large-page-name',__('cms.update'))
-@section('main-page-name',__('cms.fields'))
+@section('main-page-name',__('cms.departments'))
 @section('small-page-name',__('cms.update'))
 
 @section('content')
@@ -33,11 +33,11 @@
                                     <input type="text" class="form-control" id="name" placeholder="{{__('cms.department_name')}}"
                                            name="name" value="{{$department->name}}">
                                 </div>
-                                <div class="form-group">
-                                    <label for="department_no">{{__('cms.department_no')}}</label>
-                                    <input type="text" class="form-control" id="department_no" placeholder="{{__('cms.department_no')}}"
-                                           name="department_no" value="{{$department->department_no}}">
-                                </div>
+{{--                                <div class="form-group">--}}
+{{--                                    <label for="department_no">{{__('cms.department_no')}}</label>--}}
+{{--                                    <input type="text" class="form-control" id="department_no" placeholder="{{__('cms.department_no')}}"--}}
+{{--                                           name="department_no" value="{{$department->department_no}}">--}}
+{{--                                </div>--}}
                             </div>
                             <!-- /.card-body -->
 
@@ -62,7 +62,7 @@
         function performUpdate() {
             axios.put('/cms/admin/departments/{{$department->department_no}}', {
                 name: document.getElementById('name').value,
-                department_no: document.getElementById('department_no').value,
+                department_no: {{$department->department_no}},
             })
                 .then(function (response) {
                     //2xx

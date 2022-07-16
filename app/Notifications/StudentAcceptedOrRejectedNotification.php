@@ -12,17 +12,15 @@ class StudentAcceptedOrRejectedNotification extends Notification
     use Queueable;
 
     public $studentCompanyField;
-    public $message;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($studentCompanyField, $message)
+    public function __construct($studentCompanyField)
     {
         $this->studentCompanyField = $studentCompanyField;
-        $this->message = $message;
     }
 
     /**
@@ -52,7 +50,6 @@ class StudentAcceptedOrRejectedNotification extends Notification
             'company_name' => $this->studentCompanyField->companyField->company->name,
             'field_name' => $this->studentCompanyField->companyField->field->name,
             'status_company' => $this->studentCompanyField['status_company'],
-            'message' => $this->message,
         ];
     }
 }

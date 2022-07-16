@@ -240,14 +240,14 @@
             status: 0,
         }).then(function (response) {
             //2xx
-            console.log(response);
-            toastr.success(response.data.message);
+            // console.log(response);
+            // toastr.success(response.data.message);
             window.location.href = '/';
         })
             .catch(function (error) {
                 //4xx - 5xx
-                console.log(error.response.data.message);
-                toastr.error(error.response.data.message);
+                // console.log(error.response.data.message);
+                // toastr.error(error.response.data.message);
             });
     }
 </script>

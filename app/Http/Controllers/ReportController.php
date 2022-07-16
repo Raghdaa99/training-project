@@ -42,16 +42,6 @@ class ReportController extends Controller
     {
 
         return response()->download(storage_path('app\reports\\' . $file));
-
-//        dd(storage_path('app/reports/' . $file));
-//        return Storage::download('reports/' . $file);
-
-//        if (file_exists(public_path(). "/reports/".$file)) {
-//            return response()->download(public_path(). "/reports/".$file);
-//        } else {
-//            echo('File not found.');
-//        }
-
     }
 
     /**
@@ -64,22 +54,12 @@ class ReportController extends Controller
     {
         $validator = Validator($request->all(), [
             'student_company_id' => 'required|numeric|exists:students_company_field,id',
-            'file' => 'required|mimes:pdf,txt,xlx,csv,docx,jpg|max:2048',
+            'file' => 'required|mimes:pdf,txt,xlx,csv,docx,jpg,pptx,zip,rar,png,jpeg|max:2048',
         ]);
 
         if (!$validator->fails()) {
-//        $name = $request->file('file')->getClientOriginalName();
-//
-//        $path = $request->file('file')->store('public/files');
-//            $fileName = time() . '.' . $request->file->extension();
-
-//            $request->file->move(public_path('uploads'), $fileName);
-//            Storage::put('reports', $fileName);
             $name = $request->file('file')->getClientOriginalName();
             $request->file->storeAs('reports', $name);
-//            Storage::put('reports', $name);
-//            $request->file('file')->move('reports', $name);
-
             $report = new Report();
             $report->url = $name;
             $report->student_company_id = $request->student_company_id;

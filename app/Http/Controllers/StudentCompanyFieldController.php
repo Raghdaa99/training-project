@@ -216,12 +216,7 @@ class StudentCompanyFieldController extends Controller
             $isSaved = $item->save();
             if ($isSaved) {
                 $supervisor = Supervisor::where('supervisor_no', $item->student->supervisor_no)->first();
-                if ($request->status == 1) {
-                    $message = 'تم قبول الطالب';
-                } else {
-                    $message = 'لم يتم الموافقة على الطالب';
-                }
-                $this->notify($item, $supervisor, $message);
+                $this->notify($item, $supervisor);
             }
             return response()->json(['message' => $isSaved ? ' success' : 'Failed']
                 , $isSaved ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST);
@@ -230,9 +225,9 @@ class StudentCompanyFieldController extends Controller
         }
     }
 
-    public function notify(StudentCompanyField $studentCompanyField, Supervisor $supervisor,$message)
+    public function notify(StudentCompanyField $studentCompanyField, Supervisor $supervisor)
     {
-        $supervisor->notify(new StudentAcceptedOrRejectedNotification($studentCompanyField,$message));
+        $supervisor->notify(new StudentAcceptedOrRejectedNotification($studentCompanyField));
     }
 
     /**

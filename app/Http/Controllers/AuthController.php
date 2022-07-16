@@ -2,29 +2,29 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\TrainerEmail;
 use App\Models\Admin;
 use App\Models\Department;
 use App\Models\StudentSupervisor;
 use App\Models\Student;
 use App\Models\Supervisor;
 use App\Models\Trainer;
+use App\Notifications\RecoverPasswordSMSNotification;
 use Dotenv\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Redis;
+use Illuminate\Support\Str;
 use Spatie\Permission\Models\Role;
 use Symfony\Component\HttpFoundation\Response;
 
 class AuthController extends Controller
 {
-//    public function __construct()
-//    {
-//        $this->middleware('guest')->except('logout');
-//    }
 
     public function showLogin(Request $request)
     {
@@ -302,8 +302,121 @@ class AuthController extends Controller
 
     public function update_pass_show()
     {
-//        dd('ddd');
-
         return view('cms.auth.update-password');
     }
+
+    public function showForgetPassword(Request $request)
+    {
+        $request->merge(['guard' => $request->guard]);
+        $validator = Validator($request->all(), [
+            'guard' => 'required|string|in:student,supervisor'
+        ]);
+
+        if (!$validator->fails()) {
+            return response()->view('cms.auth.recover-password', ['guard' => $request->input('guard')]);
+        } else {
+            abort(Response::HTTP_NOT_FOUND);
+        }
+    }
+
+    public function forgetPassword(Request $request)
+    {
+        $request->merge(['guard' => $request->guard]);
+        $validator = Validator($request->all(), [
+            'academic_number' => "required|numeric",
+            'id_number' => 'required|numeric',
+            'guard' => 'required|string|in:student,supervisor'
+        ]);
+        if (!$validator->fails()) {
+            $guard = $request->input('guard') . "_no";
+            if ($request->input('guard') == 'student') {
+                $user = Student::where($guard, '=', $request->input('academic_number'))
+                    ->where('id_number', '=', $request->input('id_number'))->first();
+            } else if ($request->input('guard') == 'supervisor') {
+                $user = Supervisor::where($guard, '=', $request->input('academic_number'))
+                    ->where('id_number', '=', $request->input('id_number'))->first();
+            }
+            if ($user != null) {
+                $newPassword = Str::random(5);
+                $user->password = Hash::make($newPassword);
+                $isSaved = $user->save();
+                if ($isSaved) {
+                    $user->notify(new RecoverPasswordSMSNotification($newPassword));
+                    return response()->json(
+                        ['message' => 'A password has been sent to your phone number'],
+                        Response::HTTP_OK
+                    );
+                } else {
+                    return response()->json(
+                        ['message' => 'Error'],
+                        Response::HTTP_BAD_REQUEST
+                    );
+
+                }
+
+            } else {
+                return response()->json(
+                    ['message' => 'Checked Failed , check your credentials'],
+                    Response::HTTP_BAD_REQUEST
+                );
+            }
+        } else {
+            return response()->json(['message' => $validator->getMessageBag()->first()], Response::HTTP_BAD_REQUEST);
+        }
+    }
+
+    public function showForgetPasswordTrainer(Request $request)
+    {
+        $request->merge(['guard' => $request->guard]);
+        $validator = Validator($request->all(), [
+            'guard' => 'required|string|in:trainer'
+        ]);
+
+        if (!$validator->fails()) {
+            return response()->view('cms.auth.forgot-password-trainer', ['guard' => $request->input('guard')]);
+        } else {
+            abort(Response::HTTP_NOT_FOUND);
+        }
+    }
+
+    public function forgetPasswordTrainer(Request $request)
+    {
+        $request->merge(['guard' => $request->guard]);
+        $validator = Validator($request->all(), [
+            'email' => "required|email",
+            'guard' => 'required|string|in:trainer'
+        ]);
+        if (!$validator->fails()) {
+            if ($request->input('guard') == 'trainer') {
+                $user = Trainer::where('email', '=', $request->input('email'))->first();
+            }
+            if ($user != null) {
+                $newPassword = Str::random(5);
+                $user->password = Hash::make($newPassword);
+                $isSaved = $user->save();
+                if ($isSaved) {
+                    Mail::to($user->email)->send(new TrainerEmail($newPassword));
+                    return response()->json(
+                        ['message' => 'A password has been sent to your email'],
+                        Response::HTTP_OK
+                    );
+                } else {
+                    return response()->json(
+                        ['message' => 'Error'],
+                        Response::HTTP_BAD_REQUEST
+                    );
+
+                }
+
+            } else {
+                return response()->json(
+                    ['message' => 'Checked Failed , check your credentials'],
+                    Response::HTTP_BAD_REQUEST
+                );
+            }
+        } else {
+            return response()->json(['message' => $validator->getMessageBag()->first()], Response::HTTP_BAD_REQUEST);
+        }
+    }
+
 }

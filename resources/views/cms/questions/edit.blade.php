@@ -27,15 +27,7 @@
                     <form id="create-form">
                         @csrf
                         <div class="card-body">
-                            <div class="form-group">
-                                <label for="guard">{{__('cms.guard')}}</label>
-                                <select class="custom-select form-control-border" id="guard">
-                                    <option value="supervisor" @if($question->guard == 'supervisor') selected @endif>Supervisor
-                                    </option>
-                                    <option value="trainer" @if($question->guard == 'trainer') selected @endif>Trainer
-                                    </option>
-                                </select>
-                            </div>
+
                             <div class="form-group">
                                 <label for="title">Title Question</label>
                                 <input type="text" class="form-control" id="title" placeholder="Enter Title Of Question"
@@ -70,7 +62,6 @@
     function performUpdate() {
         axios.put('/cms/admin/questions/{{$question->id}}', {
             title: document.getElementById('title').value,
-            guard: document.getElementById('guard').value,
             max_mark: document.getElementById('max_mark').value
         })
         .then(function (response) {

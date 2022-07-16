@@ -15,7 +15,7 @@ class QuestionController extends Controller
      */
     public function index()
     {
-        $questions =Question::all();
+        $questions = Question::all();
         return response()->view('cms.questions.index', ['questions' => $questions]);
     }
 
@@ -33,7 +33,7 @@ class QuestionController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -62,7 +62,7 @@ class QuestionController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Question  $question
+     * @param \App\Models\Question $question
      * @return \Illuminate\Http\Response
      */
     public function show(Question $question)
@@ -73,32 +73,30 @@ class QuestionController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Question  $question
+     * @param \App\Models\Question $question
      * @return \Illuminate\Http\Response
      */
     public function edit(Question $question)
     {
-        return response()->view('cms.questions.edit',['question'=>$question]);
+        return response()->view('cms.questions.edit', ['question' => $question]);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Question  $question
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Models\Question $question
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Question $question)
     {
         $validator = Validator($request->all(), [
-            'guard' => 'required|string|in:supervisor,trainer',
             'title' => 'required|string',
             'max_mark' => 'required|numeric',
         ]);
 
         if (!$validator->fails()) {
             $question->title = $request->input('title');
-            $question->guard = $request->input('guard');
             $question->max_mark = $request->input('max_mark');
             $isSaved = $question->save();
             return response()->json(
@@ -113,15 +111,22 @@ class QuestionController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Question  $question
+     * @param \App\Models\Question $question
      * @return \Illuminate\Http\Response
      */
     public function destroy(Question $question)
     {
-        $isDeleted = $question->delete();
-        return response()->json(
-            ['message' => $isDeleted ? 'Deleted Successfully' : 'Delete failed'],
-            $isDeleted ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST,
-        );
+        $question = Question::withCount('evaluation')->findOrFail($question->id);
+        if ($question->evaluation_count == 0) {
+            $isDeleted = $question->delete();
+            return response()->json(
+                ['message' => $isDeleted ? 'Deleted Successfully' : 'Delete failed'],
+                $isDeleted ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST,
+            );
+        } else {
+            return response()->json(['message' => 'This Question has been taken'], Response::HTTP_BAD_REQUEST);
+
+        }
+
     }
 }
