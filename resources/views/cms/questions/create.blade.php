@@ -75,7 +75,8 @@
             //2xx
             console.log(response);
             toastr.success(response.data.message);
-            document.getElementById('create-form').reset();
+            // document.getElementById('create-form').reset();
+            window.location.href = '/cms/admin/questions';
         })
         .catch(function (error) {
             //4xx - 5xx

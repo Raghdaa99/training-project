@@ -106,6 +106,7 @@ class SupervisorController extends Controller
         $supervisor = Supervisor::findOrFail($supervisor_no);
         return view('cms.supervisor.personal-data', ['supervisor' => $supervisor]);
     }
+
     public function getNotifications()
     {
         return response()->view('cms.supervisor.notifications');

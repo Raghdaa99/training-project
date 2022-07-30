@@ -106,6 +106,14 @@
                                         Repotrs
                                     </a>
                                 </div>
+
+                                <div class="form-group">
+                                    <label for="trainer_name"> Reports Evaluation :</label>
+                                    <a class="btn btn-danger btn-sm"
+                                       href="{{route('student.evaluation',$company_student->slug())}}">
+                                        Show
+                                    </a>
+                                </div>
                             </div>
                             <!-- /.card-body -->
 

@@ -16,7 +16,7 @@ class Company extends Model
 
     public function students()
     {
-        return $this->belongsTo(Student::class, StudentCompanyField::class, 'student_no', 'company_id');
+        return $this->belongsTo(Student::class, StudentCompanyField::class, 'student_no', 'company_id')->withDefault();
     }
 
     public function trainer()

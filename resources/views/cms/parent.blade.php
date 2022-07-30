@@ -8,7 +8,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Project | @yield('title')</title>
+    <title>Training System | @yield('title')</title>
 
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -171,6 +171,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         </li>
                         @endcanany
                         @endcanany
+
 
                         @canany(['Create-Question','Read-Questions','Create-Department','Read-Departments','Create-Field','Read-Fields','Create-Company','Read-Companies'])
                         <li class="nav-header">{{__('cms.content_management')}}</li>
@@ -340,16 +341,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                             </li>
                         @endauth
 
-                        @auth('supervisor')
-                            <li class="nav-item">
-                                <a href="{{route('supervisor.personal.data')}}" class="nav-link">
-                                    <i class="nav-icon fas fa-user"></i>
-                                    <p>
-                                        Personal Data
-                                    </p>
-                                </a>
-                            </li>
-                        @endauth
+
 
                         @canany(['Create-Role','Read-Roles', 'Create-Permission','Read-Permissions'])
                             <li class="nav-header">{{__('cms.roles_permissions')}}</li>
@@ -468,7 +460,59 @@ scratch. This page gets rid of all links and provides the needed markup only.
                             </li>
                             @endauth
                         @endcan
+                        @auth('supervisor')
+                            <li class="nav-item">
+                                <a href="{{route('supervisor.personal.data')}}" class="nav-link">
+                                    <i class="nav-icon fas fa-user"></i>
+                                    <p>
+                                        Personal Data
+                                    </p>
+                                </a>
+                            </li>
 
+                            {{--Reports--}}
+
+                            <li class="nav-item">
+                                <a href="#" class="nav-link">
+                                    <i class="nav-icon fas fa-bookmark"></i>
+                                    <p>
+                                        Reports
+                                        <i class="fas fa-angle-left right"></i>
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview" style="display: none;">
+
+                                    <li class="nav-item">
+                                        <a href="{{route('supervisor.students.names')}}" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Students Names</p>
+                                        </a>
+                                    </li>
+
+                                    <li class="nav-item">
+                                        <a href="{{route('supervisor.students.evaluations')}}" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Students Evaluations</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="{{route('company.student.names')}}" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Company Names</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="{{route('company.student.evaluation')}}" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Company Evaluations</p>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+
+                            {{-- End Reports--}}
+
+                        @endauth
                         <li class="nav-header">{{__('cms.settings')}}</li>
                         <li class="nav-item">
 

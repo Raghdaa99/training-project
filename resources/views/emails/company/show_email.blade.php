@@ -9,5 +9,5 @@ Continue
 @endcomponent
 
 Thanks,<br>
-{{ config('app.name') }}
+Faculty of Information Technology , Al-AQSA University
 @endcomponent

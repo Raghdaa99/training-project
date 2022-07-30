@@ -9,13 +9,14 @@ use Illuminate\Database\Eloquent\Model;
 class Evaluation extends Model
 {
     use HasFactory,HasHashSlug;
-    public function companyField()
+    public function studentCompanyField()
     {
-        return $this->belongsTo(CompanyField::class, 'company_field_id', 'id');
+        return $this->belongsTo(StudentCompanyField::class, 'student_company_id', 'id');
 
     }
     public function question()
     {
-        return $this->belongsTo(Question::class, 'question_id', 'id');
+        return $this->belongsTo(Question::class, 'question_id', 'id')->withDefault();
     }
+
 }

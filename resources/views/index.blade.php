@@ -84,11 +84,12 @@
                          height="450">
                 </div>
                 <div class="carousel-item">
-                    <img class="d-block w-100" src="{{asset('cms/home/img/home.jpg')}}" alt="Second slide" height="450">
-                </div>
-                <div class="carousel-item">
                     <img class="d-block w-100" src="{{asset('cms/home/img/home2.png')}}" alt="Third slide" height="450">
                 </div>
+                <div class="carousel-item">
+                    <img class="d-block w-100" src="{{asset('cms/home/img/home.jpg')}}" alt="Second slide" height="450">
+                </div>
+
             </div>
             <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -153,7 +154,8 @@
 </div>
 <!-- End choose us-->
 
-<hr>
+<div class="divider"><hr></div>
+
 <!-- Start Features -->
 <div class="features text-center">
     <div class="container">
@@ -183,7 +185,7 @@
 </div>
 <!-- End Features -->
 
-<hr>
+<div class="divider"><hr></div>
 <div class="requirement">
     <div class="container">
         <div data-aos="zoom-in-up" data-aos-duration="1000">

@@ -19,42 +19,60 @@
                     <div class="card">
                         <!-- /.card-header -->
                         <div class="card-body">
+                            <p><strong>Total marks of Trainer : <span class=" mr-5 bg-gradient-dark p-2">
+                                    {{$totalMarksOfTrainer}}</span></strong>
+                                <span
+                                    class="mr-5"><strong>Total marks of Supervisor : <span class="bg-gradient-dark p-2">
+                                            {{$totalMarksOfSupervisor}}
+                                        </span></strong></span>
+                                <span
+                                    class="mr-auto"><strong>Total : <span class="bg-gradient-dark p-2">
+                                        {{$totalMarksOfSupervisor+$totalMarksOfTrainer}}
+                                   </span> </strong></span>
+                            </p>
+                            @if($totalMarksOfTrainer+$totalMarksOfSupervisor > 100 )
+                                <div class="alert alert-danger alert-dismissible" style="margin: 15px">
+                                    <h5><i class="icon fas fa-exclamation-triangle"></i> Alert!</h5>
+                                    مجموع علامات المدرب والمشرف اكبر من 100
+                                </div>
+                            @endif
                             <table class="table table-bordered table-striped table-hover">
                                 @if(count($questions)>0)
 
-                                <thead>
-                                <tr>
-                                    <th style="width: 10px">#</th>
-                                    <th>{{__('cms.name')}}</th>
-                                    <th>{{__('cms.guard')}}</th>
-                                    <th>Max OF Mark</th>
-                                    <th style="width: 40px">Settings</th>
-                                </tr>
-                                </thead>
-
-                                <tbody>
-                                @foreach ($questions as $question)
+                                    <thead>
                                     <tr>
-                                        <td>{{$loop->iteration}}</td>
-                                        <td>{{$question->title}}</td>
-                                        <td>{{$question->guard}}</td>
-                                        <td>{{$question->max_mark}}</td>
-                                        <td>
-                                            <div class="btn-group">
-                                                <a href="{{route('questions.edit',$question->id)}}"
-                                                   class="btn btn-warning">
-                                                    <i class="fas fa-edit"></i>
-                                                </a>
-                                                <a href="#" onclick="confirmDelete('{{$question->id}}',this)"
-                                                   class=" btn btn-danger">
-                                                    <i class="fas fa-trash"></i>
-                                                </a>
-                                            </div>
-                                        </td>
+                                        <th style="width: 10px">#</th>
+                                        <th>{{__('cms.name')}}</th>
+                                        <th>{{__('cms.guard')}}</th>
+                                        <th>Max OF Mark</th>
+                                        <th style="width: 40px">Settings</th>
                                     </tr>
-                                @endforeach
 
-                                </tbody>
+                                    </thead>
+
+                                    <tbody>
+                                    @foreach ($questions as $question)
+                                        <tr>
+                                            <td>{{$loop->iteration}}</td>
+                                            <td>{{$question->title}}</td>
+                                            <td>{{$question->guard}}</td>
+                                            <td>{{$question->max_mark}}</td>
+                                            <td>
+                                                <div class="btn-group">
+                                                    <a href="{{route('questions.edit',$question->id)}}"
+                                                       class="btn btn-warning">
+                                                        <i class="fas fa-edit"></i>
+                                                    </a>
+                                                    <a href="#" onclick="confirmDelete('{{$question->id}}',this)"
+                                                       class=" btn btn-danger">
+                                                        <i class="fas fa-trash"></i>
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+
+                                    </tbody>
                                 @else
                                     <div class="alert alert-warning alert-dismissible" style="margin: 15px">
                                         <h5><i class="icon fas fa-exclamation-triangle"></i> Alert!</h5>

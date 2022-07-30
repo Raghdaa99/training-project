@@ -16,7 +16,12 @@ class QuestionController extends Controller
     public function index()
     {
         $questions = Question::all();
-        return response()->view('cms.questions.index', ['questions' => $questions]);
+        $totalMarksOfTrainer=Question::where('guard','trainer')->sum('max_mark');
+        $totalMarksOfSupervisor=Question::where('guard','supervisor')->sum('max_mark');
+        return response()->view('cms.questions.index', ['questions' => $questions,
+            'totalMarksOfTrainer'=>$totalMarksOfTrainer,
+            'totalMarksOfSupervisor'=>$totalMarksOfSupervisor
+            ]);
     }
 
     /**

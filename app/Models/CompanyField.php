@@ -13,12 +13,12 @@ class CompanyField extends Model
 
     public function company()
     {
-        return $this->belongsTo(Company::class, 'company_id', 'id');
+        return $this->belongsTo(Company::class, 'company_id', 'id')->withDefault();
     }
 
     public function field()
     {
-        return $this->belongsTo(Field::class, 'field_id', 'id');
+        return $this->belongsTo(Field::class, 'field_id', 'id')->withDefault();
     }
 
     public function studentCompanyField()

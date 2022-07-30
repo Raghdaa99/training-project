@@ -33,7 +33,7 @@ class Student extends Authenticatable
     }
     public function department()
     {
-        return $this->belongsTo(Department::class, 'department_no', 'department_no');
+        return $this->belongsTo(Department::class, 'department_no', 'department_no')->withDefault();
     }
 
     public function appointments()

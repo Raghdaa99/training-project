@@ -28,7 +28,6 @@
                   <th>{{__('cms.number')}}</th>
                   <th>{{__('cms.email')}}</th>
                   <th>{{__('cms.phone')}}</th>
-                  <th style="width: 40px">Settings</th>
                 </tr>
               </thead>
               <tbody>
@@ -39,17 +38,6 @@
                   <td>{{$supervisor->supervisor_no}}</td>
                   <td>{{$supervisor->email}}</td>
                   <td>{{$supervisor->phone}}</td>
-
-                  <td>
-                    <div class="btn-group">
-                      <a href="{{route('admins.edit',$supervisor->supervisor_no)}}" class="btn btn-warning">
-                        <i class="fas fa-edit"></i>
-                      </a>
-                      <a href="#" onclick="confirmDelete('{{$supervisor->supervisor_no}}',this)" class=" btn btn-danger">
-                        <i class="fas fa-trash"></i>
-                      </a>
-                    </div>
-                  </td>
                 </tr>
                 @endforeach
 

@@ -7,6 +7,7 @@ use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\EvaluationController;
 use App\Http\Controllers\FieldController;
+use App\Http\Controllers\FinalReportsController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\StudentsSupervisorsController;
@@ -67,6 +68,7 @@ Route::group(['middleware' => 'prevent-back-history'], function () {
         Route::resource('registerStudentCourse', StudentsSupervisorsController::class);
         Route::resource('questions', QuestionController::class);
         Route::resource('students', StudentController::class);
+
     });
 
     Route::prefix('cms/supervisor')->middleware('auth:supervisor')->group(function () {
@@ -78,6 +80,12 @@ Route::group(['middleware' => 'prevent-back-history'], function () {
         Route::get('personal-data', [SupervisorController::class, 'personal_data'])->name('supervisor.personal.data');
         Route::get('notifications', [SupervisorController::class, 'getNotifications'])->name('notifications');
         Route::get('markAsRead/{id}', [SupervisorController::class, 'markAsRead'])->name('markAsRead');
+        Route::get('reports/supervisor-students-names',[FinalReportsController::class,'reportSupervisorStudentsNames'])->name('supervisor.students.names');
+        Route::get('reports/supervisor-students-evaluations',[FinalReportsController::class,'reportSupervisorStudents'])->name('supervisor.students.evaluations');
+        Route::get('reports/student-evaluation/{slug}',[FinalReportsController::class,'reportResultEvaluationStudent'])->name('student.evaluation');
+        Route::get('reports/student-evaluation-company',[FinalReportsController::class,'reportResultsEvaluationCompanyStudents'])->name('company.student.evaluation');
+        Route::get('reports/student-evaluation-company-names',[FinalReportsController::class,'reportCompanyStudentsNames'])->name('company.student.names');
+//        Route::get('download-pdf/supervisor-students-names',[FinalReportsController::class,'downloadPDF'])->name('download.pdf');
     });
 
     Route::prefix('cms/student')->middleware('modify-headers')->middleware('auth:student,supervisor')->group(function () {
