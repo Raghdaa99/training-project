@@ -46,27 +46,14 @@
                                     </thead>
 
 
-                                    <tbody>
+{{--                                    <tbody>--}}
 
-                                    {{--                                    @foreach ($items as $item)--}}
-                                    <tr>
-                                        {{--                                            <td>{{$loop->iteration}}</td>--}}
-
-
-
-                                        {{--                                        @if($item->status_supervisor==0)--}}
-                                        {{--                                           --}}
-                                        {{--                                        @endif--}}
-{{--                                        @if($item->status_company==1)--}}
-
-{{--                                           --}}
-{{--                                        @endif--}}
-                                    </tr>
-                                    {{--                                    @endforeach--}}
-
-
-                                    </tbody>
+{{--                                    </tbody>--}}
                                 </table>
+                            <a href="{{route('supervisors.edit',$supervisor->supervisor_no)}}" class="btn btn-success"
+                               style="width: 200px; ">
+                                <i class="fas fa-user-edit"> Edit </i>
+                            </a>
 
                         </div>
                         <!-- /.card-body -->

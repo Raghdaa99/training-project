@@ -72,6 +72,7 @@ Route::group(['middleware' => 'prevent-back-history'], function () {
     });
 
     Route::prefix('cms/supervisor')->middleware('auth:supervisor')->group(function () {
+        Route::resource('supervisors', SupervisorController::class);
         Route::get('show/Students', [SupervisorController::class, 'show_students'])->name('supervisor.show.students');
         Route::get('show/Student/{slug}', [SupervisorController::class, 'show_students_details'])->name('supervisor.show.students.details');
         Route::post('search/Students', [SupervisorController::class, 'search_students'])->name('supervisor.search.students');
@@ -96,6 +97,7 @@ Route::group(['middleware' => 'prevent-back-history'], function () {
         Route::resource('reports', ReportController::class);
         Route::get('download/{file}', [ReportController::class, 'download'])->name('download.report');
         Route::get('show/Student/personal-data', [StudentController::class, 'show_students_personal_data'])->name('student.personal.data');
+        Route::resource('students', StudentController::class);
 
     });
 

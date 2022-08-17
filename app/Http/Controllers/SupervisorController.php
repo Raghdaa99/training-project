@@ -264,7 +264,7 @@ class SupervisorController extends Controller
     public
     function edit(Supervisor $supervisor)
     {
-        //
+        return view('cms.supervisor.edit', ['supervisor' => $supervisor]);
     }
 
     /**
@@ -274,10 +274,31 @@ class SupervisorController extends Controller
      * @param \App\Models\Supervisor $supervisor
      * @return \Illuminate\Http\Response
      */
-    public
-    function update(Request $request, Supervisor $supervisor)
+    public function update(Request $request)
     {
-        //
+        $supervisor = Auth::guard('supervisor')->user();
+        dd($supervisor);
+        $validator = Validator($request->all(), [
+            'id_number' => 'required|numeric' ,
+            'phone' => 'required|numeric',
+            'email' => 'required|numeric|email',
+        ]);
+
+
+        if (!$validator->fails()) {
+            $supervisor->id_number = $request->input('id_number');
+            $supervisor->phone = $request->input('phone');
+            $supervisor->email = $request->input('email');
+            $isSaved = $supervisor->save();
+            return response()->json(
+                [
+                    'message' => $isSaved ? 'updated successfully' : 'Create failed!'
+                ],
+                $isSaved ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST,
+            );
+        } else {
+            return response()->json(['message' => $validator->getMessageBag()->first()], Response::HTTP_BAD_REQUEST);
+        }
     }
 
     /**

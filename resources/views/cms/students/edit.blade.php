@@ -25,26 +25,33 @@
                     <!-- /.card-header -->
                     <!-- form start -->
                     <form>
+                        @csrf
                         <div class="card-body">
 
                             <div class="form-group">
                                 <label for="name">{{__('cms.name')}}</label>
-                                <input type="text" class="form-control" id="name" placeholder="{{__('cms.enter_name')}}"
-                                    name="name" value="{{$user->name}}">
+                                <input type="text" class="form-control" id="name" disabled
+                                    name="name" value="{{$student->name}}">
+
                             </div>
                             <div class="form-group">
-                                <label for="email">{{__('cms.email')}}</label>
-                                <input type="email" class="form-control" id="email"
-                                    placeholder="{{__('cms.enter_email')}}" name="email" value="{{$user->email}}">
+                                <label for="id">Academic Number</label>
+                                <input type="number" class="form-control" id="id" disabled
+                                     name="id" value="{{$student->student_no}}">
+                            </div>
+
+
+                            <div class="form-group">
+                                <label for="id_number">ID Number</label>
+                                <input type="number" class="form-control" id="id_number" placeholder="Enter ID Number"
+                                       name="id_number" value="{{$student->id_number}}">
                             </div>
                             <div class="form-group">
-                                <label for="gender">{{__('cms.gender')}}</label>
-                                <select class="custom-select form-control-border" id="gender">
-                                    <option value="Male" @if($user->gender == 'Male') selected @endif>Male</option>
-                                    <option value="Female" @if($user->gender == 'Female') selected @endif>Female
-                                    </option>
-                                </select>
+                                <label for="phone">Phone Number</label>
+                                <input type="number" class="form-control" id="phone" placeholder="Enter Phone Number"
+                                       name="phone" value="{{$student->phone}}">
                             </div>
+
                         </div>
                         <!-- /.card-body -->
                         <div class="card-footer">
@@ -65,18 +72,20 @@
 
 @section('scripts')
 <script>
+
+
     function performUpdate() {
-        axios.put('/cms/admin/users/{{$user->id}}', {
-            name: document.getElementById('name').value,
-            email_address: document.getElementById('email').value,
-            gender: document.getElementById('gender').value
+        axios.put('/cms/student/students/{{$student->student_no}}', {
+            id_number: document.getElementById('id_number').value,
+            phone :document.getElementById('phone').value,
+
         })
         .then(function (response) {
             //2xx
             console.log(response);
             toastr.success(response.data.message);
             //
-            window.location.href = '/cms/admin/students';
+            window.location.href = '/cms/student/show/Student/personal-data';
         })
         .catch(function (error) {
             //4xx - 5xx

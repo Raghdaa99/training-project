@@ -30,10 +30,7 @@
                                             onchange="showFields('{{$studentCompanyField->id}}')">
                                         @foreach ($companies as $company)
                                             <option
-
                                                 value="{{$company->id}}" {{ $company_id == $company->id ? 'selected' : '' }}>{{$company->name}}</option>
-
-
                                         @endforeach
                                     </select>
                                 </div>

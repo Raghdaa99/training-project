@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Company;
+use App\Models\Department;
 use App\Models\Field;
 use App\Models\Student;
 use Illuminate\Http\Request;
@@ -102,9 +103,10 @@ class StudentController extends Controller
      * @param \App\Models\Student $user
      * @return \Illuminate\Http\Response
      */
-    public function edit(Student $user)
+    public function edit(Student $student)
     {
-        return response()->view('cms.students.edit', ['user' => $user]);
+        $department = Department::all();
+        return response()->view('cms.students.edit', ['student' => $student,'departmentes' => $department]);
     }
 
     /**
@@ -114,24 +116,23 @@ class StudentController extends Controller
      * @param \App\Models\Student $user
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Request $request, Student $user)
+    public function update(Request $request)
     {
+        dd($request);
+        $student = Auth::guard('student')->user();
         $validator = Validator($request->all(), [
-            'name' => 'required|string|min:3|max:100',
-            'email_address' => 'required|email|unique:students,email,' . $user->id,
-            'gender' => 'required|string|in:Male,Female',
-
+            'id_number' => 'required|numeric' ,
+            'phone' => 'required|numeric',
         ]);
 
+
         if (!$validator->fails()) {
-            $user->name = $request->input('name');
-            $user->email = $request->input('email_address');
-            $user->password = Hash::make(12345);
-            $user->gender = $request->input('gender');
-            $isSaved = $user->save();
+            $student->id_number = $request->input('id_number');
+            $student->phone = $request->input('phone');
+            $isSaved = $student->save();
             return response()->json(
                 [
-                    'message' => $isSaved ? 'Student updated successfully' : 'Create failed!'
+                    'message' => $isSaved ? 'updated successfully' : 'Create failed!'
                 ],
                 $isSaved ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST,
             );

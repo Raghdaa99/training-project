@@ -124,6 +124,7 @@ return [
     'key' => env('APP_KEY'),
 
     'cipher' => 'AES-256-CBC',
+    'PDF' => Barryvdh\DomPDF\Facade::class,
 
     /*
     |--------------------------------------------------------------------------

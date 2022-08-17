@@ -68,6 +68,10 @@
                                     </tbody>
                                 </table>
 
+                            <a href="{{route('students.edit',$student->student_no)}}" class="btn btn-success"
+                               style="width: 200px; ">
+                                <i class="fas fa-user-edit"> Edit </i>
+                            </a>
                         </div>
                         <!-- /.card-body -->
                         <div class="card-footer clearfix">
